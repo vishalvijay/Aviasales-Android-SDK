@@ -5,8 +5,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 
-import com.crashlytics.android.Crashlytics;
-
 import ru.aviasales.core.AviasalesSDK;
 import ru.aviasales.template.ui.fragment.AviasalesFragment;
 
@@ -19,7 +17,6 @@ public class MainActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 
 		AviasalesSDK.getInstance().init(this);
-		Crashlytics.start(this);
 		setContentView(R.layout.activity_main);
 
 		init(savedInstanceState);

@@ -1,19 +1,4 @@
-buildscript {
-    repositories {
-        maven { url 'http://download.crashlytics.com/maven' }
-    }
-
-    dependencies {
-        classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
-    }
-}
 apply plugin: 'com.android.application'
-
-repositories {
-    maven { url 'http://download.crashlytics.com/maven' }
-}
-
-apply plugin: 'crashlytics'
 
 
 android {
@@ -51,6 +36,4 @@ dependencies {
 	compile project(':aviasalestemplate')
 	//compile 'ru.aviasales.template:aviasalesSdkTemplate:1.0.1'
 	compile 'com.android.support:appcompat-v7:21.0.3'
-
-	compile 'com.crashlytics.android:crashlytics:1.+'
 }
