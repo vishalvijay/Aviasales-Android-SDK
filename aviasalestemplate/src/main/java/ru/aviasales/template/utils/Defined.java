@@ -39,7 +39,7 @@ public class Defined extends CoreDefined {
 
 	private static Map<String,String> CURRENCY_MAP ;
 	static {
-		Map<String, String> aMap = new LinkedHashMap<>();
+		Map<String, String> aMap = new LinkedHashMap<String,String>();
 		if(LocaleUtil.getLocale().equals(LocaleUtil.RUSSIAN_LANGUAGE_CODE)) {
 
 			aMap.put("RUB", "Российский рубль");

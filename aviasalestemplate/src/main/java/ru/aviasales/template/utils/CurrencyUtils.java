@@ -41,7 +41,7 @@ public class CurrencyUtils {
 	public static List<Currency> getCurrenciesList() {
 		Map<String,String> currencyCodes = Defined.getCurrenciesArray();
 
-		List<Currency> currencies = new ArrayList<>();
+		List<Currency> currencies = new ArrayList<Currency>();
 
 		for (Map.Entry<String,String> currencyEntry : currencyCodes.entrySet()) {
 

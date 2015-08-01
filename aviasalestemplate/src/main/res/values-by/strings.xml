@@ -1,6 +1,4 @@
 <resources>
-	<string name="app_name">Aviasales Template</string>
-
 	<string name="week_day">День недели</string>
 
 	<string name="search_form_class">Класс</string>

@@ -22,7 +22,7 @@ public class CurrencyFragmentDialog extends BaseDialogFragment {
 
 	private ListView listView;
 	private CurrencyListAdapter currencyAdapter;
-	private List<Currency> currencies = new ArrayList<>();
+	private List<Currency> currencies = new ArrayList<Currency>();
 
 	private OnCurrencyChangedListener listener;
 
