@@ -52,7 +52,7 @@ public class DateUtils {
 	}
 
 	public static String convertToString(Calendar calendar){
-		SimpleDateFormat sdf = new SimpleDateFormat(Defined.SEARCH_SERVER_DATE_FORMAT);
+		SimpleDateFormat sdf = new SimpleDateFormat(Defined.SEARCH_SERVER_DATE_FORMAT, Locale.US);
 		return sdf.format(calendar.getTime());
 	}
 
