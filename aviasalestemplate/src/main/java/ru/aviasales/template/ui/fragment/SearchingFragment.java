@@ -1,9 +1,9 @@
 package ru.aviasales.template.ui.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -123,23 +123,28 @@ public class SearchingFragment extends BaseFragment {
 			showResults();
 		}
 
-		ValueAnimator progressAnimator = ValueAnimator.ofInt(progressBar.getProgress(), PROGRESS_BAR_LENGTH);
-		progressAnimator.setDuration(ANIMATION_FINISH_DURATION);
-		progressAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-		progressAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-			@Override
-			public void onAnimationUpdate(ValueAnimator animation) {
-				int progress = (Integer) animation.getAnimatedValue();
-				progressBar.setProgress(progress);
-			}
-		});
-		progressAnimator.addListener(new AnimatorListenerAdapter() {
-			@Override
-			public void onAnimationEnd(Animator animation) {
-				showResults();
-			}
-		});
-		progressAnimator.start();
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			ValueAnimator progressAnimator = ValueAnimator.ofInt(progressBar.getProgress(), PROGRESS_BAR_LENGTH);
+			progressAnimator.setDuration(ANIMATION_FINISH_DURATION);
+			progressAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+			progressAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+				@Override
+				public void onAnimationUpdate(ValueAnimator animation) {
+					int progress = (Integer) animation.getAnimatedValue();
+					progressBar.setProgress(progress);
+				}
+			});
+			progressAnimator.addListener(new AnimatorListenerAdapter() {
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					showResults();
+				}
+			});
+			progressAnimator.start();
+		} else {
+			showResults();
+		}
+
 	}
 
 	private void showToastAndReturnToSearchForm(String toast) {

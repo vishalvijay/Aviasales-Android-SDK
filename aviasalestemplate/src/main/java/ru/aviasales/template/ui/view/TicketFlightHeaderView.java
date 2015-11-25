@@ -54,8 +54,6 @@ public class TicketFlightHeaderView extends RelativeLayout {
 			if (plane != null) {
 				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
 					plane.setScaleX(-1);
-				} else {
-					ViewHelper.setScaleX(plane, -1);
 				}
 			}
 			flight = ticketData.getReturnFlights();
