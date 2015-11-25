@@ -3,6 +3,7 @@ package ru.aviasales.template.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,7 @@ public class SearchingFragment extends BaseFragment {
 	public static final int PROGRESS_BAR_LENGTH = 1000;
 
 	private ProgressBar progressBar;
-	private boolean isStopped = false;
+	private boolean isPaused = false;
 
 	public static SearchingFragment newInstance() {
 		return new SearchingFragment();
@@ -144,13 +145,13 @@ public class SearchingFragment extends BaseFragment {
 	private void showToastAndReturnToSearchForm(String toast) {
 		if (getActivity() == null) return;
 		Toast.makeText(getActivity(), toast, Toast.LENGTH_LONG).show();
-		if (!isStopped) {
+		if (!isPaused) {
 			getActivity().onBackPressed();
 		}
 	}
 
 	private void showResults() {
-		if (!isStopped) {
+		if (!isPaused) {
 			popFragmentFromBackStack();
 			startFragment(ResultsFragment.newInstance(), true);
 		}
@@ -159,14 +160,12 @@ public class SearchingFragment extends BaseFragment {
 	@Override
 	public void onStop() {
 		super.onStop();
-		isStopped = true;
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
-
-		isStopped = false;
+	public void onResume() {
+		super.onResume();
+		isPaused = false;
 		switch (AviasalesSDK.getInstance().getSearchingTicketsStatus()) {
 			case CANCELED:
 			case ERROR:
@@ -176,5 +175,11 @@ public class SearchingFragment extends BaseFragment {
 				showResults();
 				break;
 		}
+	}
+
+	@Override
+	public void onPause() {
+		isPaused = true;
+		super.onPause();
 	}
 }
