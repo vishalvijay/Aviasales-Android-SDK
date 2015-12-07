@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<dimen name="search_form_dates_divider_top_margin">4.34dp</dimen>
-	<dimen name="search_form_dates_divider_bottom_margin">3dp</dimen>
+	<dimen name="search_form_dates_divider_bottom_margin">11dp</dimen>
 	<dimen name="search_form_destinations_divider_top_margin">1.34dp</dimen>
 	<dimen name="search_form_destinations_divider_bottom_margin">1.33dp</dimen>
 

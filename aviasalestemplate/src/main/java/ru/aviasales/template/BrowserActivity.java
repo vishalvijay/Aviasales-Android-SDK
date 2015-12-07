@@ -3,11 +3,11 @@ package ru.aviasales.template;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
 import ru.aviasales.template.ui.fragment.BrowserFragment;
 
-public class BrowserActivity extends ActionBarActivity {
+public class BrowserActivity extends AppCompatActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

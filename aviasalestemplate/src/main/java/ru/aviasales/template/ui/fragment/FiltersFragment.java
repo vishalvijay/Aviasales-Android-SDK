@@ -9,11 +9,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.List;
-
 import ru.aviasales.core.AviasalesSDK;
 import ru.aviasales.core.search.object.SearchData;
-import ru.aviasales.core.search.object.TicketData;
 import ru.aviasales.expandedlistview.view.ExpandedListView;
 import ru.aviasales.template.R;
 import ru.aviasales.template.filters.GeneralFilter;
@@ -22,11 +19,11 @@ import ru.aviasales.template.ui.adapter.AgencyAdapter;
 import ru.aviasales.template.ui.adapter.AirlinesAdapter;
 import ru.aviasales.template.ui.adapter.AirportsAdapter;
 import ru.aviasales.template.ui.adapter.AlliancesAdapter;
-import ru.aviasales.template.ui.view.SingleSlideFilterView;
-import ru.aviasales.template.ui.view.TwoSideSeekBarFilterView;
 import ru.aviasales.template.ui.view.FiltersTimeOfDayView;
 import ru.aviasales.template.ui.view.OvernightFilterView;
+import ru.aviasales.template.ui.view.SingleSlideFilterView;
 import ru.aviasales.template.ui.view.StopOverFilterView;
+import ru.aviasales.template.ui.view.TwoSideSeekBarFilterView;
 
 public class FiltersFragment extends BaseFragment {
 
@@ -104,22 +101,22 @@ public class FiltersFragment extends BaseFragment {
 	}
 
 	private void applyFilters() {
-
-		FiltersManager.getInstance().filterSearchData(AviasalesSDK.getInstance().getSearchData(), new FiltersManager.OnFilterResultListener() {
-			@Override
-			public void onFilteringFinished(List<TicketData> filteredTicketsData) {
-
-				if (resetBtn != null) {
-					if (!getFilters().isActive()) {
-						resetBtn.setEnabled(false);
-					} else {
-						resetBtn.setEnabled(true);
-					}
-				}
-
-				setFoundTicketsText(filteredTicketsData.size());
-			}
-		});
+// TODO: 12/3/15 починить
+//		FiltersManager.getInstance().filterSearchData(AviasalesSDK.getInstance().getSearchData(), new FiltersManager.OnFilterResultListener() {
+//			@Override
+//			public void onFilteringFinished(List<TicketData> filteredTicketsData) {
+//
+//				if (resetBtn != null) {
+//					if (!getFilters().isActive()) {
+//						resetBtn.setEnabled(false);
+//					} else {
+//						resetBtn.setEnabled(true);
+//					}
+//				}
+//
+//				setFoundTicketsText(filteredTicketsData.size());
+//			}
+//		});
 		setFiltersVisibility();
 	}
 

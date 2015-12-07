@@ -1,158 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout
+<RelativeLayout
 		android:id="@+id/search_form"
 		xmlns:android="http://schemas.android.com/apk/res/android"
-		xmlns:app="http://schemas.android.com/apk/res-auto"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
+		android:layout_height="match_parent"
 		android:layout_alignParentBottom="true"
 		android:background="@drawable/search_form_bkg_drawable"
 		android:clipChildren="false"
 		android:paddingBottom="@dimen/search_form_search_button_bottom_margin"
 		android:splitMotionEvents="false">
 
-	<FrameLayout
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"/>
+	<include
+			android:id="@+id/radio_group"
+			layout="@layout/search_type_radio_group"/>
 
 	<RelativeLayout
 			android:id="@+id/dummy_view_for_flow_animation"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
+			android:layout_alignParentBottom="true"
 			android:clipChildren="false">
-
-		<ru.aviasales.template.ui.view.SearchFormPlaceButton
-				android:id="@+id/btn_origin"
-				style="@style/button.light"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:paddingBottom="14.33dp"
-				android:paddingLeft="70dp"
-				android:paddingRight="90dp"
-				android:paddingTop="10.66dp"
-				app:placeType="departurePlace"/>
-
-		<ru.aviasales.template.ui.view.SearchFormPlaceButton
-				android:id="@+id/btn_destination"
-				style="@style/button.light"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_alignLeft="@+id/btn_origin"
-				android:layout_below="@+id/btn_origin"
-				android:paddingBottom="14.33dp"
-				android:paddingLeft="70dp"
-				android:paddingRight="90dp"
-				android:paddingTop="10.66dp"
-				app:placeType="destinationPlace"/>
-
-		<ImageView
-				android:id="@+id/iv_origin"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_alignTop="@+id/btn_origin"
-				android:layout_marginLeft="16dp"
-				android:layout_marginTop="23dp"
-				android:src="@drawable/ic_place"
-				android:tint="@color/colorAsPrimary"/>
-
-		<ImageView
-				android:id="@+id/iv_destination"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_alignLeft="@+id/iv_calendar_depart"
-				android:layout_below="@+id/iv_origin"
-				android:layout_marginTop="42dp"
-				android:src="@drawable/ic_place"
-				android:tint="@color/colorAsPrimary"/>
-
-		<ImageView
-				android:id="@+id/btn_change_directions"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_alignParentRight="true"
-				android:layout_alignTop="@+id/btn_origin"
-				android:layout_marginRight="9dp"
-				android:layout_marginTop="49dp"
-				android:background="@drawable/button_round_light"
-				android:clickable="true"
-				android:paddingBottom="5dp"
-				android:paddingLeft="7dp"
-				android:paddingRight="7dp"
-				android:paddingTop="5dp"
-				android:src="@drawable/search_change_directions"
-				android:tint="@color/colorAviasalesMain"/>
-
-		<View
-				android:id="@+id/dest_and_dates_divider"
-				android:layout_width="match_parent"
-				android:layout_height="1dp"
-				android:layout_below="@+id/btn_destination"
-				android:layout_marginBottom="@dimen/search_form_dates_divider_bottom_margin"
-				android:layout_marginLeft="72dp"
-				android:layout_marginTop="@dimen/search_form_dates_divider_top_margin"
-				android:background="@color/gray_divider"/>
-
-		<ru.aviasales.template.ui.view.SearchFormDateButton
-				android:id="@+id/btn_depart_date"
-				style="@style/button.light"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_below="@id/dest_and_dates_divider"
-				android:paddingBottom="15.67dp"
-				android:paddingLeft="38dp"
-				android:paddingTop="14dp"
-				app:dateType="departDate"/>
-
-		<ru.aviasales.template.ui.view.SearchFormDateButton
-				android:id="@+id/btn_return_date"
-				style="@style/button.light"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_alignLeft="@+id/btn_depart_date"
-				android:layout_below="@+id/btn_depart_date"
-				android:paddingBottom="16dp"
-				android:paddingLeft="38dp"
-				android:paddingTop="12dp"
-				app:dateType="returnDate"/>
-
-		<CheckBox
-				android:id="@+id/btn_return_date_switch"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_alignParentRight="true"
-				android:layout_alignTop="@+id/btn_return_date"
-				android:layout_marginRight="9dp"
-				android:layout_marginTop="14dp"/>
-
-		<ImageView
-				android:id="@+id/iv_calendar_depart"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_below="@id/dest_and_dates_divider"
-				android:layout_marginLeft="16dp"
-				android:layout_marginTop="23dp"
-				android:src="@drawable/search_form_plane_right"
-				android:tint="@color/colorAsPrimary"/>
-
-		<ImageView
-				android:id="@+id/iv_calendar_return"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_alignLeft="@+id/iv_calendar_depart"
-				android:layout_below="@+id/btn_depart_date"
-				android:layout_marginTop="20.34dp"
-				android:src="@drawable/search_form_plane_left"
-				android:tint="@color/colorAsPrimary"/>
 
 		<View
 				android:id="@+id/second_divider"
 				android:layout_width="match_parent"
 				android:layout_height="1dp"
-				android:layout_below="@+id/btn_return_date"
 				android:layout_marginBottom="@dimen/search_form_destinations_divider_bottom_margin"
 				android:layout_marginLeft="72dp"
-				android:layout_marginTop="@dimen/search_form_destinations_divider_top_margin"
 				android:background="@color/gray_divider"/>
 
 		<LinearLayout
@@ -210,7 +85,7 @@
 		<Button
 				android:id="@+id/btn_search"
 				android:layout_width="match_parent"
-				android:layout_height="51dp"
+				android:layout_height="45dp"
 				android:layout_below="@+id/lt_trip_class"
 				android:layout_gravity="center"
 				android:layout_marginLeft="16dp"
@@ -220,5 +95,26 @@
 				android:textColor="@color/white"
 				android:textSize="14dp"/>
 
+
 	</RelativeLayout>
-</FrameLayout>
+
+	<FrameLayout
+			android:id="@+id/fl_search_view"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_above="@id/dummy_view_for_flow_animation"
+			android:layout_below="@id/radio_group">
+
+		<ru.aviasales.template.ui.view.SimpleSearchFormView
+				android:id="@+id/simple_search_view"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"/>
+
+		<ru.aviasales.template.ui.view.ComplexSearchFormView
+				android:id="@+id/complex_search_view"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"/>
+	</FrameLayout>
+
+
+</RelativeLayout>

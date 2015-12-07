@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+		android:id="@+id/ll_complex_search_segments"
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:paddingLeft="16dp"
+		android:paddingRight="16dp"
+		android:paddingTop="10dp">
+
+	<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="7dp">
+
+		<com.devspark.robototextview.widget.RobotoButton
+				android:id="@+id/btn_complex_search_add"
+				android:layout_width="wrap_content"
+				android:layout_height="36dp"
+				android:layout_toLeftOf="@+id/v_center"
+				android:background="@drawable/button_light_with_corners"
+				android:text="@string/search_form_complex_search_add"
+				android:textColor="@color/gray_blue"/>
+
+		<View
+				android:id="@+id/v_center"
+				android:layout_width="1px"
+				android:layout_height="1px"
+				android:layout_centerHorizontal="true"/>
+
+		<com.devspark.robototextview.widget.RobotoButton
+				android:id="@+id/btn_complex_search_remove"
+				android:layout_width="wrap_content"
+				android:layout_height="36dp"
+				android:layout_toRightOf="@+id/v_center"
+				android:background="@drawable/button_light_with_corners"
+				android:text="@string/search_form_complex_search_remove"
+				android:textColor="@color/gray_blue"/>
+	</RelativeLayout>
+</LinearLayout>

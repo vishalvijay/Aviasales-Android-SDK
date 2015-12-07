@@ -1,11 +1,11 @@
 <resources>
 	<!-- Default screen margins, per the Android Design guidelines. -->
-	<dimen name="search_form_dates_divider_top_margin">12.34dp</dimen>
-	<dimen name="search_form_dates_divider_bottom_margin">10dp</dimen>
+	<dimen name="search_form_dates_divider_top_margin">7.34dp</dimen>
+	<dimen name="search_form_dates_divider_bottom_margin">16dp</dimen>
 	<dimen name="search_form_destinations_divider_top_margin">10.34dp</dimen>
-	<dimen name="search_form_destinations_divider_bottom_margin">22.33dp</dimen>
+	<dimen name="search_form_destinations_divider_bottom_margin">18.33dp</dimen>
 
-	<dimen name="search_form_search_button_top_margin">25dp</dimen>
+	<dimen name="search_form_search_button_top_margin">20dp</dimen>
 	<dimen name="search_form_search_button_bottom_margin">20dp</dimen>
 	<dimen name="search_form_passengers_margin_right">48dp</dimen>
 
@@ -40,5 +40,7 @@
 	<dimen name="filters_seekbar_height">3dp</dimen>
 	<dimen name="filters_seekbar_thumb_padding_top_and_bottom">5dp</dimen>
 	<dimen name="range_seekbar_bg_padding">2.33dp</dimen>
+
+	<dimen name="button_with_corners_radius">2dp</dimen>
 
 </resources>

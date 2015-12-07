@@ -16,7 +16,7 @@ import ru.aviasales.template.R;
 public class StringUtils {
 
 	// returns string in format: 1 234 456 р
-	public static String formatPriceInAppCurrency(int priceInDefaultCur, String appCurCode,
+	public static String formatPriceInAppCurrency(long priceInDefaultCur, String appCurCode,
 	                                              Map<String, Double> currencies) {
 		long price;
 		if (currencies == null) {
@@ -98,15 +98,15 @@ public class StringUtils {
 		return original.substring(0, 1).toUpperCase() + original.substring(1);
 	}
 
-	public static SpannableString getSpannableString(CharSequence string, ParcelableSpan span){
+	public static SpannableString getSpannableString(CharSequence string, ParcelableSpan span) {
 		SpannableString spannable = new SpannableString(string);
-		if(span != null) {
+		if (span != null) {
 			spannable.setSpan(span, 0, string.length(), 0);
 		}
 		return spannable;
 	}
 
-	public static SpannableStringBuilder getSpannablePriceString(String priceString, String currency){
+	public static SpannableStringBuilder getSpannablePriceString(String priceString, String currency) {
 		SpannableStringBuilder builder = new SpannableStringBuilder();
 
 		builder.append(priceString);

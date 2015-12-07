@@ -15,10 +15,12 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorListenerAdapter;
 import com.nineoldandroids.animation.ValueAnimator;
 
-import ru.aviasales.core.AviasalesSDK;
+import java.util.Map;
+
+import ru.aviasales.core.AviasalesSDKV3;
 import ru.aviasales.core.http.exception.ApiExceptions;
-import ru.aviasales.core.search.object.SearchData;
-import ru.aviasales.core.search.searching.OnTicketsSearchListener;
+import ru.aviasales.core.search_v3.objects.SearchDataV3;
+import ru.aviasales.core.search_v3.searching.OnSearchListener;
 import ru.aviasales.template.R;
 import ru.aviasales.template.filters.manager.FiltersManager;
 
@@ -59,11 +61,11 @@ public class SearchingFragment extends BaseFragment {
 	@Override
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-		switch (AviasalesSDK.getInstance().getSearchingTicketsStatus()) {
+		switch (AviasalesSDKV3.getInstance().getSearchingTicketsStatus()) {
 			case SEARCHING:
-				AviasalesSDK.getInstance().setOnTicketsSearchListener(new OnTicketsSearchListener() {
+				AviasalesSDKV3.getInstance().setOnTicketsSearchListener(new OnSearchListener() {
 					@Override
-					public void onSuccess(SearchData searchData) {
+					public void onSuccess(SearchDataV3 searchData) {
 						FiltersManager.getInstance().initFilter(searchData, getActivity());
 						onSearchSuccessFinish();
 					}
@@ -103,6 +105,16 @@ public class SearchingFragment extends BaseFragment {
 							default:
 								showToastAndReturnToSearchForm(getString(R.string.toast_error_unknown));
 						}
+					}
+
+					@Override
+					public void onMagicFareLoaded(SearchDataV3 searchDataV3, boolean b) {
+
+					}
+
+					@Override
+					public void onTicketCountChanged(int i, int i1, Map<String, Double> map, boolean b) {
+
 					}
 				});
 				break;
@@ -171,7 +183,7 @@ public class SearchingFragment extends BaseFragment {
 	public void onResume() {
 		super.onResume();
 		isPaused = false;
-		switch (AviasalesSDK.getInstance().getSearchingTicketsStatus()) {
+		switch (AviasalesSDKV3.getInstance().getSearchingTicketsStatus()) {
 			case CANCELED:
 			case ERROR:
 				getActivity().onBackPressed();

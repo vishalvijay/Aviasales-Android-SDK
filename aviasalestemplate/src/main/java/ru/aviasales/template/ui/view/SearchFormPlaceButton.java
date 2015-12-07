@@ -18,6 +18,7 @@ public class SearchFormPlaceButton extends RelativeLayout {
 
 	private TextView tvCity;
 	private TextView tvAirport;
+	private TextView tvIata;
 	private int type;
 
 	public SearchFormPlaceButton(Context context) {
@@ -40,6 +41,7 @@ public class SearchFormPlaceButton extends RelativeLayout {
 		LayoutInflater.from(context).inflate(R.layout.search_form_place_btn, this, true);
 		tvCity = (TextView) findViewById(R.id.tv_city);
 		tvAirport = (TextView) findViewById(R.id.tv_airport);
+		tvIata = (TextView) findViewById(R.id.tv_iata);
 
 		setUpDefaultValues();
 	}
@@ -55,6 +57,8 @@ public class SearchFormPlaceButton extends RelativeLayout {
 		}
 
 		tvAirport.setText(R.string.search_form_airport_default);
+		tvIata.setText("");
+
 	}
 
 	private void parseAttributes(Context context, AttributeSet attrs) {
@@ -63,7 +67,7 @@ public class SearchFormPlaceButton extends RelativeLayout {
 		values.recycle();
 	}
 
-	public void setData(PlaceData placeData){
+	public void setData(PlaceData placeData) {
 		if (placeData == null) {
 			setUpDefaultValues();
 			return;
@@ -78,6 +82,8 @@ public class SearchFormPlaceButton extends RelativeLayout {
 		}
 		airport += ", " + placeData.getCountry();
 		tvAirport.setText(airport.toUpperCase());
+
+		tvIata.setText(placeData.getIata());
 	}
 
 	public int getType() {

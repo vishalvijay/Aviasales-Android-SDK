@@ -4,23 +4,20 @@ import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.os.Build;
-import android.support.v4.BuildConfig;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Display;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Currency;
 import java.util.Map;
 
-import ru.aviasales.core.search.object.TicketData;
+import ru.aviasales.core.search_v3.objects.Proposal;
 import ru.aviasales.template.R;
 import ru.aviasales.template.api.AirlineLogoApi;
 import ru.aviasales.template.api.params.AirlineLogoParams;
@@ -60,40 +57,42 @@ public class ResultsItemView extends CardView {
 
 	}
 
-	public void setTicketData(TicketData ticketData, Context context) {
+	public void setProposal(Proposal proposal, Context context) {
 
 		Map<String, Double> currencies = getCurrencyRates();
 
-		tvPrice.setTextSize(TypedValue.COMPLEX_UNIT_DIP,  32);
-		changeTextSize(ticketData.getPrice());
+		tvPrice.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 32);
+		changeTextSize(proposal.getBestPrice());
 
-		tvPrice.setText(StringUtils.formatPriceInAppCurrency(ticketData.getPrice(), getAppCurrency(), currencies));
+		tvPrice.setText(StringUtils.formatPriceInAppCurrency(proposal.getBestPrice(), getAppCurrency(), currencies));
 
 		tvCurrency.setText(getAppCurrency());
 
 		try {
 			final AirlineLogoParams params = new AirlineLogoParams();
 			params.setContext(context);
-			params.setIata(ticketData.getMainAirline());
+			params.setIata(proposal.getValidatingCarrier());
 			params.setImage(ivAirlineLogo);
 			params.setWidth(context.getResources().getDimensionPixelSize(R.dimen.airline_logo_width));
 			params.setHeight(context.getResources().getDimensionPixelSize(R.dimen.airline_logo_height));
 			new AirlineLogoApi().getAirlineLogo(setAdditionalParamsToImageLoader(params));
 		} catch (Exception e) {
-			Toast.makeText(context,e.getMessage(),Toast.LENGTH_LONG).show();
+			Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
 			// skip if something wrong with it
 		}
+		// TODO: переписать на новый proposal
+		/*
+		rlDirectRoute.setRouteData(proposal.getDirectFlights());
 
-		rlDirectRoute.setRouteData(ticketData.getDirectFlights());
-
-		if (ticketData.withoutReturn()) {
+		if (proposal.withoutReturn()) {
 			rlReturnRoute.setVisibility(View.GONE);
 		} else {
-			rlReturnRoute.setRouteData(ticketData.getReturnFlights());
+			rlReturnRoute.setRouteData(proposal.getReturnFlights());
 		}
+		*/
 	}
 
-	public void setAlternativePrice(Integer price) {
+	public void setAlternativePrice(long price) {
 		tvPrice.setText(StringUtils.formatPriceInAppCurrency(price, getAppCurrency(), getCurrencyRates()));
 	}
 
@@ -113,14 +112,14 @@ public class ResultsItemView extends CardView {
 		return ivAirlineLogo;
 	}
 
-	private void changeTextSize(int price) {
+	private void changeTextSize(long price) {
 		final String priceText = StringUtils.formatPriceInAppCurrency(price, getAppCurrency(), getCurrencyRates());
 		changePriceTextViewSizeIfNeeded(priceText);
 	}
 
 	private void changePriceTextViewSizeIfNeeded(String priceText) {
 		int width = ((ViewGroup) tvPrice.getParent()).getWidth() == 0 ?
-					getMeasuredMaxPriceTextViewWidth() : ((ViewGroup) tvPrice.getParent()).getWidth();
+				getMeasuredMaxPriceTextViewWidth() : ((ViewGroup) tvPrice.getParent()).getWidth();
 
 		if (width != 0) {
 			float finalTextSizeInPx = tvPrice.getTextSize();
@@ -148,7 +147,7 @@ public class ResultsItemView extends CardView {
 		windowManager.getDefaultDisplay().getMetrics(metrics);
 		Point size = new Point();
 		Display display = windowManager.getDefaultDisplay();
-		if(Build.VERSION.SDK_INT >= 13) {
+		if (Build.VERSION.SDK_INT >= 13) {
 			display.getSize(size);
 		} else {
 			size.set(display.getWidth(), display.getHeight());

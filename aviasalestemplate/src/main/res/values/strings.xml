@@ -164,4 +164,9 @@
 
 	<string name="ticket_flight_text">Flight</string>
 
+	<string name="search_form_complex_search_add">Добавить</string>
+	<string name="search_form_complex_search_remove">Удалить</string>
+
+	<string name="search_form_tab_simple">простой</string>
+	<string name="search_form_tab_complex">сложный</string>
 </resources>

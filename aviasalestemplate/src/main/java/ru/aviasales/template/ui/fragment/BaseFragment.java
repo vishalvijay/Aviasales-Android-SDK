@@ -8,7 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
 import ru.aviasales.template.ui.dialog.BaseDialogFragment;
 import ru.aviasales.template.utils.BackPressable;
@@ -55,7 +55,7 @@ public abstract class BaseFragment extends Fragment implements BackPressable {
 	public void onSaveInstanceState(Bundle outState) {
 
 		// removing dialog in pre-honeycomb because onSavedInstanceState called before onPause
-		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB){
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
 			dismissDialogWithSave();
 		}
 
@@ -85,7 +85,7 @@ public abstract class BaseFragment extends Fragment implements BackPressable {
 	}
 
 	protected ActionBar getActionBar() {
-		return ((ActionBarActivity) getActivity()).getSupportActionBar();
+		return ((AppCompatActivity) getActivity()).getSupportActionBar();
 	}
 
 	protected void setTextToActionBar(String textToActionBar) {
@@ -146,7 +146,7 @@ public abstract class BaseFragment extends Fragment implements BackPressable {
 		}
 	}
 
-	protected void popBackStackInclusive(String tag){
+	protected void popBackStackInclusive(String tag) {
 		if (getActivity() != null) {
 			Fragment parentFragment = getParentFragment();
 

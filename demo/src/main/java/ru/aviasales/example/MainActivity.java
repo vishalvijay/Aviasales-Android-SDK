@@ -1,14 +1,14 @@
 package ru.aviasales.example;
 
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-import ru.aviasales.core.AviasalesSDK;
+import ru.aviasales.core.AviasalesSDKV3;
 import ru.aviasales.template.ui.fragment.AviasalesFragment;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
 	private AviasalesFragment aviasalesFragment;
 
@@ -16,7 +16,7 @@ public class MainActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		AviasalesSDK.getInstance().init(this);
+		AviasalesSDKV3.getInstance().init(this);
 		setContentView(R.layout.activity_main);
 
 		init(savedInstanceState);

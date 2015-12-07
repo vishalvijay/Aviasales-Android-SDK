@@ -1,21 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<RelativeLayout
 		xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content">
 
 	<LinearLayout
 			android:id="@+id/lt_search_form_button"
-			android:layout_width="wrap_content"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical">
 
-		<com.devspark.robototextview.widget.RobotoTextView
-				android:id="@+id/tv_city"
-				style="@style/search.destination.city"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"/>
+		<RelativeLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+			<com.devspark.robototextview.widget.RobotoTextView
+					android:id="@+id/tv_city"
+					style="@style/search.destination.city"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"/>
+
+			<com.devspark.robototextview.widget.RobotoTextView
+					android:id="@+id/tv_iata"
+					typeface="roboto_regular"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:layout_centerVertical="true"
+					android:textAllCaps="true"
+					android:textColor="@color/grey_455A64"
+					android:textSize="18dp"/>
+		</RelativeLayout>
 
 		<com.devspark.robototextview.widget.RobotoTextView
 				android:id="@+id/tv_airport"
@@ -25,4 +41,6 @@
 				android:layout_marginTop="1dp"/>
 
 	</LinearLayout>
-</LinearLayout>
+
+
+</RelativeLayout>
