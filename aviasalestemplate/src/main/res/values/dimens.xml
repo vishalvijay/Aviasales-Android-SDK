@@ -4,10 +4,14 @@
 	<dimen name="search_form_dates_divider_bottom_margin">16dp</dimen>
 	<dimen name="search_form_destinations_divider_top_margin">10.34dp</dimen>
 	<dimen name="search_form_destinations_divider_bottom_margin">18.33dp</dimen>
+	<dimen name="search_form_titles_margin_top">35dp</dimen>
+	<dimen name="search_form_titles_margin_bottom">18dp</dimen>
+	<dimen name="search_form_part_height">512dp</dimen>
 
 	<dimen name="search_form_search_button_top_margin">20dp</dimen>
 	<dimen name="search_form_search_button_bottom_margin">20dp</dimen>
 	<dimen name="search_form_passengers_margin_right">48dp</dimen>
+	<dimen name="search_form_trip_class_margin_bottom">12dp</dimen>
 
 	<dimen name="select_airport_item_height">48dp</dimen>
 

@@ -45,7 +45,7 @@
 					android:layout_height="match_parent"
 					android:layout_marginLeft="56dp"
 					android:layout_weight="1.01"
-					android:paddingBottom="12dp"
+					android:paddingBottom="@dimen/search_form_trip_class_margin_bottom"
 					android:paddingLeft="15dp">
 
 				<com.devspark.robototextview.widget.RobotoTextView
