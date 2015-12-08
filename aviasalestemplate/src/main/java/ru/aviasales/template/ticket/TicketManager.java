@@ -17,6 +17,7 @@ import ru.aviasales.core.search.params.SearchParams;
 import ru.aviasales.template.utils.CurrencyUtils;
 import ru.aviasales.template.utils.Defined;
 
+@Deprecated
 public class TicketManager {
 	private static final TicketManager INSTANCE = new TicketManager();
 

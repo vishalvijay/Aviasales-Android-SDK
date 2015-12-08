@@ -84,7 +84,7 @@ public class ResultsFragment extends BaseFragment {
 	private void setupActionBarCustomView() {
 		ActionBarTitleFlightView titleView = new ActionBarTitleFlightView(getActivity());
 		if (getSearchParams() != null) {
-			// TODO: 12/3/15 починить, привести к новому формату
+			// TODO: 12/3/15 Results починить, привести к новому формату
 //			titleView.setData(getSearchParams().getOriginIata(), getSearchParams().getDestinationIata());
 		}
 		getActionBar().show();
@@ -304,7 +304,7 @@ public class ResultsFragment extends BaseFragment {
 
 	private void clearFilters() {
 		FiltersManager.getInstance().getFilters().clearFilters();
-		// TODO: 12/3/15 починить
+		// TODO: 12/3/15 Filters починить
 //		FiltersManager.getInstance().filterSearchData(AviasalesSDKV3.getInstance().getSearchData(), new FiltersManager.OnFilterResultListener() {
 //			@Override
 //			public void onFilteringFinished(List<TicketData> filteredTicketsData) {

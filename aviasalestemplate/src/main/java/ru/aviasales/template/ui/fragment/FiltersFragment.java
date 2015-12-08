@@ -101,7 +101,7 @@ public class FiltersFragment extends BaseFragment {
 	}
 
 	private void applyFilters() {
-// TODO: 12/3/15 починить
+// TODO: 12/3/15 Filters починить
 //		FiltersManager.getInstance().filterSearchData(AviasalesSDK.getInstance().getSearchData(), new FiltersManager.OnFilterResultListener() {
 //			@Override
 //			public void onFilteringFinished(List<TicketData> filteredTicketsData) {

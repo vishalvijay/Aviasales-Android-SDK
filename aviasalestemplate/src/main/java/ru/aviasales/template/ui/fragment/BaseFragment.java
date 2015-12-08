@@ -54,15 +54,18 @@ public abstract class BaseFragment extends Fragment implements BackPressable {
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 
-		// removing dialog in pre-honeycomb because onSavedInstanceState called before onPause
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-			dismissDialogWithSave();
-		}
+		workaroundForPreHoneycomb();
 
 		if (removedDialogFragmentTag != null) {
 			outState.putString(EXTRA_REMOVED_DIALOG, removedDialogFragmentTag);
 		}
 		super.onSaveInstanceState(outState);
+	}
+
+	private void workaroundForPreHoneycomb() {
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+			dismissDialogWithSave();
+		}
 	}
 
 	protected void createDialog(final BaseDialogFragment dialogFragment) {

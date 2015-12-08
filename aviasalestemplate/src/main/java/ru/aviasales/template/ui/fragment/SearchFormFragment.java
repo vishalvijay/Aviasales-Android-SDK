@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
 import ru.aviasales.core.AviasalesSDKV3;
 import ru.aviasales.core.search_v3.objects.SearchDataV3;
@@ -22,7 +23,7 @@ import ru.aviasales.template.R;
 import ru.aviasales.template.ui.dialog.DatePickerDialogFragment;
 import ru.aviasales.template.ui.dialog.PassengersDialogFragment;
 import ru.aviasales.template.ui.dialog.TripClassDialogFragment;
-import ru.aviasales.template.ui.listener.AviasalesInterface;
+import ru.aviasales.template.ui.listener.AviasalesImpl;
 import ru.aviasales.template.ui.model.ComplexSearchParamsSegment;
 import ru.aviasales.template.ui.model.SearchFormData;
 import ru.aviasales.template.ui.model.SimpleSearchParams;
@@ -42,7 +43,7 @@ public class SearchFormFragment extends BaseFragment implements SimpleSearchForm
 	private final static int DIALOG_RETURN_SEGMENT_NUMBER = 1;
 
 	private boolean isComplexSearchSelected = false;
-	private AviasalesInterface aviasalesInterface;
+	private AviasalesImpl aviasalesImpl;
 
 	private SearchFormPassengersButton btnPassengers;
 	private ViewGroup btnTripClass;
@@ -86,7 +87,7 @@ public class SearchFormFragment extends BaseFragment implements SimpleSearchForm
 		setHasOptionsMenu(true);
 		showActionBar(true);
 
-		aviasalesInterface = (AviasalesInterface) getParentFragment();
+		aviasalesImpl = (AviasalesImpl) getParentFragment();
 
 		setupViews(layout);
 
@@ -170,7 +171,7 @@ public class SearchFormFragment extends BaseFragment implements SimpleSearchForm
 						Toast.makeText(getContext(), "Ошибка поиска ", Toast.LENGTH_LONG).show();
 					}
 				});
-				// TODO: 12/4/15 восстановим позже
+				// TODO: 12/4/15 SearchingFragment восстановим позже
 //				startFragment(SearchingFragment.newInstance(), true);
 
 			}
@@ -180,11 +181,9 @@ public class SearchFormFragment extends BaseFragment implements SimpleSearchForm
 		rgSearchType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				if (checkedId == R.id.rb_simple_search) {
-					isComplexSearchSelected = false;
-				} else if (checkedId == R.id.rb_complex_search) {
-					isComplexSearchSelected = true;
-				}
+
+				isComplexSearchSelected = checkedId == R.id.rb_complex_search;
+
 				setupSearchFormsVisibility();
 			}
 		});
@@ -203,8 +202,8 @@ public class SearchFormFragment extends BaseFragment implements SimpleSearchForm
 	private void setupData() {
 		if (getActivity() == null) return;
 
-		searchFormData = aviasalesInterface.getSearchFormData();
-		simpleSearchFormView.setupData(searchFormData);
+		searchFormData = aviasalesImpl.getSearchFormData();
+		simpleSearchFormView.setUpData(searchFormData);
 		simpleSearchFormView.setListener(this);
 
 		complexSearchFormView.setupData(searchFormData);
@@ -295,7 +294,7 @@ public class SearchFormFragment extends BaseFragment implements SimpleSearchForm
 					}
 
 				}
-				simpleSearchFormView.setupData(searchFormData);
+				simpleSearchFormView.setUpData(searchFormData);
 				complexSearchFormView.setupData(searchFormData);
 				dismissDialog();
 			}
@@ -394,7 +393,7 @@ public class SearchFormFragment extends BaseFragment implements SimpleSearchForm
 
 	@Override
 	public void onStop() {
-		aviasalesInterface.saveState();
+		aviasalesImpl.saveState();
 		super.onStop();
 	}
 

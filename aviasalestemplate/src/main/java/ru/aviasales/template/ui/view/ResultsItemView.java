@@ -80,7 +80,7 @@ public class ResultsItemView extends CardView {
 			Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
 			// skip if something wrong with it
 		}
-		// TODO: переписать на новый proposal
+		// TODO: Results переписать на новый proposal
 		/*
 		rlDirectRoute.setRouteData(proposal.getDirectFlights());
 
@@ -147,7 +147,7 @@ public class ResultsItemView extends CardView {
 		windowManager.getDefaultDisplay().getMetrics(metrics);
 		Point size = new Point();
 		Display display = windowManager.getDefaultDisplay();
-		if (Build.VERSION.SDK_INT >= 13) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
 			display.getSize(size);
 		} else {
 			size.set(display.getWidth(), display.getHeight());

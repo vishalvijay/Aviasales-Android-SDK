@@ -105,7 +105,7 @@ public class SimpleSearchFormView extends FrameLayout {
 	}
 
 	//must be called from onStart method
-	public void setupData(SearchFormData searchFormData) {
+	public void setUpData(SearchFormData searchFormData) {
 		if (getContext() == null) return;
 
 		this.searchFormData = searchFormData;

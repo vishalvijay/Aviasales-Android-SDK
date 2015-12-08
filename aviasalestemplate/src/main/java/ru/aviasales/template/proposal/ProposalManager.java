@@ -12,12 +12,13 @@ import ru.aviasales.core.search.object.AirportData;
 import ru.aviasales.core.search.object.GateData;
 import ru.aviasales.core.search_v3.objects.Flight;
 import ru.aviasales.core.search_v3.objects.Proposal;
+import ru.aviasales.core.search_v3.objects.ProposalSegment;
 import ru.aviasales.core.search_v3.objects.SearchDataV3;
 import ru.aviasales.core.search_v3.objects.Terms;
 import ru.aviasales.core.search_v3.params.SearchParamsV3;
 
 public class ProposalManager {
-	private static final ProposalManager INSTANCE = new ProposalManager();
+	private static final ProposalManager instance = new ProposalManager();
 
 	private Proposal proposalData;
 	private final List<String> agencies = new ArrayList<String>();
@@ -28,7 +29,7 @@ public class ProposalManager {
 	private Map<String, Terms> nativePrices;
 
 	public static ProposalManager getInstance() {
-		return INSTANCE;
+		return instance;
 	}
 
 	public void init(SearchParamsV3 params, SearchDataV3 searchData, Proposal proposal) {
@@ -82,7 +83,7 @@ public class ProposalManager {
 		agencies.addAll(proposal.getFiltredNativePrices().keySet());
 		List<String> agenciesToRemove = new ArrayList<>();
 		for (String gateId : agencies) {
-			if (gateId.contains("-")) agenciesToRemove.add(gateId.replace("-", ""));
+			agenciesToRemove.add(gateId.replace("-", ""));
 		}
 		agencies.removeAll(agenciesToRemove);
 
@@ -106,8 +107,8 @@ public class ProposalManager {
 	}
 
 	private GateData getGate(String id) {
-		for (Map.Entry<String, GateData> gate : gates.entrySet()) {
-			if (gate.getValue().getId().equals(id)) return gate.getValue();
+		for (GateData gate : gates.values()) {
+			if (gate.getId().equals(id)) return gate;
 		}
 		return new GateData();
 	}
@@ -117,7 +118,6 @@ public class ProposalManager {
 	}
 
 	public List<String> getAgenciesCodes() {
-		if (agencies == null) return new ArrayList<String>();
 		return agencies;
 	}
 
@@ -161,17 +161,17 @@ public class ProposalManager {
 				return (int) (proposal.getTotalWithFilters() - proposal1.getTotalWithFilters());
 			}
 
-			private int compareDurations(Proposal proposal, Proposal proposal1) {
-				int proposalDuration = Proposal.getTicketDuration(proposal);
-				int proposal1Duration = Proposal.getTicketDuration(proposal1);
-				if (proposalDuration == proposal1Duration) {
-					return compareDepartureTime(proposal, proposal1);
+			private int compareDurations(Proposal lProposal, Proposal rProposal) {
+				int lDuration = Proposal.getTicketDuration(lProposal);
+				int rDuration = Proposal.getTicketDuration(rProposal);
+				if (lDuration == rDuration) {
+					return compareDepartureTime(lProposal, rProposal);
 				}
-				return proposalDuration - proposal1Duration;
+				return lDuration - rDuration;
 			}
 
-			private int compareDepartureTime(Proposal proposal, Proposal proposal1) {
-				return (int) (getDepartureTime(proposal) - getDepartureTime(proposal1));
+			private int compareDepartureTime(Proposal lProposal, Proposal rProposal) {
+				return (int) (getDepartureTime(lProposal) - getDepartureTime(rProposal));
 			}
 
 			private Long getDepartureTime(Proposal proposal) {
@@ -183,8 +183,8 @@ public class ProposalManager {
 
 	public int getProposalDuration(Proposal proposal) {
 		int dur = 0;
-		for (int i = 0; i < proposal.getSegments().size(); i++) {
-			dur += getRouteDurationInMinRt(proposal.getSegmentFlights(i));
+		for (ProposalSegment proposalSegment : proposal.getSegments()) {
+			dur += getRouteDurationInMinRt(proposalSegment.getFlights());
 		}
 
 		return dur;

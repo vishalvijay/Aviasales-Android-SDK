@@ -106,16 +106,6 @@ public class SearchingFragment extends BaseFragment {
 								showToastAndReturnToSearchForm(getString(R.string.toast_error_unknown));
 						}
 					}
-
-					@Override
-					public void onMagicFareLoaded(SearchDataV3 searchDataV3, boolean b) {
-
-					}
-
-					@Override
-					public void onTicketCountChanged(int i, int i1, Map<String, Double> map, boolean b) {
-
-					}
 				});
 				break;
 		}

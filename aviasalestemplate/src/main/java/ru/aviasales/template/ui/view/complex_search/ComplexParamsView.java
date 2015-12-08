@@ -75,17 +75,9 @@ public class ComplexParamsView extends FrameLayout implements ComplexSegmentView
 					}
 
 				}
-				if (segments.size() == 3) {
-					ComplexSearchParamsSegment firstSegment = segments.get(0);
-					if (firstSegment.getOrigin() != null && segments.get(1).getDestination() == null) {
-						segments.get(1).setOrigin(firstSegment.getDestination());
-						segmentViews.get(1).changeDepartureData(segments.get(1).getOrigin().getIata(),
-								segments.get(1).getOrigin().getName(), false);
-						if (listener != null) {
-							listener.segmentChanged(ComplexParamsView.this, segmentViews.get(1), 1, segments.get(1));
-						}
-					}
-				}
+
+				checkForAddingThirdSegment(segments);
+
 				if (segmentViews.size() == MAX_SEGMENTS_COUNT) {
 					addButton.setEnabled(false);
 				}
@@ -101,16 +93,36 @@ public class ComplexParamsView extends FrameLayout implements ComplexSegmentView
 				} else if (segmentViews.size() == MIN_SEGMENTS_COUNT) {
 					clearSegmentData(segmentViews.size() - 1);
 				}
-
-				if (segmentViews.size() == MIN_SEGMENTS_COUNT &&
-						segments.get(1).getOrigin() == null &&
-						segments.get(1).getDestination() == null &&
-						segments.get(1).getDate() == null) {
-					removeButton.setEnabled(false);
+				if (segmentViews.size() == MIN_SEGMENTS_COUNT) {
+					checkForRemovingSecondSegment(segments);
 				}
+
 				addButton.setEnabled(true);
 			}
 		});
+	}
+
+	private void checkForRemovingSecondSegment(List<ComplexSearchParamsSegment> segments) {
+		if (segments.get(1).getOrigin() == null &&
+				segments.get(1).getDestination() == null &&
+				segments.get(1).getDate() == null) {
+			removeButton.setEnabled(false);
+		}
+	}
+
+	private void checkForAddingThirdSegment(List<ComplexSearchParamsSegment> segments) {
+		if (segments.size() == 3) {
+			ComplexSearchParamsSegment firstSegment = segments.get(0);
+			ComplexSearchParamsSegment secondSegment = segments.get(1);
+			if (firstSegment.getOrigin() != null && firstSegment.getDestination() != null && secondSegment.getOrigin() == null) {
+				secondSegment.setOrigin(firstSegment.getDestination());
+				segmentViews.get(1).changeDepartureData(secondSegment.getOrigin().getIata(),
+						secondSegment.getOrigin().getName(), false);
+				if (listener != null) {
+					listener.segmentChanged(ComplexParamsView.this, segmentViews.get(1), 1, segments.get(1));
+				}
+			}
+		}
 	}
 
 	public void initSegments(List<ComplexSearchParamsSegment> segments) {
@@ -132,15 +144,16 @@ public class ComplexParamsView extends FrameLayout implements ComplexSegmentView
 	}
 
 	private void createOrUpdateSegment(int i, ComplexSearchParamsSegment segment) {
-		if (i < this.segments.size() && this.segments.get(i) != null && this.segmentViews.get(i) != null) {
+		ComplexSegmentView segmentView = this.segmentViews.get(i);
+		if (i < this.segments.size() && this.segments.get(i) != null && segmentView != null) {
 			if (segment.getOrigin() != null) {
-				segmentViews.get(i).changeDepartureData(segment.getOrigin().getIata(), segment.getOrigin().getName(), false);
+				segmentView.changeDepartureData(segment.getOrigin().getIata(), segment.getOrigin().getName(), false);
 			}
 			if (segment.getDestination() != null) {
-				segmentViews.get(i).changeArrivalData(segment.getDestination().getIata(), segment.getDestination().getName(), false);
+				segmentView.changeArrivalData(segment.getDestination().getIata(), segment.getDestination().getName(), false);
 			}
 			if (segment.getStringDate() != null) {
-				segmentViews.get(i).changeDateData(segment.getDateInMM_ddFormat(), segment.getYear(), false);
+				segmentView.changeDateData(segment.getDateInMM_ddFormat(), segment.getYear(), false);
 			}
 		} else {
 			addSegmentView(i, segment);

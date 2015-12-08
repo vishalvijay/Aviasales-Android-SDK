@@ -128,13 +128,14 @@ public class SearchFormData {
 	private List<ComplexSearchParamsSegment> loadSegments(SharedPreferences prefs, int segmentsSize) {
 		List<ComplexSearchParamsSegment> segments = new ArrayList<>(segmentsSize);
 		for (int i = 0; i < segmentsSize; i++) {
+			String indexString = Integer.toString(i);
 			segments.add(i, new ComplexSearchParamsSegment(
 					PlaceData.create(prefs.getString(SearchParamsV3.SEARCH_PARAM_ORIGIN_IATA.replace(SearchParamsV3.SEGMENT_NUMBER,
-							Integer.toString(i)), null)),
+							indexString), null)),
 					PlaceData.create(prefs.getString(SearchParamsV3.SEARCH_PARAM_DESTINATION_IATA.replace(SearchParamsV3.SEGMENT_NUMBER,
-							Integer.toString(i)), null)),
+							indexString), null)),
 					prefs.getString(SearchParamsV3.SEARCH_PARAM_DATE.replace(SearchParamsV3.SEGMENT_NUMBER,
-							Integer.toString(i)), null)
+							indexString), null)
 			));
 		}
 		return segments;

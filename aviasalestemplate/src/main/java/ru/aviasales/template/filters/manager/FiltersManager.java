@@ -52,7 +52,7 @@ public class FiltersManager {
 		pool.submit(new Runnable() {
 			@Override
 			public void run() {
-				// TODO: 12/3/15 починить
+				// TODO: 12/3/15 Filters починить
 //				List<Proposal> filteredTickets = mFilter.applyFilters(searchData);
 //				mHandler.post(new EndRunnable(filteredTickets));
 
@@ -107,12 +107,12 @@ public class FiltersManager {
 				mFilter = new GeneralFilter(context);
 
 				if (searchData.getProposals() != null) {
-					// TODO: 12/3/15 починить
+					// TODO: 12/3/15 Filters починить
 //					PreInitializeFilters preInitializeFilters = new PreInitializeFilters(context, searchData);
 //					preInitializeFilters.setupFilters();
-					// TODO: 12/3/15 починить
+					// TODO: 12/3/15 Filters починить
 //					mFilter.init(searchData, preInitializeFilters);
-					// TODO: 12/3/15 починить
+					// TODO: 12/3/15 Filters починить
 //					List<Proposal> filteredTickets = mFilter.applyFilters(searchData);
 //					Collections.sort(filteredTickets, ProposalManager.getInstance().getProposalComparator());
 
