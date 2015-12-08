@@ -3,7 +3,6 @@ package ru.aviasales.template.filters.manager;
 import android.content.Context;
 import android.os.Handler;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,11 +11,9 @@ import ru.aviasales.core.AviasalesSDKV3;
 import ru.aviasales.core.search_v3.objects.Proposal;
 import ru.aviasales.core.search_v3.objects.SearchDataV3;
 import ru.aviasales.template.filters.GeneralFilter;
-import ru.aviasales.template.filters.PreInitializeFilters;
-import ru.aviasales.template.proposal.ProposalManager;
 
 public class FiltersManager {
-	private static volatile FiltersManager sInstance;
+	private static volatile FiltersManager instance = new FiltersManager();
 
 	public interface OnFilterResultListener {
 		void onFilteringFinished(List<Proposal> filteredTicketsData);
@@ -32,14 +29,7 @@ public class FiltersManager {
 	private List<Proposal> mFilteredProposals;
 
 	public static FiltersManager getInstance() {
-		if (sInstance == null) {
-			synchronized (FiltersManager.class) {
-				if (sInstance == null) {
-					sInstance = new FiltersManager();
-				}
-			}
-		}
-		return sInstance;
+		return instance;
 	}
 
 
