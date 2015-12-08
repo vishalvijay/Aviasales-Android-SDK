@@ -37,10 +37,11 @@ public class Defined extends CoreDefined {
 	private static final String TH_DEFAULT_CURRENCY = "THB";
 
 
-	private static Map<String,String> CURRENCY_MAP ;
+	private static Map<String, String> CURRENCY_MAP;
+
 	static {
-		Map<String, String> aMap = new LinkedHashMap<String,String>();
-		if(LocaleUtil.getLocale().equals(LocaleUtil.RUSSIAN_LANGUAGE_CODE)) {
+		Map<String, String> aMap = new LinkedHashMap<String, String>();
+		if (LocaleUtil.getLocale().equals(LocaleUtil.RUSSIAN_LANGUAGE_CODE)) {
 
 			aMap.put("RUB", "Российский рубль");
 			aMap.put("USD", "Доллар США");
@@ -92,11 +93,11 @@ public class Defined extends CoreDefined {
 	public static String getDefaultCurrency() {
 		String locale = LocaleUtil.getLocale();
 
-		if (locale.equalsIgnoreCase(LocaleUtil.ENGLISH_LANGUAGE_CODE + "_" + LocaleUtil.GREAT_BRITAIN_CODE)) {
+		if (locale.equalsIgnoreCase(LocaleUtil.ENGLISH_LANGUAGE_CODE + "_" + LocaleUtil.GREAT_BRITAIN_COUNTRY_CODE)) {
 			return EN_GB_DEFAULT_CURRENCY;
-		} else if (locale.equalsIgnoreCase(LocaleUtil.ENGLISH_LANGUAGE_CODE + "_" + LocaleUtil.AUSTRALIA_CODE)) {
+		} else if (locale.equalsIgnoreCase(LocaleUtil.ENGLISH_LANGUAGE_CODE + "_" + LocaleUtil.GREAT_BRITAIN_COUNTRY_CODE)) {
 			return EN_AU_DEFAULT_CURRENCY;
-		} else if (locale.equalsIgnoreCase(LocaleUtil.ENGLISH_LANGUAGE_CODE + "_" + LocaleUtil.IRELAND_CODE)) {
+		} else if (locale.equalsIgnoreCase(LocaleUtil.ENGLISH_LANGUAGE_CODE + "_" + LocaleUtil.GREAT_BRITAIN_COUNTRY_CODE)) {
 			return EN_IE_DEFAULT_CURRENCY;
 		} else if (locale.equalsIgnoreCase(LocaleUtil.SPANISH_LANGUAGE_CODE)) {
 			return ES_DEFAULT_CURRENCY;
@@ -115,7 +116,7 @@ public class Defined extends CoreDefined {
 			return EN_DEFAULT_CURRENCY;
 	}
 
-	public static Map<String,String> getCurrenciesArray(){
+	public static Map<String, String> getCurrenciesArray() {
 		return CURRENCY_MAP;
 	}
 }

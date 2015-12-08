@@ -7,8 +7,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.view.*;
-import android.widget.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -231,7 +237,7 @@ public class TicketDetailsFragment extends BaseFragment {
 			public void onClick(DialogInterface dialog, int id) {
 				if (DateUtils.isDateBeforeDateShiftLine(getSearchParams().getDepartCalendarObject())) {
 					Toast.makeText(getActivity(), getString(R.string.ticket_refresh_dates_passed), Toast.LENGTH_SHORT).show();
-					startFragment(SearchFromFragment.newInstance(), true);
+					startFragment(SearchFormFragment.newInstance(), true);
 				} else {
 
 					if (!Utils.isOnline(getActivity())) {
@@ -389,7 +395,7 @@ public class TicketDetailsFragment extends BaseFragment {
 		getActivity().startActivity(intent);
 	}
 
-	private void hideSpinner(){
+	private void hideSpinner() {
 		try {
 			Method method = Spinner.class.getDeclaredMethod("onDetachedFromWindow");
 			method.setAccessible(true);
@@ -402,7 +408,7 @@ public class TicketDetailsFragment extends BaseFragment {
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 
-		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB){
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
 			if (updateDialog != null && updateDialog.isShowing()) {
 				removedDialogFragmentTag = UPDATE_DIALOG_TAG;
 			}

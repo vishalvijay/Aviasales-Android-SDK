@@ -18,14 +18,14 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import ru.aviasales.core.AviasalesSDK;
-import ru.aviasales.core.search.object.SearchData;
-import ru.aviasales.core.search.object.TicketData;
-import ru.aviasales.core.search.params.SearchParams;
+import ru.aviasales.core.AviasalesSDKV3;
+import ru.aviasales.core.search_v3.objects.Proposal;
+import ru.aviasales.core.search_v3.objects.SearchDataV3;
+import ru.aviasales.core.search_v3.params.SearchParamsV3;
 import ru.aviasales.template.R;
 import ru.aviasales.template.currencies.Currency;
 import ru.aviasales.template.filters.manager.FiltersManager;
-import ru.aviasales.template.ticket.TicketManager;
+import ru.aviasales.template.proposal.ProposalManager;
 import ru.aviasales.template.ui.adapter.ResultsRecycleViewAdapter;
 import ru.aviasales.template.ui.dialog.CurrencyFragmentDialog;
 import ru.aviasales.template.ui.dialog.ResultsSortingDialog;
@@ -84,7 +84,8 @@ public class ResultsFragment extends BaseFragment {
 	private void setupActionBarCustomView() {
 		ActionBarTitleFlightView titleView = new ActionBarTitleFlightView(getActivity());
 		if (getSearchParams() != null) {
-			titleView.setData(getSearchParams().getOriginIata(), getSearchParams().getDestinationIata());
+			// TODO: 12/3/15 Results починить, привести к новому формату
+//			titleView.setData(getSearchParams().getOriginIata(), getSearchParams().getDestinationIata());
 		}
 		getActionBar().show();
 		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -133,10 +134,10 @@ public class ResultsFragment extends BaseFragment {
 
 		adapter.setListener(new ResultsRecycleViewAdapter.OnClickListener() {
 			@Override
-			public void onClick(final TicketData ticketData, int position) {
+			public void onClick(final Proposal proposal, int position) {
 				if (getActivity() == null) return;
 
-				showDetails(ticketData);
+				showDetails(proposal);
 			}
 		});
 		adapter.notifyDataSet();
@@ -155,12 +156,12 @@ public class ResultsFragment extends BaseFragment {
 		return adapter;
 	}
 
-	private SearchData getSearchResults() {
-		return AviasalesSDK.getInstance().getSearchData();
+	private SearchDataV3 getSearchResults() {
+		return AviasalesSDKV3.getInstance().getSearchData();
 	}
 
-	private void showDetails(TicketData ticketData) {
-		TicketManager.getInstance().init(ticketData, AviasalesSDK.getInstance().getSearchData().getGatesInfo(), AviasalesSDK.getInstance().getSearchParamsOfLastSearch());
+	private void showDetails(Proposal ticketData) {
+		ProposalManager.getInstance().init(ticketData, AviasalesSDKV3.getInstance().getSearchData().getGatesInfo(), AviasalesSDKV3.getInstance().getSearchParamsOfLastSearch());
 		startFragment(TicketDetailsFragment.newInstance(), true);
 	}
 
@@ -275,8 +276,8 @@ public class ResultsFragment extends BaseFragment {
 
 	}
 
-	protected SearchParams getSearchParams() {
-		return AviasalesSDK.getInstance().getSearchParamsOfLastSearch();
+	protected SearchParamsV3 getSearchParams() {
+		return AviasalesSDKV3.getInstance().getSearchParamsOfLastSearch();
 	}
 
 	public void updateResults() {
@@ -303,12 +304,13 @@ public class ResultsFragment extends BaseFragment {
 
 	private void clearFilters() {
 		FiltersManager.getInstance().getFilters().clearFilters();
-		FiltersManager.getInstance().filterSearchData(AviasalesSDK.getInstance().getSearchData(), new FiltersManager.OnFilterResultListener() {
-			@Override
-			public void onFilteringFinished(List<TicketData> filteredTicketsData) {
-				updateResults();
-			}
-		});
+		// TODO: 12/3/15 Filters починить
+//		FiltersManager.getInstance().filterSearchData(AviasalesSDKV3.getInstance().getSearchData(), new FiltersManager.OnFilterResultListener() {
+//			@Override
+//			public void onFilteringFinished(List<TicketData> filteredTicketsData) {
+//				updateResults();
+//			}
+//		});
 	}
 
 }

@@ -14,16 +14,16 @@ public class SelectAirportInfoAdapter extends RecyclerView.Adapter<RecyclerView.
 	private static final int INFO_VIEW_TYPE = 0;
 
 	private Context context;
-	private RecyclerView.Adapter mBaseAdapter;
+	private RecyclerView.Adapter baseAdapter;
 	private String infoText;
 	private boolean isInfoViewActive = false;
 
 	public SelectAirportInfoAdapter(Context context,
 	                                RecyclerView.Adapter baseAdapter) {
-		mBaseAdapter = baseAdapter;
+		this.baseAdapter = baseAdapter;
 		this.context = context;
 
-		mBaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+		this.baseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
 			@Override
 			public void onChanged() {
 				notifyDataSetChanged();
@@ -69,7 +69,7 @@ public class SelectAirportInfoAdapter extends RecyclerView.Adapter<RecyclerView.
 			View view = new SelectAirportInfoView(context);
 			return new LocationViewHolder(view);
 		} else {
-			return mBaseAdapter.onCreateViewHolder(parent, typeView - 1);
+			return baseAdapter.onCreateViewHolder(parent, typeView - 1);
 		}
 	}
 
@@ -88,7 +88,7 @@ public class SelectAirportInfoAdapter extends RecyclerView.Adapter<RecyclerView.
 				((LocationViewHolder) sectionViewHolder).statusView.allowClick(false);
 			}
 		} else {
-			mBaseAdapter.onBindViewHolder(sectionViewHolder, infoPositionToPosition(position));
+			baseAdapter.onBindViewHolder(sectionViewHolder, infoPositionToPosition(position));
 		}
 	}
 
@@ -96,7 +96,7 @@ public class SelectAirportInfoAdapter extends RecyclerView.Adapter<RecyclerView.
 	public int getItemViewType(int position) {
 		return isInfoViewPosition(position)
 				? INFO_VIEW_TYPE
-				: mBaseAdapter.getItemViewType(infoPositionToPosition(position)) + 1;
+				: baseAdapter.getItemViewType(infoPositionToPosition(position)) + 1;
 	}
 
 	private boolean isBottomView(int position) {
@@ -115,12 +115,12 @@ public class SelectAirportInfoAdapter extends RecyclerView.Adapter<RecyclerView.
 	public long getItemId(int position) {
 		return isInfoViewPosition(position)
 				? Integer.MAX_VALUE
-				: mBaseAdapter.getItemId(infoPositionToPosition(position));
+				: baseAdapter.getItemId(infoPositionToPosition(position));
 	}
 
 	@Override
 	public int getItemCount() {
-		int itemCount = mBaseAdapter.getItemCount();
+		int itemCount = baseAdapter.getItemCount();
 		if (isInfoViewActive) itemCount++;
 		return itemCount;
 	}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+		android:id="@+id/rl_search_form"
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_alignParentBottom="true"
+		android:background="@drawable/search_form_bkg_drawable">
+
+	<android.support.v4.widget.NestedScrollView
+			android:id="@+id/search_form_scroll_view"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+		<ru.aviasales.template.ui.view.complex_search.ComplexParamsView
+				android:id="@+id/search_form"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"/>
+	</android.support.v4.widget.NestedScrollView>
+
+</RelativeLayout>

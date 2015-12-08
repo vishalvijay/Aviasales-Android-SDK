@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:paddingBottom="9dp"
+		android:paddingTop="9dp">
+
+	<LinearLayout
+			android:id="@+id/text_info_layout"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center_horizontal"
+			android:orientation="vertical">
+
+		<com.devspark.robototextview.widget.RobotoTextView
+				android:id="@+id/tv_top"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="MOW"
+				android:textColor="@color/grey_37474F"
+				android:textSize="18dp"/>
+
+		<com.devspark.robototextview.widget.RobotoTextView
+				android:id="@+id/tv_bottom"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:singleLine="true"
+				android:text="Домодедово"
+				android:textAllCaps="true"
+				android:textColor="@color/grey_37474F"
+				android:textSize="10dp"/>
+	</LinearLayout>
+
+	<ImageView
+			android:id="@+id/iv_icon"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:scaleType="center"
+			android:src="@drawable/ic_add_complex_search"/>
+
+</RelativeLayout>

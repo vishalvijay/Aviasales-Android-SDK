@@ -8,48 +8,6 @@
 		android:orientation="vertical"
 		android:splitMotionEvents="false">
 
-	<FrameLayout
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"/>
-
-	<RelativeLayout
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:layout_above="@+id/search_form"
-			android:layout_marginTop="16.7dp"
-			android:orientation="horizontal"
-			>
-
-		<com.devspark.robototextview.widget.RobotoTextView
-				android:id="@+id/tv_origin_iata"
-				style="@style/search.destination.iata"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_centerVertical="true"
-				android:layout_marginRight="20dp"
-				android:layout_toLeftOf="@+id/iv_planes_icon"
-				android:text="LED"/>
-
-		<ImageView
-				android:id="@+id/iv_planes_icon"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_centerHorizontal="true"
-				android:layout_centerVertical="true"
-				android:src="@drawable/ic_plane_right"/>
-
-		<com.devspark.robototextview.widget.RobotoTextView
-				android:id="@+id/tv_destination_iata"
-				style="@style/search.destination.iata"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_centerVertical="true"
-				android:layout_marginLeft="20dp"
-				android:layout_toRightOf="@+id/iv_planes_icon"
-				android:text="WAW"/>
-
-	</RelativeLayout>
-
 	<include layout="@layout/search_form_part"/>
 
 </RelativeLayout>

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.devspark.robototextview.widget.RobotoCheckedTextView;
 
 import ru.aviasales.core.search.params.SearchParams;
+import ru.aviasales.core.search_v3.params.SearchParamsV3;
 import ru.aviasales.template.R;
 
 public class TripClassDialogFragment extends BaseDialogFragment {
@@ -20,11 +21,11 @@ public class TripClassDialogFragment extends BaseDialogFragment {
 	private RobotoCheckedTextView economy;
 	private RobotoCheckedTextView business;
 
-	private int tripClass = 0;
+	private String tripClass = SearchParamsV3.TRIP_CLASS_ECONOMY;
 
 	private OnTripClassChangedListener onTripClassChangedListener;
 
-	public static TripClassDialogFragment newInstance(int tripClass, OnTripClassChangedListener onTripClassChangedListener) {
+	public static TripClassDialogFragment newInstance(String tripClass, OnTripClassChangedListener onTripClassChangedListener) {
 		TripClassDialogFragment tripClassDialogFragment = new TripClassDialogFragment();
 		tripClassDialogFragment.setTripClass(tripClass);
 		tripClassDialogFragment.setOnTripClassChangedListener(onTripClassChangedListener);
@@ -44,11 +45,11 @@ public class TripClassDialogFragment extends BaseDialogFragment {
 
 	private void setCheckedItem() {
 		switch (tripClass) {
-			case SearchParams.TRIP_CLASS_ECONOMY:
+			case SearchParamsV3.TRIP_CLASS_ECONOMY:
 				economy.setChecked(true);
 				business.setChecked(false);
 				break;
-			case SearchParams.TRIP_CLASS_BUSINESS:
+			case SearchParamsV3.TRIP_CLASS_BUSINESS:
 				economy.setChecked(false);
 				business.setChecked(true);
 				break;
@@ -72,7 +73,7 @@ public class TripClassDialogFragment extends BaseDialogFragment {
 				economy.setChecked(true);
 				business.setChecked(false);
 				if(onTripClassChangedListener != null) {
-					onTripClassChangedListener.onTripClassChanged(SearchParams.TRIP_CLASS_ECONOMY);
+					onTripClassChangedListener.onTripClassChanged(SearchParamsV3.TRIP_CLASS_ECONOMY);
 				}
 			}
 		});
@@ -83,7 +84,7 @@ public class TripClassDialogFragment extends BaseDialogFragment {
 				economy.setChecked(false);
 				business.setChecked(true);
 				if (onTripClassChangedListener != null) {
-					onTripClassChangedListener.onTripClassChanged(SearchParams.TRIP_CLASS_BUSINESS);
+					onTripClassChangedListener.onTripClassChanged(SearchParamsV3.TRIP_CLASS_BUSINESS);
 				}
 			}
 		});
@@ -91,7 +92,7 @@ public class TripClassDialogFragment extends BaseDialogFragment {
 		return view;
 	}
 
-	public void setTripClass(int tripClass) {
+	public void setTripClass(String tripClass) {
 		this.tripClass = tripClass;
 	}
 
@@ -100,7 +101,7 @@ public class TripClassDialogFragment extends BaseDialogFragment {
 	}
 
 	public interface OnTripClassChangedListener {
-		void onTripClassChanged(int tripClass);
+		void onTripClassChanged(String tripClass);
 		void onCancel();
 	}
 
