@@ -23,7 +23,7 @@
 				android:layout_toLeftOf="@+id/v_center"
 				android:background="@drawable/button_light_with_corners"
 				android:text="@string/search_form_complex_search_add"
-				android:textColor="@color/gray_blue"/>
+				android:textColor="@color/complex_search_button_text_color_selector"/>
 
 		<View
 				android:id="@+id/v_center"
@@ -39,6 +39,6 @@
 				android:layout_toRightOf="@+id/v_center"
 				android:background="@drawable/button_light_with_corners"
 				android:text="@string/search_form_complex_search_remove"
-				android:textColor="@color/gray_blue"/>
+				android:textColor="@color/complex_search_button_text_color_selector"/>
 	</RelativeLayout>
 </LinearLayout>
