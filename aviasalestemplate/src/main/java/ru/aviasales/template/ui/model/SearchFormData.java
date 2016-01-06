@@ -10,10 +10,9 @@ import java.util.Date;
 import java.util.List;
 
 import ru.aviasales.core.http.utils.CoreDateUtils;
+import ru.aviasales.core.search.params.Passengers;
 import ru.aviasales.core.search.params.SearchParams;
 import ru.aviasales.core.search_airports.object.PlaceData;
-import ru.aviasales.core.search_v3.params.Passengers;
-import ru.aviasales.core.search_v3.params.SearchParamsV3;
 import ru.aviasales.template.R;
 import ru.aviasales.template.utils.DateUtils;
 import ru.aviasales.template.utils.Defined;
@@ -21,13 +20,18 @@ import ru.aviasales.template.utils.Utils;
 
 public class SearchFormData {
 
+	private static final String SEARCH_PARAM_ORIGIN_NAME = "search_param_origin_name";
+	private static final String SEARCH_PARAM_DESTINATION_NAME = "search_param_destination_name";
+	private static final String SEARCH_PARAM_DEPART_DATE = "search_param_depart_date";
+	private static final String SEARCH_PARAM_RETURN_DATE = "search_param_return_date";
+
 	private static final String EXTRA_RETURN_ENABLED = "extra-return_enabled";
 	private static final String COMPLEX_SEARCH_SEGMENTS_COUNT = "open_jaw_segments_count";
 
 	private SimpleSearchParams simpleSearchParams;
 
 	private List<ComplexSearchParamsSegment> complexSearchSegments;
-	private String tripClass = SearchParamsV3.TRIP_CLASS_ECONOMY;
+	private String tripClass = SearchParams.TRIP_CLASS_ECONOMY;
 
 	private Passengers passengers;
 	private final Context context;
@@ -41,13 +45,13 @@ public class SearchFormData {
 		loadSimpleSearchParams(prefs);
 		loadComplexSearchParams(prefs);
 
-		tripClass = prefs.getString(SearchParamsV3.SEARCH_PARAM_TRIP_CLASS, SearchParamsV3.TRIP_CLASS_ECONOMY);
+		tripClass = prefs.getString(SearchParams.SEARCH_PARAM_TRIP_CLASS, SearchParams.TRIP_CLASS_ECONOMY);
 
 		passengers = new Passengers();
 
-		passengers.setAdults(prefs.getInt(SearchParamsV3.SEARCH_PARAM_ADULTS, 1));
-		passengers.setChildren(prefs.getInt(SearchParamsV3.SEARCH_PARAM_CHILDREN, 0));
-		passengers.setInfants(prefs.getInt(SearchParamsV3.SEARCH_PARAM_INFANTS, 0));
+		passengers.setAdults(prefs.getInt(SearchParams.SEARCH_PARAM_ADULTS, 1));
+		passengers.setChildren(prefs.getInt(SearchParams.SEARCH_PARAM_CHILDREN, 0));
+		passengers.setInfants(prefs.getInt(SearchParams.SEARCH_PARAM_INFANTS, 0));
 
 		checkAndFixDates();
 	}
@@ -115,11 +119,11 @@ public class SearchFormData {
 	private void loadSimpleSearchParams(SharedPreferences prefs) {
 		simpleSearchParams = new SimpleSearchParams();
 
-		simpleSearchParams.setOrigin(PlaceData.create(prefs.getString(SearchParams.SEARCH_PARAM_ORIGIN_NAME, null)));
-		simpleSearchParams.setDestination(PlaceData.create(prefs.getString(SearchParams.SEARCH_PARAM_DESTINATION_NAME, null)));
+		simpleSearchParams.setOrigin(PlaceData.create(prefs.getString(SEARCH_PARAM_ORIGIN_NAME, null)));
+		simpleSearchParams.setDestination(PlaceData.create(prefs.getString(SEARCH_PARAM_DESTINATION_NAME, null)));
 
-		simpleSearchParams.setDepartDate(prefs.getString(SearchParams.SEARCH_PARAM_DEPART_DATE, null));
-		simpleSearchParams.setReturnDate(prefs.getString(SearchParams.SEARCH_PARAM_RETURN_DATE, null));
+		simpleSearchParams.setDepartDate(prefs.getString(SEARCH_PARAM_DEPART_DATE, null));
+		simpleSearchParams.setReturnDate(prefs.getString(SEARCH_PARAM_RETURN_DATE, null));
 
 		simpleSearchParams.setReturnEnabled(prefs.getBoolean(EXTRA_RETURN_ENABLED, false));
 
@@ -130,11 +134,11 @@ public class SearchFormData {
 		for (int i = 0; i < segmentsSize; i++) {
 			String indexString = Integer.toString(i);
 			segments.add(i, new ComplexSearchParamsSegment(
-					PlaceData.create(prefs.getString(SearchParamsV3.SEARCH_PARAM_ORIGIN_IATA.replace(SearchParamsV3.SEGMENT_NUMBER,
+					PlaceData.create(prefs.getString(SearchParams.SEARCH_PARAM_ORIGIN_IATA.replace(SearchParams.SEGMENT_NUMBER,
 							indexString), null)),
-					PlaceData.create(prefs.getString(SearchParamsV3.SEARCH_PARAM_DESTINATION_IATA.replace(SearchParamsV3.SEGMENT_NUMBER,
+					PlaceData.create(prefs.getString(SearchParams.SEARCH_PARAM_DESTINATION_IATA.replace(SearchParams.SEGMENT_NUMBER,
 							indexString), null)),
-					prefs.getString(SearchParamsV3.SEARCH_PARAM_DATE.replace(SearchParamsV3.SEGMENT_NUMBER,
+					prefs.getString(SearchParams.SEARCH_PARAM_DATE.replace(SearchParams.SEGMENT_NUMBER,
 							indexString), null)
 			));
 		}
@@ -173,16 +177,16 @@ public class SearchFormData {
 
 	public String getTripClassName() {
 		switch (tripClass) {
-			case SearchParamsV3.TRIP_CLASS_ECONOMY:
+			case SearchParams.TRIP_CLASS_ECONOMY:
 				return Utils.capitalizeFirstLetter(context.getString(R.string.trip_class_economy));
-			case SearchParamsV3.TRIP_CLASS_BUSINESS:
+			case SearchParams.TRIP_CLASS_BUSINESS:
 				return Utils.capitalizeFirstLetter(context.getString(R.string.trip_class_business));
 		}
 		return null;
 	}
 
-	public SearchParamsV3 createSearchParams(boolean isComplexSearch) {
-		SearchParamsV3 params = new SearchParamsV3();
+	public SearchParams createSearchParams(boolean isComplexSearch) {
+		SearchParams params = new SearchParams();
 
 
 		params.setPassengers(passengers);
@@ -198,7 +202,7 @@ public class SearchFormData {
 		return params;
 	}
 
-	private SearchParamsV3 createComplexSearchParams(SearchParamsV3 params) {
+	private SearchParams createComplexSearchParams(SearchParams params) {
 
 		for (ComplexSearchParamsSegment paramsSegment : complexSearchSegments) {
 			params.addSegment(paramsSegment.toSearchSegment());
@@ -207,7 +211,7 @@ public class SearchFormData {
 		return params;
 	}
 
-	private SearchParamsV3 createSimpleSearchParams(SearchParamsV3 params) {
+	private SearchParams createSimpleSearchParams(SearchParams params) {
 
 		params.setSegments(simpleSearchParams.createSegments());
 		return params;
@@ -219,10 +223,10 @@ public class SearchFormData {
 		putSimpleSearchParams(editor);
 		putComplexSearchParams(editor);
 
-		editor.putString(SearchParamsV3.SEARCH_PARAM_TRIP_CLASS, tripClass)
-				.putInt(SearchParamsV3.SEARCH_PARAM_ADULTS, passengers.getAdults())
-				.putInt(SearchParamsV3.SEARCH_PARAM_CHILDREN, passengers.getChildren())
-				.putInt(SearchParamsV3.SEARCH_PARAM_INFANTS, passengers.getInfants())
+		editor.putString(SearchParams.SEARCH_PARAM_TRIP_CLASS, tripClass)
+				.putInt(SearchParams.SEARCH_PARAM_ADULTS, passengers.getAdults())
+				.putInt(SearchParams.SEARCH_PARAM_CHILDREN, passengers.getChildren())
+				.putInt(SearchParams.SEARCH_PARAM_INFANTS, passengers.getInfants())
 				.putBoolean(EXTRA_RETURN_ENABLED, simpleSearchParams.isReturnEnabled())
 				.apply();
 	}
@@ -231,24 +235,24 @@ public class SearchFormData {
 		int i = 0;
 		for (ComplexSearchParamsSegment complexSegment : complexSearchSegments) {
 			if (complexSegment.getOrigin() != null) {
-				editor.putString(SearchParamsV3.SEARCH_PARAM_ORIGIN_IATA.replace(SearchParamsV3.SEGMENT_NUMBER,
+				editor.putString(SearchParams.SEARCH_PARAM_ORIGIN_IATA.replace(SearchParams.SEGMENT_NUMBER,
 						Integer.toString(i)), complexSegment.getOrigin().serialize());
 			} else {
-				editor.remove(SearchParamsV3.SEARCH_PARAM_ORIGIN_IATA.replace(SearchParamsV3.SEGMENT_NUMBER,
+				editor.remove(SearchParams.SEARCH_PARAM_ORIGIN_IATA.replace(SearchParams.SEGMENT_NUMBER,
 						Integer.toString(i)));
 			}
 			if (complexSegment.getDestination() != null) {
-				editor.putString(SearchParamsV3.SEARCH_PARAM_DESTINATION_IATA.replace(SearchParamsV3.SEGMENT_NUMBER,
+				editor.putString(SearchParams.SEARCH_PARAM_DESTINATION_IATA.replace(SearchParams.SEGMENT_NUMBER,
 						Integer.toString(i)), complexSegment.getDestination().serialize());
 			} else {
-				editor.remove(SearchParamsV3.SEARCH_PARAM_DESTINATION_IATA.replace(SearchParamsV3.SEGMENT_NUMBER,
+				editor.remove(SearchParams.SEARCH_PARAM_DESTINATION_IATA.replace(SearchParams.SEGMENT_NUMBER,
 						Integer.toString(i)));
 			}
 			if (complexSegment.getStringDate() != null) {
-				editor.putString(SearchParamsV3.SEARCH_PARAM_DATE.replace(SearchParamsV3.SEGMENT_NUMBER,
+				editor.putString(SearchParams.SEARCH_PARAM_DATE.replace(SearchParams.SEGMENT_NUMBER,
 						Integer.toString(i)), complexSegment.getStringDate());
 			} else {
-				editor.remove(SearchParamsV3.SEARCH_PARAM_DATE.replace(SearchParamsV3.SEGMENT_NUMBER,
+				editor.remove(SearchParams.SEARCH_PARAM_DATE.replace(SearchParams.SEGMENT_NUMBER,
 						Integer.toString(i)));
 			}
 			i++;
@@ -267,11 +271,10 @@ public class SearchFormData {
 		if (simpleSearchParams.getDestination() != null) {
 			destinationSerialized = simpleSearchParams.getDestination().serialize();
 		}
-
-		editor.putString(SearchParams.SEARCH_PARAM_ORIGIN_NAME, originSerialized)
-				.putString(SearchParams.SEARCH_PARAM_DESTINATION_NAME, destinationSerialized)
-				.putString(SearchParams.SEARCH_PARAM_DEPART_DATE, simpleSearchParams.getDepartDateString())
-				.putString(SearchParams.SEARCH_PARAM_RETURN_DATE, simpleSearchParams.getReturnDateString());
+		editor.putString(SEARCH_PARAM_ORIGIN_NAME, originSerialized)
+				.putString(SEARCH_PARAM_DESTINATION_NAME, destinationSerialized)
+				.putString(SEARCH_PARAM_DEPART_DATE, simpleSearchParams.getDepartDateString())
+				.putString(SEARCH_PARAM_RETURN_DATE, simpleSearchParams.getReturnDateString());
 
 	}
 

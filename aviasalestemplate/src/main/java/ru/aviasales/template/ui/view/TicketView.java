@@ -3,13 +3,23 @@ package ru.aviasales.template.ui.view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import ru.aviasales.core.search.object.TicketData;
+import java.util.ArrayList;
+import java.util.List;
+
+import ru.aviasales.core.search.object.Proposal;
+import ru.aviasales.core.search.object.SearchData;
+import ru.aviasales.core.search.params.SearchParams;
 import ru.aviasales.template.R;
-import ru.aviasales.template.ticket.TicketManager;
+import ru.aviasales.template.utils.Utils;
 
 public class TicketView extends LinearLayout {
+
+	private final List<TicketFlightView> ticketFlightViewList = new ArrayList<>();
+	private boolean isComplex;
 
 	public TicketView(Context context) {
 		super(context);
@@ -19,38 +29,42 @@ public class TicketView extends LinearLayout {
 		super(context, attrs);
 	}
 
-	public void setUpViews(Context context, TicketData ticketData) {
+	public TicketView(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+	}
+
+	public void setUpViews(Context context, Proposal proposal, SearchParams searchParams,
+	                       SearchData searchData) {
 		setOrientation(VERTICAL);
 
-		TicketData ticket = ticketData;
+		isComplex = searchParams.isComplexSearch();
 
-		TicketFlightHeaderView thereToFlightHeader = (TicketFlightHeaderView) LayoutInflater.from(context)
-				.inflate(R.layout.ticket_flight_header, this, false);
-		thereToFlightHeader.setData(ticket, true);
+		if (proposal != null) {
+			for (int i = 0; i < proposal.getSegments().size(); i++) {
 
-		TicketFlightView thereToFlight = (TicketFlightView) LayoutInflater.from(context)
-				.inflate(R.layout.ticket_flight, this, false);
-		thereToFlight.setData(TicketManager.getInstance().getAirports(), TicketManager.getInstance().getAirlines(), ticket.getDirectFlights(), false);
+				TicketFlightHeaderView thereToFlightHeader = (TicketFlightHeaderView) LayoutInflater.from(getContext())
+						.inflate(R.layout.ticket_flight_header, this, false);
+				thereToFlightHeader.setData(proposal.getSegmentFlights(i), proposal.getSegmentDurations().get(i), searchData, !isComplex && i == 1);
 
-		TicketRelativeLayout departCardView = (TicketRelativeLayout) LayoutInflater.from(context).inflate(R.layout.ticket_details_card_view, this, false);
-		addView(departCardView);
-		departCardView.addView(thereToFlightHeader);
-		departCardView.addView(thereToFlight);
+				addView(thereToFlightHeader);
+				addView(createDivider());
 
-		if (ticket.getReturnFlights() != null) {
+				TicketFlightView thereToFlight = (TicketFlightView) LayoutInflater.from(context)
+						.inflate(R.layout.ticket_flight, this, false);
+				thereToFlight.setData(searchData, proposal, i);
 
-			TicketFlightHeaderView thereFromHeader = (TicketFlightHeaderView) LayoutInflater.from(context)
-					.inflate(R.layout.ticket_flight_header, this, false);
-			thereFromHeader.setData(ticket, false);
-
-			TicketFlightView thereFromFlight = (TicketFlightView) LayoutInflater.from(context)
-					.inflate(R.layout.ticket_flight, this, false);
-			thereFromFlight.setData(TicketManager.getInstance().getAirports(), TicketManager.getInstance().getAirlines(), ticket.getReturnFlights(), true);
-
-			TicketRelativeLayout returnCardView = (TicketRelativeLayout) LayoutInflater.from(context).inflate(R.layout.ticket_details_card_view, this, false);
-			addView(returnCardView);
-			returnCardView.addView(thereFromHeader);
-			returnCardView.addView(thereFromFlight);
+				addView(thereToFlight);
+				ticketFlightViewList.add(thereToFlight);
+				addView(createDivider());
+			}
 		}
 	}
+
+	private View createDivider() {
+		View divider = new View(getContext());
+		divider.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Utils.convertDPtoPixels(getContext(), 1)));
+		divider.setBackgroundColor(getResources().getColor(R.color.grey_E4E4E4));
+		return divider;
+	}
+
 }

@@ -13,15 +13,12 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 import java.util.TimeZone;
 
-import ru.aviasales.core.AviasalesSDK;
 import ru.aviasales.core.search.object.AirlineData;
 import ru.aviasales.core.search.object.AirportData;
-import ru.aviasales.core.search.object.FlightData;
-import ru.aviasales.core.search.object.SearchData;
+import ru.aviasales.core.search.object.Flight;
 import ru.aviasales.template.R;
 import ru.aviasales.template.api.AirlineLogoApi;
 import ru.aviasales.template.api.params.AirlineLogoParams;
@@ -75,53 +72,55 @@ public class TicketFlightSegmentView extends RelativeLayout {
 		tvArrivalName = (TextView) findViewById(R.id.tv_arrival_name);
 	}
 
-	public void setData(Map<String, AirlineData> airlines, final FlightData flight, boolean returnFlight) {
+	public void setData(Map<String, AirlineData> airlines, Map<String, AirportData> airports, Flight flight) {
 
-		SearchData searchData = AviasalesSDK.getInstance().getSearchData();
-		if(searchData == null) {
-			return;
-		}
+
+		AirportData departAirport = airports.get(flight.getDeparture());
+		String departName = departAirport == null || departAirport.getCity() == null ?
+				flight.getDeparture() : departAirport.getCity() + ", " + flight.getDeparture();
+		tvDepartName.setText(departName);
+		tvDepartAirportName.setText(departAirport == null || departAirport.getName() == null ? "" : departAirport.getName());
+
+		AirportData arrivalAirport = airports.get(flight.getArrival());
+		String arrivalName = arrivalAirport == null || arrivalAirport.getCity() == null ?
+				flight.getArrival() : arrivalAirport.getCity() + ", " + flight.getArrival();
+		tvArrivalName.setText(arrivalName);
+		tvArrivalAirportName.setText(arrivalAirport == null || arrivalAirport.getName() == null ? "" : arrivalAirport.getName());
 
 		tvCarrierInfo.setText(getResources().getString(R.string.ticket_flight_text) + " " +
-				flight.getAirline() + "-" + flight.getNumber());
-
-		AirportData departAirport = searchData.getAirportByIata(flight.getOrigin());
-		tvDepartName.setText(departAirport.getCity() + ", " + flight.getOrigin());
-		tvDepartAirportName.setText(departAirport.getName());
-
-		AirportData arrivalAirport = searchData.getAirportByIata(flight.getDestination());
-		tvArrivalName.setText(arrivalAirport.getCity() + ", " + flight.getDestination());
-		tvArrivalAirportName.setText(arrivalAirport.getName());
+				flight.getOperatingCarrier() + "-" + flight.getNumber());
 
 		loadImage(flight, carrierLogo);
 
-		Date departureDate = new Date(flight.getDeparture() * 1000);
-		Date arrivalDate = new Date(flight.getArrival() * 1000);
+		SimpleDateFormat resultsTimeFormat = new SimpleDateFormat(Defined.RESULTS_TIME_FORMAT);
+		SimpleDateFormat serverDateFormat = new SimpleDateFormat(Defined.SEARCH_SERVER_DATE_FORMAT);
+		TimeZone utc = TimeZone.getTimeZone(Defined.UTC_TIMEZONE);
+		resultsTimeFormat.setTimeZone(utc);
+		serverDateFormat.setTimeZone(utc);
 
-		SimpleDateFormat dfTime = getTimeFormat();
-		tvDepartureTime.setText(dfTime.format(departureDate));
-		tvArrivalTime.setText(dfTime.format(arrivalDate));
+		tvDepartureTime.setText(DateUtils.convertDateFromTo(flight.getDepartureTime(), resultsTimeFormat, getTimeFormat()));
+		tvArrivalTime.setText(DateUtils.convertDateFromTo(flight.getArrivalTime(), resultsTimeFormat, getTimeFormat()));
 
-		SimpleDateFormat dfDate = getDateFormat();
-		tvDepartureDate.setText(dfDate.format(departureDate));
-		tvArrivalDate.setText(dfDate.format(arrivalDate));
+		tvDepartureDate.setText(DateUtils.convertDateFromTo(flight.getDepartureDate(), serverDateFormat, getDateFormat()));
+		tvArrivalDate.setText(DateUtils.convertDateFromTo(flight.getArrivalDate(), serverDateFormat, getDateFormat()));
 
 		tvFlightDuration.setText(StringUtils.getDurationString(getContext(), flight.getDuration()));
 
 		String carrierName;
-		if (flight.getAirline() != null && airlines.get(flight.getAirline()) != null) {
-			carrierName = airlines.get(flight.getAirline()).getName();
+		if (flight.getOperatingCarrier() != null && airlines.get(flight.getOperatingCarrier()) != null) {
+			carrierName = airlines.get(flight.getOperatingCarrier()).getName();
 		} else {
 			carrierName = "";
 		}
 
 		tvCarrierName.setText(carrierName);
+
 	}
 
-	private void loadImage(FlightData flight, ImageView image) {
+	private void loadImage(Flight flight, ImageView image) {
 		AirlineLogoParams params = new AirlineLogoParams();
 		params.setContext(getContext());
-		params.setIata(flight.getAirline());
+		params.setIata(flight.getOperatingCarrier());
 		params.setImage(image);
 		params.setWidth(getResources().getDimensionPixelSize(R.dimen.airline_logo_width));
 		params.setHeight(getResources().getDimensionPixelSize(R.dimen.airline_logo_height));
@@ -164,4 +163,5 @@ public class TicketFlightSegmentView extends RelativeLayout {
 		dfTime.setTimeZone(TimeZone.getTimeZone(Defined.UTC_TIMEZONE));
 		return dfTime;
 	}
+
 }

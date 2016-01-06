@@ -5,59 +5,55 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import ru.aviasales.core.search.object.AirlineData;
 import ru.aviasales.core.search.object.AirportData;
-import ru.aviasales.core.search.object.FlightData;
+import ru.aviasales.core.search.object.Flight;
+import ru.aviasales.core.search.object.Proposal;
+import ru.aviasales.core.search.object.SearchData;
 import ru.aviasales.template.R;
 
 public class TicketFlightView extends LinearLayout {
 
-	private List<FlightData> flights;
+	private List<Flight> flights;
 	private Map<String, AirlineData> airlines;
 	private Map<String, AirportData> airports;
 
 	public TicketFlightView(Context context) {
 		super(context);
 		setOrientation(VERTICAL);
-		forEditMode();
 	}
 
 	public TicketFlightView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		setOrientation(VERTICAL);
-		forEditMode();
 	}
 
-	private void forEditMode() {
-		if (isInEditMode()) {
-			flights = new ArrayList<FlightData>();
-			flights.add(new FlightData());
-			flights.add(new FlightData());
-			generateViews(false);
-		}
+	public TicketFlightView(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+		setOrientation(VERTICAL);
 	}
 
-	public void setData(Map<String, AirportData> airports, Map<String, AirlineData> airlines,
-	                    List<FlightData> flights, boolean returnFlight) {
-		this.airports = airports;
-		this.airlines = airlines;
-		this.flights = flights;
-		generateViews(returnFlight);
+	public void setData(SearchData searchData,
+	                    Proposal proposal, int index) {
+		this.airports = searchData.getAirports();
+		this.airlines = searchData.getAirlines();
+		this.flights = proposal.getSegmentFlights(index);
+		generateViews();
 	}
 
-	private void generateViews(boolean returnFlight) {
-		FlightData prevFlight = null;
-		for (FlightData flight : flights) {
+	private void generateViews() {
+
+		Flight prevFlight = null;
+		for (Flight flight : flights) {
 			if (prevFlight != null) {
 				TicketTransferView transferView = (TicketTransferView) LayoutInflater.from(getContext())
 						.inflate(R.layout.ticket_transfer_item, this, false);
 				addView(transferView);
 				if (!isInEditMode()) {
-					transferView.setData(prevFlight, flight, airports);
+					transferView.setData(flight, airports);
 				}
 			}
 
@@ -65,7 +61,7 @@ public class TicketFlightView extends LinearLayout {
 					.inflate(R.layout.ticket_flight_segment, this, false);
 			addView(flightSegmentView);
 			if (!isInEditMode()) {
-				flightSegmentView.setData(airlines, flight, returnFlight);
+				flightSegmentView.setData(airlines, airports, flight);
 			}
 			prevFlight = flight;
 		}

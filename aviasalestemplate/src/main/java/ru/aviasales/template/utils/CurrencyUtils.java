@@ -14,7 +14,7 @@ public class CurrencyUtils {
 	private static final String PREF_CURRENCY_CODE = "currency_code";
 
 	public static Map<String, Double> getCurrencyRates() {
-		return AviasalesSDK.getInstance().getSearchData().getCurrencyRates();
+		return AviasalesSDK.getInstance().getSearchData().getCurrencies();
 	}
 
 	public static long getPriceInAppCurrency(long priceInDefaultCur, String appCurCode, Map<String, Double> currencies) {

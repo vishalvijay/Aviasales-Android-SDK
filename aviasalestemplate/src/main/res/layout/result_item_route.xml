@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
+<ru.aviasales.template.ui.view.ResultsItemRouteView
 		xmlns:android="http://schemas.android.com/apk/res/android"
 		xmlns:app="http://schemas.android.com/apk/res-auto"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
+		android:layout_height="wrap_content"
+		android:paddingTop="7dp">
 
 	<com.devspark.robototextview.widget.RobotoTextView
 			android:id="@+id/tv_cities"
@@ -85,4 +86,4 @@
 			android:textSize="14dp"/>
 
 
-</RelativeLayout>
+</ru.aviasales.template.ui.view.ResultsItemRouteView>

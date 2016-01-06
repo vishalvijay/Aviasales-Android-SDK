@@ -13,12 +13,10 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Map;
 
-import ru.aviasales.core.AviasalesSDKV3;
-import ru.aviasales.core.search_v3.objects.SearchDataV3;
-import ru.aviasales.core.search_v3.params.Passengers;
-import ru.aviasales.core.search_v3.searching.OnSearchListener;
+import ru.aviasales.core.AviasalesSDK;
+import ru.aviasales.core.search.params.Passengers;
+import ru.aviasales.core.search.searching.SimpleOnSearchListener;
 import ru.aviasales.template.R;
 import ru.aviasales.template.ui.dialog.DatePickerDialogFragment;
 import ru.aviasales.template.ui.dialog.PassengersDialogFragment;
@@ -144,35 +142,11 @@ public class SearchFormFragment extends BaseFragment implements SimpleSearchForm
 							.show();
 					return;
 				}
-				// TODO: 12/4/15 заглушка
-				Toast.makeText(getActivity(), "Стартовал " + (isComplexSearchSelected ? "сложный" : "простой") + "поиск", Toast.LENGTH_LONG)
-						.show();
 
-				AviasalesSDKV3.getInstance().startTicketsSearch(searchFormData.createSearchParams(isComplexSearchSelected), new OnSearchListener() {
-					@Override
-					public void onSuccess(SearchDataV3 searchData) {
-						if (getActivity() != null) {
-							Toast.makeText(getActivity(), "поиск закончился. Найдено: " + searchData.getProposals().size() + " билетов", Toast.LENGTH_LONG)
-									.show();
-						}
-					}
+				AviasalesSDK.getInstance().startTicketsSearch(searchFormData.createSearchParams(isComplexSearchSelected), new SimpleOnSearchListener() {
 
-					@Override
-					public void onProgressUpdate(int i) {
-
-					}
-
-					@Override
-					public void onCanceled() {
-					}
-
-					@Override
-					public void onError(int i, int i2, String s) {
-						Toast.makeText(getContext(), "Ошибка поиска ", Toast.LENGTH_LONG).show();
-					}
 				});
-				// TODO: 12/4/15 SearchingFragment восстановим позже
-//				startFragment(SearchingFragment.newInstance(), true);
+				startFragment(SearchingFragment.newInstance(), true);
 
 			}
 		});

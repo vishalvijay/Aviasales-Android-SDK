@@ -9,15 +9,21 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
-import ru.aviasales.core.search_v3.objects.Proposal;
+import ru.aviasales.core.search.object.Proposal;
+import ru.aviasales.core.search.object.ProposalSegment;
 import ru.aviasales.template.R;
 import ru.aviasales.template.api.AirlineLogoApi;
 import ru.aviasales.template.api.params.AirlineLogoParams;
@@ -30,8 +36,10 @@ public class ResultsItemView extends CardView {
 	private TextView tvPrice;
 	private TextView tvCurrency;
 	private ImageView ivAirlineLogo;
-	private ResultsItemRouteView rlDirectRoute;
-	private ResultsItemRouteView rlReturnRoute;
+
+	private LinearLayout llContent;
+
+	private List<ResultsItemRouteView> routeViews;
 
 	public ResultsItemView(Context context) {
 		super(context);
@@ -52,12 +60,10 @@ public class ResultsItemView extends CardView {
 		tvCurrency = (TextView) findViewById(R.id.tv_currency);
 		ivAirlineLogo = (ImageView) findViewById(R.id.iv_airline);
 
-		rlDirectRoute = (ResultsItemRouteView) findViewById(R.id.direct_route);
-		rlReturnRoute = (ResultsItemRouteView) findViewById(R.id.return_route);
-
+		llContent = (LinearLayout) findViewById(R.id.content);
 	}
 
-	public void setProposal(Proposal proposal, Context context) {
+	public void setProposal(Proposal proposal, Context context, boolean isComplexSearch) {
 
 		Map<String, Double> currencies = getCurrencyRates();
 
@@ -67,6 +73,19 @@ public class ResultsItemView extends CardView {
 		tvPrice.setText(StringUtils.formatPriceInAppCurrency(proposal.getBestPrice(), getAppCurrency(), currencies));
 
 		tvCurrency.setText(getAppCurrency());
+
+		if (routeViews == null) {
+			routeViews = generateRouteViews(proposal, isComplexSearch);
+			for (ResultsItemRouteView routeView : routeViews) {
+				llContent.addView(routeView);
+			}
+		}
+
+		List<ProposalSegment> proposalSegments = proposal.getSegments();
+		int i = 0;
+		for (ProposalSegment proposalSegment : proposalSegments) {
+			routeViews.get(i++).setRouteData(proposalSegment.getFlights(), isComplexSearch);
+		}
 
 		try {
 			final AirlineLogoParams params = new AirlineLogoParams();
@@ -78,19 +97,30 @@ public class ResultsItemView extends CardView {
 			new AirlineLogoApi().getAirlineLogo(setAdditionalParamsToImageLoader(params));
 		} catch (Exception e) {
 			Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
-			// skip if something wrong with it
 		}
-		// TODO: Results переписать на новый proposal
-		/*
-		rlDirectRoute.setRouteData(proposal.getDirectFlights());
 
-		if (proposal.withoutReturn()) {
-			rlReturnRoute.setVisibility(View.GONE);
-		} else {
-			rlReturnRoute.setRouteData(proposal.getReturnFlights());
-		}
-		*/
 	}
+
+	protected List<ResultsItemRouteView> generateRouteViews(Proposal proposal, boolean complexSearch) {
+		List<ResultsItemRouteView> routeViews = new ArrayList<>();
+
+		for (ProposalSegment ignored : proposal.getSegments()) {
+			View view = complexSearch ? createComplexRouteView() : createRouteView();
+			routeViews.add((ResultsItemRouteView) view);
+		}
+		return routeViews;
+	}
+
+	protected View createRouteView() {
+		return LayoutInflater.from(getContext())
+				.inflate(R.layout.result_item_route, this, false);
+	}
+
+	protected View createComplexRouteView() {
+		return LayoutInflater.from(getContext())
+				.inflate(R.layout.result_item_complex_route, this, false);
+	}
+
 
 	public void setAlternativePrice(long price) {
 		tvPrice.setText(StringUtils.formatPriceInAppCurrency(price, getAppCurrency(), getCurrencyRates()));

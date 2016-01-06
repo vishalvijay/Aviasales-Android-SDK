@@ -29,6 +29,9 @@
 	<dimen name="results_item_margin_top">3dp</dimen>
 	<dimen name="results_item_margin_bottom">-4dp</dimen>
 	<dimen name="results_item_padding_bottom">22dp</dimen>
+	<dimen name="results_item_complex_time_margin">44dp</dimen>
+	<dimen name="results_item_complex_transfers_min_size">30dp</dimen>
+	<dimen name="results_item_duration_min_size">60dp</dimen>
 
 	<dimen name="airline_logo_width">88dp</dimen>
 	<dimen name="airline_logo_height">47dp</dimen>

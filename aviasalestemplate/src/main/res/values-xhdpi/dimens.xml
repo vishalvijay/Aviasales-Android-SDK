@@ -17,4 +17,8 @@
 
 	<dimen name="results_duration_margin_right">96dp</dimen>
 	<dimen name="results_transfers_margin_right">112dp</dimen>
+	<dimen name="results_item_complex_time_margin">44dp</dimen>
+	<dimen name="results_item_complex_transfers_min_size">40dp</dimen>
+	<dimen name="results_item_transfers_min_size">98dp</dimen>
+
 </resources>

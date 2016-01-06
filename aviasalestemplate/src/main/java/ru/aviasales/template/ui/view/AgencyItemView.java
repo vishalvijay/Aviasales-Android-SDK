@@ -8,9 +8,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import ru.aviasales.template.R;
-import ru.aviasales.template.currencies.Currency;
-import ru.aviasales.template.ticket.TicketManager;
-import ru.aviasales.template.utils.CurrencyUtils;
+import ru.aviasales.template.proposal.ProposalManager;
 import ru.aviasales.template.utils.StringUtils;
 
 public class AgencyItemView extends RelativeLayout {
@@ -47,9 +45,9 @@ public class AgencyItemView extends RelativeLayout {
 
 	public void setData(String agency, boolean hasMobileVersion) {
 		this.agency = agency;
-		tvBestPrice.setText(StringUtils.formatPriceInAppCurrency(TicketManager.getInstance().getAgencyPrice(agency), getContext()));
+		tvBestPrice.setText(StringUtils.formatPriceInAppCurrency(ProposalManager.getInstance().getAgencyPrice(agency), getContext()));
 
-		tvBestAgency.setText(TicketManager.getInstance().getAgencyName(agency));
+		tvBestAgency.setText(ProposalManager.getInstance().getAgencyName(agency));
 		if (hasMobileVersion) {
 			ivMobileVersion.setVisibility(View.VISIBLE);
 		} else {

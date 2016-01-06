@@ -4,21 +4,21 @@ import android.content.Context;
 
 import java.util.List;
 
-import ru.aviasales.core.search.object.SearchData;
-import ru.aviasales.core.search.object.TicketData;
+import ru.aviasales.core.legacy.search.object.OldSearchData;
+import ru.aviasales.core.legacy.search.object.TicketData;
 
 public class PreInitializeFilters {
 	private int oneStopOverMinPrice;
 	private int withoutStopOverMinPrice;
 	private int twoPlusStopOverMinPrice;
 	private boolean airportOvernightEnabled;
-	private SearchData searchData;
+	private OldSearchData searchData;
 	private GeneralFilter testFilter;
 	private boolean oneStopOverFilterEnabled;
 	private boolean withoutStopOverFilterEnabled;
 	private boolean twoPlusStopOverFilterEnabled;
 
-	public PreInitializeFilters(Context context, SearchData searchData) {
+	public PreInitializeFilters(Context context, OldSearchData searchData) {
 		this.oneStopOverMinPrice = Integer.MAX_VALUE;
 		this.withoutStopOverMinPrice = Integer.MAX_VALUE;
 		this.twoPlusStopOverMinPrice = Integer.MAX_VALUE;

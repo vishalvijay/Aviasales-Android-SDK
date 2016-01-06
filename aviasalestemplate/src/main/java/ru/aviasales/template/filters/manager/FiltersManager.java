@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import ru.aviasales.core.AviasalesSDKV3;
-import ru.aviasales.core.search_v3.objects.Proposal;
-import ru.aviasales.core.search_v3.objects.SearchDataV3;
+import ru.aviasales.core.AviasalesSDK;
+import ru.aviasales.core.search.object.Proposal;
+import ru.aviasales.core.search.object.SearchData;
 import ru.aviasales.template.filters.GeneralFilter;
 
 public class FiltersManager {
@@ -33,7 +33,7 @@ public class FiltersManager {
 	}
 
 
-	public void filterSearchData(final SearchDataV3 searchData, OnFilterResultListener listener) {
+	public void filterSearchData(final SearchData searchData, OnFilterResultListener listener) {
 
 		mOnFilterResultsListener = listener;
 
@@ -61,7 +61,7 @@ public class FiltersManager {
 		this.mOnFilterResultsListener = onFilterResultsListener;
 	}
 
-	public List<Proposal> getFilteredTickets() {
+	public List<Proposal> getFilteredProposals() {
 		return mFilteredProposals;
 	}
 
@@ -83,11 +83,11 @@ public class FiltersManager {
 		return mFilter;
 	}
 
-	public void initFilter(final SearchDataV3 searchData, final Context context) {
+	public void initFilter(final SearchData searchData, final Context context) {
 
 		createPool();
 
-		mFilteredProposals = AviasalesSDKV3.getInstance().getSearchData().getProposals();
+		mFilteredProposals = AviasalesSDK.getInstance().getSearchData().getProposals();
 		pool.submit(new Runnable() {
 			@Override
 			public void run() {

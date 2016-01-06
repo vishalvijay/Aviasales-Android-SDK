@@ -146,6 +146,7 @@
 	<string name="stop_over_filter_view_twoplus">Two stops</string>
 	<string name="currency_dialog_title">Currency</string>
 	<string name="dot">•</string>
+	<string name="dots">•••</string>
 	<string name="results_no_transfers">—</string>
 	<string name="week_day">day of the week</string>
 	<string name="empty_view_results_title">Nothing is left after your filtering.</string>
@@ -169,4 +170,7 @@
 
 	<string name="search_form_tab_simple">простой</string>
 	<string name="search_form_tab_complex">сложный</string>
+
+	<string name="results_flight_date">Дата</string>
+	<string name="ticket_title_agency">на %1$s</string>
 </resources>

@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Map;
 
 import ru.aviasales.core.AviasalesSDK;
+import ru.aviasales.core.legacy.search.object.OldFlightData;
+import ru.aviasales.core.legacy.search.object.TicketData;
 import ru.aviasales.core.search.object.AirlineData;
 import ru.aviasales.core.search.object.AirportData;
-import ru.aviasales.core.search.object.FlightData;
 import ru.aviasales.core.search.object.GateData;
-import ru.aviasales.core.search.object.TicketData;
 import ru.aviasales.core.search.params.SearchParams;
 import ru.aviasales.template.utils.CurrencyUtils;
 import ru.aviasales.template.utils.Defined;
@@ -186,7 +186,7 @@ public class TicketManager {
 		};
 	}
 
-	public int getRouteDurationInMin(List<FlightData> flights) {
+	public int getRouteDurationInMin(List<OldFlightData> flights) {
 		if (flights == null) return 0;
 		int duration = 0;
 		for (int i = 0; i < flights.size(); i++) {

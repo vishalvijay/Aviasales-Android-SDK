@@ -101,6 +101,13 @@ public class DateUtils {
 		return isDateBeforeDateShiftLine(checkDate);
 	}
 
+	public static boolean isDateBeforeDateShiftLine(String checkDate) {
+		// We don't use -12 because no any airports in that zone
+		LocalDate todayInShiftTimezone = new LocalDate(DateTimeZone.forID("-11:00"));
+		LocalDate checkLocalDate = LocalDate.parse(checkDate);
+		return checkLocalDate.isBefore(todayInShiftTimezone);
+	}
+
 	public static Date getAmPmTime(Integer hr, Integer min) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -124,6 +131,31 @@ public class DateUtils {
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 		return cal.getTime();
+	}
+
+	public static String convertDateFromTo(String date, String formatFrom, String formatTo) {
+		SimpleDateFormat fdfFrom = new SimpleDateFormat(formatFrom);
+		SimpleDateFormat fdfTo = new SimpleDateFormat(formatTo);
+		TimeZone utc = TimeZone.getTimeZone(Defined.UTC_TIMEZONE);
+		fdfFrom.setTimeZone(utc);
+		fdfTo.setTimeZone(utc);
+
+		String dateString = convertDateFromTo(date, fdfFrom, fdfTo);
+		if (formatTo.matches("[^M]*M{3}[^M]*")) {
+			dateString = dateString.replace(".", "");
+		}
+
+		return dateString;
+	}
+
+	public static String convertDateFromTo(String date, SimpleDateFormat formatFrom, SimpleDateFormat formatTo) {
+		Date parsedDate = null;
+		try {
+			parsedDate = formatFrom.parse(date);
+		} catch (ParseException e) {
+			Log.e("Parse exception", e.getMessage());
+		}
+		return formatTo.format(parsedDate);
 	}
 
 }

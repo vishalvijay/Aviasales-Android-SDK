@@ -6,7 +6,8 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.aviasales.core.search.object.FlightData;
+import ru.aviasales.core.legacy.search.object.OldFlightData;
+
 
 public class OvernightFilter implements Parcelable {
 
@@ -60,7 +61,7 @@ public class OvernightFilter implements Parcelable {
 		return !(isAirportOvernightAvailable || !isAirportOvernightViewEnabled);
 	}
 
-	public boolean isActual(List<FlightData> flights) {
+	public boolean isActual(List<OldFlightData> flights) {
 		for (int i = 0; i < flights.size(); i++) {
 			for (OvernightTerms overnightTerms : overnightTermsList) {
 				if ((!isAirportOvernightAvailable && i != 0 && overnightTerms.isOvernight(flights.get(i).getDepartureInMinutes() -

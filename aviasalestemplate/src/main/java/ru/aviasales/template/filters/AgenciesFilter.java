@@ -7,8 +7,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import ru.aviasales.core.legacy.search.object.TicketData;
 import ru.aviasales.core.search.object.GateData;
-import ru.aviasales.core.search.object.TicketData;
+
 
 public class AgenciesFilter implements Parcelable {
 
