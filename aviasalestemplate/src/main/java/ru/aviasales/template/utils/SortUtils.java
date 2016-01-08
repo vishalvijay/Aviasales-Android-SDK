@@ -1,10 +1,16 @@
 package ru.aviasales.template.utils;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import ru.aviasales.core.search.object.Proposal;
+import ru.aviasales.template.proposal.sort.ProposalArrivalComparator;
+import ru.aviasales.template.proposal.sort.ProposalArrivalOnReturnComparator;
+import ru.aviasales.template.proposal.sort.ProposalDepartureComparator;
+import ru.aviasales.template.proposal.sort.ProposalDepartureOnReturnComparator;
+import ru.aviasales.template.proposal.sort.ProposalDurationComparator;
+import ru.aviasales.template.proposal.sort.ProposalPriceComparator;
+import ru.aviasales.template.proposal.sort.ProposalRatingComparator;
 
 public class SortUtils {
 
@@ -48,78 +54,31 @@ public class SortUtils {
 	}
 
 	private static void sortingByRating(final List<Proposal> proposals) {
-		Collections.sort(proposals, new Comparator<Proposal>() {
-			@Override
-			public int compare(Proposal lhs, Proposal rhs) {
-				double lhsRating = lhs.getRating(proposals.get(0));
-				double rhsRating = rhs.getRating(proposals.get(0));
-				if (lhsRating - rhsRating < 0) {
-					return -1;
-				} else if (lhsRating - rhsRating > 0) {
-					return 1;
-				} else {
-					return 0;
-				}
-			}
-		});
+		Collections.sort(proposals, new ProposalRatingComparator(proposals.get(0)));
 	}
 
 	private static void sortingByDuration(List<Proposal> proposals) {
-		Collections.sort(proposals, new Comparator<Proposal>() {
-			@Override
-			public int compare(Proposal lhs, Proposal rhs) {
-				return lhs.getDurationInMinutes() - rhs.getDurationInMinutes();
-			}
-		});
+		Collections.sort(proposals, new ProposalDurationComparator());
 	}
 
 	private static void sortingByArrivalOnReturn(List<Proposal> proposals) {
-		Collections.sort(proposals, new Comparator<Proposal>() {
-			@Override
-			public int compare(Proposal lhs, Proposal rhs) {
-				return (int) (lhs.getReturnArrival() - rhs.getReturnArrival());
-			}
-		});
+		Collections.sort(proposals, new ProposalArrivalOnReturnComparator());
 	}
 
 	private static void soringByDepartureOnReturn(List<Proposal> proposals) {
-		Collections.sort(proposals, new Comparator<Proposal>() {
-			@Override
-			public int compare(Proposal lhs, Proposal rhs) {
-				return (int) (lhs.getReturnDeparture() - rhs.getReturnDeparture());
-			}
-		});
+		Collections.sort(proposals, new ProposalDepartureOnReturnComparator());
 	}
 
 	private static void sortingByArrival(List<Proposal> proposals, final boolean isComplexSearch) {
-		Collections.sort(proposals, new Comparator<Proposal>() {
-			@Override
-			public int compare(Proposal lhs, Proposal rhs) {
-				if (isComplexSearch) {
-					return (int) (lhs.getReturnArrival() - rhs.getReturnArrival());
-				} else {
-					return (int) (lhs.getArrival() - rhs.getArrival());
-				}
-			}
-		});
+		Collections.sort(proposals, new ProposalArrivalComparator(isComplexSearch));
 	}
 
 	private static void sortByDeparture(List<Proposal> proposals) {
-		Collections.sort(proposals, new Comparator<Proposal>() {
-			@Override
-			public int compare(Proposal lhs, Proposal rhs) {
-				return (int) (lhs.getDeparture() - rhs.getDeparture());
-			}
-		});
+		Collections.sort(proposals, new ProposalDepartureComparator());
 	}
 
 	private static void sortByPrice(List<Proposal> proposals) {
-		Collections.sort(proposals, new Comparator<Proposal>() {
-			@Override
-			public int compare(Proposal lhs, Proposal rhs) {
-				return (int) (lhs.getTotalWithFilters() - rhs.getTotalWithFilters());
-			}
-		});
+		Collections.sort(proposals, new ProposalPriceComparator());
 	}
 
 	public static int getSavedSortingType() {
@@ -129,4 +88,5 @@ public class SortUtils {
 	public static void resetSavedSortingType() {
 		savedSortingType = SORTING_BY_PRICE;
 	}
+
 }

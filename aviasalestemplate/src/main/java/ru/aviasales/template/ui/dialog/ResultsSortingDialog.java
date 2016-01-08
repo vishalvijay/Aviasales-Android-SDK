@@ -18,15 +18,21 @@ public class ResultsSortingDialog extends BaseDialogFragment {
 
 	public final static String TAG = "fragment.ResultsSortingDialog";
 
-	private static int currentSorting;
+	private int currentSorting;
+	private boolean isComplexSearch;
 
 	private OnSortingChangedListener onSortingChangedListener;
 
-	public static ResultsSortingDialog newInstance(int savedSortingType, OnSortingChangedListener onSortingChangedListener) {
+	public static ResultsSortingDialog newInstance(int savedSortingType, boolean isComplexSearch, OnSortingChangedListener onSortingChangedListener) {
 		ResultsSortingDialog dialog = new ResultsSortingDialog();
 		dialog.setOnSortingChangedListener(onSortingChangedListener);
-		currentSorting = savedSortingType;
+		dialog.setCurrentSorting(savedSortingType);
+		dialog.setIsComplexSearch(isComplexSearch);
 		return dialog;
+	}
+
+	private void setIsComplexSearch(boolean isComplexSearch) {
+		this.isComplexSearch = isComplexSearch;
 	}
 
 	@Override
@@ -57,7 +63,7 @@ public class ResultsSortingDialog extends BaseDialogFragment {
 			layout.findViewById(R.id.tv_sort_by_arrival_on_way_back).setVisibility(View.GONE);
 		}
 
-		if (AviasalesSDK.getInstance().getSearchParamsOfLastSearch().isComplexSearch()) {
+		if (isComplexSearch) {
 			layout.findViewById(R.id.tv_sort_by_departure).setVisibility(View.GONE);
 			layout.findViewById(R.id.tv_sort_by_arrival).setVisibility(View.GONE);
 		}
@@ -82,6 +88,10 @@ public class ResultsSortingDialog extends BaseDialogFragment {
 
 	public void setOnSortingChangedListener(OnSortingChangedListener onSortingChangedListener) {
 		this.onSortingChangedListener = onSortingChangedListener;
+	}
+
+	public void setCurrentSorting(int currentSorting) {
+		this.currentSorting = currentSorting;
 	}
 
 	public interface OnSortingChangedListener {
@@ -111,7 +121,7 @@ public class ResultsSortingDialog extends BaseDialogFragment {
 
 	private boolean isNotTwoWayTicket() {
 		return AviasalesSDK.getInstance().getSearchParamsOfLastSearch().getSegments().size() < 2
-				|| AviasalesSDK.getInstance().getSearchParamsOfLastSearch().isComplexSearch();
+				|| isComplexSearch;
 	}
 
 }

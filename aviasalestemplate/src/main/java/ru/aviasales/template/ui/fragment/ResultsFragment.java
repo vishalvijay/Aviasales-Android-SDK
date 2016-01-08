@@ -217,19 +217,20 @@ public class ResultsFragment extends BaseFragment {
 	}
 
 	private void createSortingDialog() {
-		createDialog(ResultsSortingDialog.newInstance(SortUtils.getSavedSortingType(), new ResultsSortingDialog.OnSortingChangedListener() {
-			@Override
-			public void onSortingChanged(int sortingType) {
-				resultsListView.setAdapter(resultsAdapter);
-				resultsAdapter.sortProposals(sortingType);
-				dismissDialog();
-			}
+		createDialog(ResultsSortingDialog.newInstance(SortUtils.getSavedSortingType(),
+				AviasalesSDK.getInstance().getSearchParamsOfLastSearch().isComplexSearch(), new ResultsSortingDialog.OnSortingChangedListener() {
+					@Override
+					public void onSortingChanged(int sortingType) {
+						resultsListView.setAdapter(resultsAdapter);
+						resultsAdapter.sortProposals(sortingType);
+						dismissDialog();
+					}
 
-			@Override
-			public void onCancel() {
-				dismissDialog();
-			}
-		}));
+					@Override
+					public void onCancel() {
+						dismissDialog();
+					}
+				}));
 	}
 
 	@Override

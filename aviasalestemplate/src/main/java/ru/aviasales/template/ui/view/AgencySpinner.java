@@ -8,7 +8,6 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +17,7 @@ import ru.aviasales.template.ui.adapter.AgencySpinnerAdapter;
 
 public class AgencySpinner extends FrameLayout {
 
-	private Spinner agencySpinner;
+	private CustomSpinner agencySpinner;
 
 	private FrameLayout spinnerContainer;
 
@@ -36,7 +35,7 @@ public class AgencySpinner extends FrameLayout {
 	private void setupView(Context context) {
 		LayoutInflater.from(context).inflate(R.layout.ticket_agency_spinner, this, true);
 
-		agencySpinner = (Spinner) findViewById(R.id.spinner);
+		agencySpinner = (CustomSpinner) findViewById(R.id.spinner);
 		spinnerContainer = (FrameLayout) findViewById(R.id.fl_spinner_container);
 		spinnerContainer.setOnClickListener(new OnClickListener() {
 			@Override
@@ -87,12 +86,6 @@ public class AgencySpinner extends FrameLayout {
 	}
 
 	private void hideSpinner() {
-		try {
-			Method method = Spinner.class.getDeclaredMethod("onDetachedFromWindow");
-			method.setAccessible(true);
-			method.invoke(agencySpinner);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		agencySpinner.onDetachedFromWindow();
 	}
 }

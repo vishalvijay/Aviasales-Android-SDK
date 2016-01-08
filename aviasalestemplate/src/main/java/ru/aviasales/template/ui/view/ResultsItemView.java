@@ -37,7 +37,7 @@ public class ResultsItemView extends CardView {
 	private TextView tvCurrency;
 	private ImageView ivAirlineLogo;
 
-	private LinearLayout llContent;
+	private LinearLayout contentLayout;
 
 	private List<ResultsItemRouteView> routeViews;
 
@@ -60,7 +60,7 @@ public class ResultsItemView extends CardView {
 		tvCurrency = (TextView) findViewById(R.id.tv_currency);
 		ivAirlineLogo = (ImageView) findViewById(R.id.iv_airline);
 
-		llContent = (LinearLayout) findViewById(R.id.content);
+		contentLayout = (LinearLayout) findViewById(R.id.content);
 	}
 
 	public void setProposal(Proposal proposal, Context context, boolean isComplexSearch) {
@@ -77,7 +77,7 @@ public class ResultsItemView extends CardView {
 		if (routeViews == null) {
 			routeViews = generateRouteViews(proposal, isComplexSearch);
 			for (ResultsItemRouteView routeView : routeViews) {
-				llContent.addView(routeView);
+				contentLayout.addView(routeView);
 			}
 		}
 

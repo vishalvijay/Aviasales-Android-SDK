@@ -22,6 +22,8 @@ public class ResultsItemRouteView extends RelativeLayout {
 
 	private static final String TICKET_SHORT_COMPLEX_FORMAT = "d MMM";
 
+	private static final int TRANSFERS_MAX_COUNT = 3;
+
 	private TextView tvIatas;
 	private TextView tvFlightDate;
 	private TextView tvDepartureAndArrivalTime;
@@ -87,7 +89,7 @@ public class ResultsItemRouteView extends RelativeLayout {
 		if (complexSearch) {
 			tvTransfers.setText(flights.size() > 1 ? String.valueOf(flights.size() - 1) : getResources().getString(R.string.dash));
 		} else {
-			if (flights.size() > 3) {
+			if (flights.size() > TRANSFERS_MAX_COUNT) {
 				tvTransfers.setText(Integer.toString(flights.size() - 1));
 			} else {
 				tvTransfers.setText(StringUtils.getTransferText(getContext(), flights));
