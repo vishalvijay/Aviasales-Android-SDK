@@ -2,35 +2,37 @@
 
 <FrameLayout
 		xmlns:android="http://schemas.android.com/apk/res/android"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent">
+		android:layout_width="60dp"
+		android:layout_height="30dp">
+
 
 	<FrameLayout
 			android:id="@+id/fl_spinner_container"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:addStatesFromChildren="true"
-			android:background="@drawable/button_light_bkg"
-			android:paddingLeft="8dp"
-			android:paddingRight="8dp">
+			android:clickable="true"
+			android:focusable="true"
+			android:background="@drawable/spinner_agencies_background">
 
-		<Spinner
+		<ru.aviasales.template.ui.view.CustomSpinner
 				android:id="@+id/spinner"
 				android:layout_width="match_parent"
-				android:layout_height="40dp"
-				android:layout_gravity="center_vertical"
-				android:background="@drawable/ticket_spinner_bkg"/>
+				android:layout_height="match_parent"
+				android:background="@android:color/transparent"
+				android:visibility="invisible"
+				android:layout_gravity="center_vertical"/>
 
 	</FrameLayout>
 
+
 	<com.devspark.robototextview.widget.RobotoTextView
 			android:id="@+id/tv_spinner"
-			android:layout_width="wrap_content"
-			android:layout_height="40dp"
-			android:layout_gravity="center_vertical"
-			android:gravity="center_vertical"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_gravity="center"
+			android:gravity="center"
 			android:textColor="@color/white"
 			android:textSize="20dp"
-			android:visibility="gone"/>
+			android:text="@string/dots"/>
 
 </FrameLayout>

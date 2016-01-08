@@ -7,31 +7,29 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-import ru.aviasales.core.search_v3.objects.Proposal;
+import ru.aviasales.core.search.object.Proposal;
 import ru.aviasales.template.R;
-import ru.aviasales.template.filters.manager.FiltersManager;
-import ru.aviasales.template.ui.dialog.ResultsSortingDialog;
-import ru.aviasales.template.ui.fragment.ResultsFragment;
 import ru.aviasales.template.ui.view.ResultsItemView;
+import ru.aviasales.template.utils.SortUtils;
 
 
 public class ResultsRecycleViewAdapter extends RecyclerView.Adapter<ResultsRecycleViewAdapter.ViewHolder> {
 
 	private final Context context;
 	private List<Proposal> proposals = new ArrayList<>();
+	private boolean isComplexSearch;
 	private OnClickListener listener;
 
 	public interface OnClickListener {
 		void onClick(Proposal proposal, int position);
 	}
 
-	public ResultsRecycleViewAdapter(Context context) {
+	public ResultsRecycleViewAdapter(Context context, List<Proposal> proposals, boolean isComplexSearch) {
 		this.context = context.getApplicationContext();
-		proposals = FiltersManager.getInstance().getFilteredTickets();
+		this.proposals = proposals;
+		this.isComplexSearch = isComplexSearch;
 	}
 
 	@Override
@@ -43,7 +41,7 @@ public class ResultsRecycleViewAdapter extends RecyclerView.Adapter<ResultsRecyc
 
 	@Override
 	public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-		viewHolder.resultsItemView.setProposal(getItem(position), context);
+		viewHolder.resultsItemView.setProposal(getItem(position), context, isComplexSearch);
 		viewHolder.resultsItemView.setAlternativePrice(getItem(position).getTotalWithFilters());
 		viewHolder.resultsItemView.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -78,88 +76,19 @@ public class ResultsRecycleViewAdapter extends RecyclerView.Adapter<ResultsRecyc
 		}
 	}
 
-	private void sort() {
-		switch (ResultsFragment.sortingType) {
-			case ResultsSortingDialog.SORTING_BY_PRICE:
-				Collections.sort(proposals, new Comparator<Proposal>() {
-					@Override
-					public int compare(Proposal lhs, Proposal rhs) {
-						return (int) (lhs.getTotalWithFilters() - rhs.getTotalWithFilters());
-					}
-				});
-				break;
-			case ResultsSortingDialog.SORTING_BY_DEPARTURE:
-				Collections.sort(proposals, new Comparator<Proposal>() {
-					@Override
-					public int compare(Proposal lhs, Proposal rhs) {
-						return (int) (lhs.getDeparture() - rhs.getDeparture());
-					}
-				});
-				break;
-			case ResultsSortingDialog.SORTING_BY_ARRIVAL:
-				Collections.sort(proposals, new Comparator<Proposal>() {
-					@Override
-					public int compare(Proposal lhs, Proposal rhs) {
-						return (int) (lhs.getArrival() - rhs.getArrival());
-					}
-				});
-				break;
-			case ResultsSortingDialog.SORTING_BY_DEPARTURE_ON_RETURN:
-				Collections.sort(proposals, new Comparator<Proposal>() {
-					@Override
-					public int compare(Proposal lhs, Proposal rhs) {
-						return (int) (lhs.getReturnDeparture() - rhs.getReturnDeparture());
-					}
-				});
-				break;
-			case ResultsSortingDialog.SORTING_BY_ARRIVAL_ON_RETURN:
-				Collections.sort(proposals, new Comparator<Proposal>() {
-					@Override
-					public int compare(Proposal lhs, Proposal rhs) {
-						return (int) (lhs.getReturnArrival() - rhs.getReturnArrival());
-					}
-				});
-				break;
-			case ResultsSortingDialog.SORTING_BY_DURATION:
-				Collections.sort(proposals, new Comparator<Proposal>() {
-					@Override
-					public int compare(Proposal lhs, Proposal rhs) {
-						return lhs.getDurationInMinutes() - rhs.getDurationInMinutes();
-					}
-				});
-				break;
-			case ResultsSortingDialog.SORTING_BY_RATING:
-				Collections.sort(proposals, new Comparator<Proposal>() {
-					@Override
-					public int compare(Proposal lhs, Proposal rhs) {
-						double lhsRating = lhs.getRating(proposals.get(0));
-						double rhsRating = rhs.getRating(proposals.get(0));
-						if (lhsRating - rhsRating < 0) {
-							return -1;
-						} else if (lhsRating - rhsRating > 0) {
-							return 1;
-						} else {
-							return 0;
-						}
-					}
-				});
-				break;
-		}
-	}
-
 	public void setListener(OnClickListener listener) {
 		this.listener = listener;
 	}
 
-	public void notifyDataSet() {
+	public void sortProposals(int savedSortingType) {
 		if (proposals != null) {
-			sort();
+			SortUtils.sortProposals(proposals, savedSortingType, isComplexSearch);
 		}
 		super.notifyDataSetChanged();
 	}
 
-	public void reloadFilteredTickets(List<Proposal> filteredTickets) {
+	public void reloadFilteredTickets(List<Proposal> filteredTickets, int savedSortingType) {
 		proposals = filteredTickets;
-		notifyDataSet();
+		sortProposals(savedSortingType);
 	}
 }

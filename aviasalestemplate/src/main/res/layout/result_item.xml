@@ -20,10 +20,11 @@
 			android:background="@drawable/results_item"
 			android:duplicateParentState="true">
 
-		<RelativeLayout
+		<LinearLayout
 				android:id="@+id/content"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
+				android:orientation="vertical"
 				android:paddingBottom="@dimen/results_item_padding_bottom"
 				android:paddingTop="@dimen/results_item_padding_top">
 
@@ -66,21 +67,6 @@
 
 			</RelativeLayout>
 
-			<ru.aviasales.template.ui.view.ResultsItemRouteView
-					android:id="@+id/direct_route"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:layout_alignParentLeft="true"
-					android:layout_below="@+id/top_line"/>
-
-			<ru.aviasales.template.ui.view.ResultsItemRouteView
-					android:id="@+id/return_route"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:layout_alignParentLeft="true"
-					android:layout_below="@+id/direct_route"
-					android:layout_marginTop="7dp"/>
-
-		</RelativeLayout>
+		</LinearLayout>
 	</RelativeLayout>
 </ru.aviasales.template.ui.view.ResultsItemView>

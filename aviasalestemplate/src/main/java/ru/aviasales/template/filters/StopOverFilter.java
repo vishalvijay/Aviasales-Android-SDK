@@ -5,7 +5,8 @@ import android.os.Parcelable;
 
 import java.util.List;
 
-import ru.aviasales.core.search.object.FlightData;
+import ru.aviasales.core.legacy.search.object.OldFlightData;
+
 
 public class StopOverFilter implements Parcelable {
 
@@ -48,7 +49,7 @@ public class StopOverFilter implements Parcelable {
 				(twoPlusStopOver || !isTwoPlusStopOverViewEnabled));
 	}
 
-	public boolean isActual(List<FlightData> flightDatas) {
+	public boolean isActual(List<OldFlightData> flightDatas) {
 		int stopOverCount = flightDatas.size();
 		return ((oneStopOver && stopOverCount == 2) ||
 				(withoutStopOver && stopOverCount == 1) ||

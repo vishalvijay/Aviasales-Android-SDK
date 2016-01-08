@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import ru.aviasales.core.locale.CountryCodes;
+import ru.aviasales.core.locale.LanguageCodes;
 import ru.aviasales.core.locale.LocaleUtil;
 import ru.aviasales.core.utils.CoreDefined;
 
@@ -41,7 +43,7 @@ public class Defined extends CoreDefined {
 
 	static {
 		Map<String, String> aMap = new LinkedHashMap<String, String>();
-		if (LocaleUtil.getLocale().equals(LocaleUtil.RUSSIAN_LANGUAGE_CODE)) {
+		if (LocaleUtil.getLocale().equals(LanguageCodes.RUSSIAN)) {
 
 			aMap.put("RUB", "Российский рубль");
 			aMap.put("USD", "Доллар США");
@@ -93,24 +95,24 @@ public class Defined extends CoreDefined {
 	public static String getDefaultCurrency() {
 		String locale = LocaleUtil.getLocale();
 
-		if (locale.equalsIgnoreCase(LocaleUtil.ENGLISH_LANGUAGE_CODE + "_" + LocaleUtil.GREAT_BRITAIN_COUNTRY_CODE)) {
+		if (locale.equalsIgnoreCase(LanguageCodes.ENGLISH + "_" + CountryCodes.GREAT_BRITAIN)) {
 			return EN_GB_DEFAULT_CURRENCY;
-		} else if (locale.equalsIgnoreCase(LocaleUtil.ENGLISH_LANGUAGE_CODE + "_" + LocaleUtil.GREAT_BRITAIN_COUNTRY_CODE)) {
+		} else if (locale.equalsIgnoreCase(LanguageCodes.ENGLISH + "_" + CountryCodes.GREAT_BRITAIN)) {
 			return EN_AU_DEFAULT_CURRENCY;
-		} else if (locale.equalsIgnoreCase(LocaleUtil.ENGLISH_LANGUAGE_CODE + "_" + LocaleUtil.GREAT_BRITAIN_COUNTRY_CODE)) {
+		} else if (locale.equalsIgnoreCase(LanguageCodes.ENGLISH + "_" + CountryCodes.GREAT_BRITAIN)) {
 			return EN_IE_DEFAULT_CURRENCY;
-		} else if (locale.equalsIgnoreCase(LocaleUtil.SPANISH_LANGUAGE_CODE)) {
+		} else if (locale.equalsIgnoreCase(LanguageCodes.SPANISH)) {
 			return ES_DEFAULT_CURRENCY;
-		} else if (locale.equalsIgnoreCase(LocaleUtil.GERMAN_LANGUAGE_CODE)) {
+		} else if (locale.equalsIgnoreCase(LanguageCodes.GERMAN)) {
 			return DE_DEFAULT_CURRENCY;
-		} else if (locale.equalsIgnoreCase(LocaleUtil.ITALIAN_LANGUAGE_CODE)) {
+		} else if (locale.equalsIgnoreCase(LanguageCodes.ITALIAN)) {
 			return IT_DEFAULT_CURRENCY;
-		} else if (locale.equalsIgnoreCase(LocaleUtil.THAI_LANGUAGE_CODE)) {
+		} else if (locale.equalsIgnoreCase(LanguageCodes.THAI)) {
 			return TH_DEFAULT_CURRENCY;
-		} else if (locale.equalsIgnoreCase(LocaleUtil.FRENCH_LANGUAGE_CODE)) {
+		} else if (locale.equalsIgnoreCase(LanguageCodes.FRENCH)) {
 			return FR_DEFAULT_CURRENCY;
-		} else if (locale.equalsIgnoreCase(LocaleUtil.RUSSIAN_LANGUAGE_CODE + "_" + LocaleUtil.RUSSIAN_LANGUAGE_CODE)
-				|| locale.equalsIgnoreCase(LocaleUtil.RUSSIAN_LANGUAGE_CODE)) {
+		} else if (locale.equalsIgnoreCase(LanguageCodes.RUSSIAN + "_" + LanguageCodes.RUSSIAN)
+				|| locale.equalsIgnoreCase(LanguageCodes.RUSSIAN)) {
 			return DEFAULT_CURRENCY;
 		} else
 			return EN_DEFAULT_CURRENCY;

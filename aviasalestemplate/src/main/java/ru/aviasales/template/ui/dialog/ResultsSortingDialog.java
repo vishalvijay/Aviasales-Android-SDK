@@ -1,9 +1,9 @@
 package ru.aviasales.template.ui.dialog;
 
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,29 +11,28 @@ import android.widget.CheckedTextView;
 
 import ru.aviasales.core.AviasalesSDK;
 import ru.aviasales.template.R;
+import ru.aviasales.template.utils.SortUtils;
 
 
 public class ResultsSortingDialog extends BaseDialogFragment {
 
 	public final static String TAG = "fragment.ResultsSortingDialog";
 
-	public static final int SORTING_BY_PRICE = 0;
-	public static final int SORTING_BY_DEPARTURE = 1;
-	public static final int SORTING_BY_ARRIVAL = 2;
-	public static final int SORTING_BY_DEPARTURE_ON_RETURN = 3;
-	public static final int SORTING_BY_ARRIVAL_ON_RETURN = 4;
-	public static final int SORTING_BY_DURATION = 5;
-	public static final int SORTING_BY_RATING = 6;
-
-	private static int currentSorting;
+	private int currentSorting;
+	private boolean isComplexSearch;
 
 	private OnSortingChangedListener onSortingChangedListener;
 
-	public static ResultsSortingDialog newInstance(int sortingType, OnSortingChangedListener onSortingChangedListener) {
+	public static ResultsSortingDialog newInstance(int savedSortingType, boolean isComplexSearch, OnSortingChangedListener onSortingChangedListener) {
 		ResultsSortingDialog dialog = new ResultsSortingDialog();
 		dialog.setOnSortingChangedListener(onSortingChangedListener);
-		currentSorting = sortingType;
+		dialog.setCurrentSorting(savedSortingType);
+		dialog.setIsComplexSearch(isComplexSearch);
 		return dialog;
+	}
+
+	private void setIsComplexSearch(boolean isComplexSearch) {
+		this.isComplexSearch = isComplexSearch;
 	}
 
 	@Override
@@ -51,24 +50,24 @@ public class ResultsSortingDialog extends BaseDialogFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.results_sorting_dialog, container);
 
-		setUpSortingItem(layout, R.id.tv_sort_by_price, SORTING_BY_PRICE);
-		setUpSortingItem(layout, R.id.tv_sort_by_departure, SORTING_BY_DEPARTURE);
-		setUpSortingItem(layout, R.id.tv_sort_by_arrival, SORTING_BY_ARRIVAL);
-		setUpSortingItem(layout, R.id.tv_sort_by_departure_on_way_back, SORTING_BY_DEPARTURE_ON_RETURN);
-		setUpSortingItem(layout, R.id.tv_sort_by_arrival_on_way_back, SORTING_BY_ARRIVAL_ON_RETURN);
-		setUpSortingItem(layout, R.id.tv_sort_by_duration, SORTING_BY_DURATION);
-		setUpSortingItem(layout, R.id.tv_sort_by_rating, SORTING_BY_RATING);
+		setUpSortingItem(layout, R.id.tv_sort_by_price, SortUtils.SORTING_BY_PRICE);
+		setUpSortingItem(layout, R.id.tv_sort_by_departure, SortUtils.SORTING_BY_DEPARTURE);
+		setUpSortingItem(layout, R.id.tv_sort_by_arrival, SortUtils.SORTING_BY_ARRIVAL);
+		setUpSortingItem(layout, R.id.tv_sort_by_departure_on_way_back, SortUtils.SORTING_BY_DEPARTURE_ON_RETURN);
+		setUpSortingItem(layout, R.id.tv_sort_by_arrival_on_way_back, SortUtils.SORTING_BY_ARRIVAL_ON_RETURN);
+		setUpSortingItem(layout, R.id.tv_sort_by_duration, SortUtils.SORTING_BY_DURATION);
+		setUpSortingItem(layout, R.id.tv_sort_by_rating, SortUtils.SORTING_BY_RATING);
 
-		if (ticketsWithoutReturn()) {
+		if (isNotTwoWayTicket()) {
 			layout.findViewById(R.id.tv_sort_by_departure_on_way_back).setVisibility(View.GONE);
 			layout.findViewById(R.id.tv_sort_by_arrival_on_way_back).setVisibility(View.GONE);
 		}
 
+		if (isComplexSearch) {
+			layout.findViewById(R.id.tv_sort_by_departure).setVisibility(View.GONE);
+			layout.findViewById(R.id.tv_sort_by_arrival).setVisibility(View.GONE);
+		}
 		return layout;
-	}
-
-	private boolean ticketsWithoutReturn() {
-		return AviasalesSDK.getInstance().getSearchParamsOfLastSearch().getReturnDate() == null;
 	}
 
 	private void setUpSortingItem(ViewGroup layout, int itemId, final int sortingType) {
@@ -91,8 +90,13 @@ public class ResultsSortingDialog extends BaseDialogFragment {
 		this.onSortingChangedListener = onSortingChangedListener;
 	}
 
+	public void setCurrentSorting(int currentSorting) {
+		this.currentSorting = currentSorting;
+	}
+
 	public interface OnSortingChangedListener {
 		void onSortingChanged(int sortingType);
+
 		void onCancel();
 	}
 
@@ -105,21 +109,19 @@ public class ResultsSortingDialog extends BaseDialogFragment {
 		}
 
 		int dialogWidth = getResources().getDimensionPixelSize(R.dimen.sorting_dialog_width);
-		int dialogHeight;
 
-		if (ticketsWithoutReturn()) {
-			dialogHeight = getResources().getDimensionPixelSize(R.dimen.sorting_dialog_height_without_return);
-		} else {
-			dialogHeight = getResources().getDimensionPixelSize(R.dimen.sorting_dialog_height);
-		}
-
-		getDialog().getWindow().setLayout(dialogWidth, dialogHeight);
+		getDialog().getWindow().setLayout(dialogWidth, -2);
 	}
 
 	@Override
 	public void onCancel(DialogInterface dialog) {
 		onSortingChangedListener.onCancel();
 		super.onCancel(dialog);
+	}
+
+	private boolean isNotTwoWayTicket() {
+		return AviasalesSDK.getInstance().getSearchParamsOfLastSearch().getSegments().size() < 2
+				|| isComplexSearch;
 	}
 
 }

@@ -6,8 +6,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import ru.aviasales.core.http.utils.CoreDateUtils;
+import ru.aviasales.core.search.params.Segment;
 import ru.aviasales.core.search_airports.object.PlaceData;
-import ru.aviasales.core.search_v3.params.Segment;
 import ru.aviasales.template.utils.DateUtils;
 import ru.aviasales.template.utils.Defined;
 

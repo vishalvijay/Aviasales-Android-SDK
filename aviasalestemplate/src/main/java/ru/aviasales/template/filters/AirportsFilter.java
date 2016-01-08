@@ -8,8 +8,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import ru.aviasales.core.legacy.search.object.TicketData;
 import ru.aviasales.core.search.object.AirportData;
-import ru.aviasales.core.search.object.TicketData;
+
 
 public class AirportsFilter implements Parcelable {
 

@@ -13,12 +13,12 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import ru.aviasales.core.http.exception.ApiException;
+import ru.aviasales.core.legacy.search.object.OldFlightData;
+import ru.aviasales.core.legacy.search.object.OldSearchData;
+import ru.aviasales.core.legacy.search.object.TicketData;
 import ru.aviasales.core.search.object.AirlineData;
 import ru.aviasales.core.search.object.AirportData;
-import ru.aviasales.core.search.object.FlightData;
 import ru.aviasales.core.search.object.GateData;
-import ru.aviasales.core.search.object.SearchData;
-import ru.aviasales.core.search.object.TicketData;
 import ru.aviasales.core.utils.CoreAviasalesUtils;
 
 public class GeneralFilter implements Parcelable {
@@ -66,7 +66,7 @@ public class GeneralFilter implements Parcelable {
 		overnightFilter = new OvernightFilter(generalFilter.getOvernightFilter());
 	}
 
-	public void init(SearchData searchData, PreInitializeFilters preInitializeFilters) {
+	public void init(OldSearchData searchData, PreInitializeFilters preInitializeFilters) {
 		initMinAndMaxValues(searchData);
 		clearFilters();
 
@@ -78,7 +78,7 @@ public class GeneralFilter implements Parcelable {
 
 	}
 
-	public synchronized List<TicketData> applyFilters(SearchData searchData) {
+	public synchronized List<TicketData> applyFilters(OldSearchData searchData) {
 		if (searchData == null || searchData.getTickets() == null) {
 			return new ArrayList<TicketData>();
 		}
@@ -101,7 +101,7 @@ public class GeneralFilter implements Parcelable {
 		return filteredTickets;
 	}
 
-	private void setGatesWithoutMobileVersion(SearchData searchData) {
+	private void setGatesWithoutMobileVersion(OldSearchData searchData) {
 		if (gatesWithoutMobileVersion == null) {
 			gatesWithoutMobileVersion = new ArrayList<GateData>();
 			for (GateData gateData : searchData.getGatesInfo()) {
@@ -112,7 +112,7 @@ public class GeneralFilter implements Parcelable {
 		}
 	}
 
-	private boolean shouldAddTicketToResults(SearchData searchData, TicketData ticketData) {
+	private boolean shouldAddTicketToResults(OldSearchData searchData, TicketData ticketData) {
 		return isSuitedByDuration(ticketData) &&
 				isSuitedByPrice(ticketData) &&
 				isSuitedByStopOverDelay(ticketData) &&
@@ -156,9 +156,9 @@ public class GeneralFilter implements Parcelable {
 		}
 	}
 
-	public boolean isSuitedByAlliance(SearchData searchData, TicketData ticketData) {
+	public boolean isSuitedByAlliance(OldSearchData searchData, TicketData ticketData) {
 		if (allianceFilter.isActive()) {
-			for (FlightData flightData : ticketData.getAllFlights()) {
+			for (OldFlightData flightData : ticketData.getAllFlights()) {
 				if (!allianceFilter.isActual(searchData.getAirlines().get(flightData.getAirline()).getAllianceName())) {
 					return false;
 				}
@@ -172,7 +172,7 @@ public class GeneralFilter implements Parcelable {
 
 	public boolean isSuitedByAirport(TicketData ticketData) {
 		if (airportsFilter.isActive()) {
-			for (FlightData flightData : ticketData.getAllFlights()) {
+			for (OldFlightData flightData : ticketData.getAllFlights()) {
 				if (!airportsFilter.isActual(flightData.getOrigin()) || !airportsFilter.isActual(flightData.getDestination())) {
 					return false;
 				}
@@ -258,12 +258,12 @@ public class GeneralFilter implements Parcelable {
 
 			int directDuration = 0;
 			int returnDuration = 0;
-			for (FlightData flightData : ticketData.getDirectFlights()) {
+			for (OldFlightData flightData : ticketData.getDirectFlights()) {
 				directDuration += flightData.getDuration() + flightData.getDelay();
 			}
 
 			if (ticketData.getReturnFlights() != null) {
-				for (FlightData flightData : ticketData.getReturnFlights()) {
+				for (OldFlightData flightData : ticketData.getReturnFlights()) {
 					returnDuration += flightData.getDuration() + flightData.getDelay();
 				}
 			}
@@ -282,7 +282,7 @@ public class GeneralFilter implements Parcelable {
 		}
 	}
 
-	public boolean isSuitedByAgencies(SearchData searchData, TicketData ticketData) {
+	public boolean isSuitedByAgencies(OldSearchData searchData, TicketData ticketData) {
 		if (agenciesFilter.isActive()) {
 			if (agenciesFilter.isActual(ticketData)) {
 				try {
@@ -459,7 +459,7 @@ public class GeneralFilter implements Parcelable {
 		}
 	};
 
-	public synchronized void initMinAndMaxValues(SearchData searchData) {
+	public synchronized void initMinAndMaxValues(OldSearchData searchData) {
 		Map<String, AirportData> airportDataMap = new HashMap<String, AirportData>();
 		Map<String, AirlineData> airlineDataMap = new HashMap<String, AirlineData>();
 		List<GateData> onlyActualGates = new ArrayList<GateData>();

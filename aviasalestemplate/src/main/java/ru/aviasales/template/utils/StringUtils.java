@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 import ru.aviasales.core.locale.LocaleUtil;
-import ru.aviasales.core.search.object.FlightData;
+import ru.aviasales.core.search.object.Flight;
+import ru.aviasales.core.search.params.SearchParams;
+import ru.aviasales.core.search.params.Segment;
 import ru.aviasales.template.R;
 
 public class StringUtils {
@@ -27,7 +29,7 @@ public class StringUtils {
 		return getPriceWithDelimiter(price);
 	}
 
-	public static String formatPriceInAppCurrency(int priceInDefaultCur, Context context) {
+	public static String formatPriceInAppCurrency(long priceInDefaultCur, Context context) {
 		return formatPriceInAppCurrency(
 				priceInDefaultCur,
 				CurrencyUtils.getAppCurrency(context),
@@ -49,7 +51,7 @@ public class StringUtils {
 		return sb.reverse().toString();
 	}
 
-	public static String getTransferText(Context context, List<FlightData> flights) {
+	public static String getTransferText(Context context, List<Flight> flights) {
 		StringBuilder builder = new StringBuilder();
 
 		if (flights.size() == 1) {
@@ -60,7 +62,7 @@ public class StringUtils {
 					if (i != 0) {
 						builder.append(", ");
 					}
-					builder.append(flights.get(i).getDestination());
+					builder.append(flights.get(i).getArrival());
 				}
 			}
 		}
@@ -113,5 +115,25 @@ public class StringUtils {
 		builder.append(" ");
 		builder.append(getSpannableString(currency, new RelativeSizeSpan(0.4f)));
 		return builder;
+	}
+
+	public static String getFirstAndLastIatasString(SearchParams searchParams) {
+
+		List<Segment> segments = searchParams.getSegments();
+		Segment firstSegment = segments.get(0);
+		Segment lastSegment = segments.get(segments.size() - 1);
+		String originFirstIata = firstSegment.getOrigin();
+		String destinationFirstIata = firstSegment.getDestination();
+		String destinationLastIata = lastSegment.getDestination();
+		if (segments.size() == 1) {
+			return originFirstIata + " • " + destinationLastIata;
+		} else {
+			if (searchParams.isComplexSearch()) {
+				return originFirstIata + " • " + destinationLastIata;
+			} else {
+				return originFirstIata + " • " + destinationFirstIata;
+			}
+
+		}
 	}
 }

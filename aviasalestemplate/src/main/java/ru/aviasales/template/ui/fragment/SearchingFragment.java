@@ -17,12 +17,13 @@ import com.nineoldandroids.animation.ValueAnimator;
 
 import java.util.Map;
 
-import ru.aviasales.core.AviasalesSDKV3;
+import ru.aviasales.core.AviasalesSDK;
 import ru.aviasales.core.http.exception.ApiExceptions;
-import ru.aviasales.core.search_v3.objects.SearchDataV3;
-import ru.aviasales.core.search_v3.searching.OnSearchListener;
+import ru.aviasales.core.search.object.SearchData;
+import ru.aviasales.core.search.searching.OnSearchListener;
 import ru.aviasales.template.R;
 import ru.aviasales.template.filters.manager.FiltersManager;
+import ru.aviasales.template.utils.SortUtils;
 
 public class SearchingFragment extends BaseFragment {
 
@@ -61,12 +62,14 @@ public class SearchingFragment extends BaseFragment {
 	@Override
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-		switch (AviasalesSDKV3.getInstance().getSearchingTicketsStatus()) {
+		switch (AviasalesSDK.getInstance().getSearchingTicketsStatus()) {
 			case SEARCHING:
-				AviasalesSDKV3.getInstance().setOnTicketsSearchListener(new OnSearchListener() {
+				AviasalesSDK.getInstance().setOnTicketsSearchListener(new OnSearchListener() {
 					@Override
-					public void onSuccess(SearchDataV3 searchData) {
+					public void onSuccess(SearchData searchData) {
+						SortUtils.resetSavedSortingType();
 						FiltersManager.getInstance().initFilter(searchData, getActivity());
+
 						onSearchSuccessFinish();
 					}
 
@@ -173,7 +176,7 @@ public class SearchingFragment extends BaseFragment {
 	public void onResume() {
 		super.onResume();
 		isPaused = false;
-		switch (AviasalesSDKV3.getInstance().getSearchingTicketsStatus()) {
+		switch (AviasalesSDK.getInstance().getSearchingTicketsStatus()) {
 			case CANCELED:
 			case ERROR:
 				getActivity().onBackPressed();

@@ -7,15 +7,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nineoldandroids.view.ViewHelper;
-
 import java.util.List;
+import java.util.Map;
 
-import ru.aviasales.core.AviasalesSDK;
-import ru.aviasales.core.search.object.FlightData;
-import ru.aviasales.core.search.object.TicketData;
+import ru.aviasales.core.search.object.AirportData;
+import ru.aviasales.core.search.object.Flight;
+import ru.aviasales.core.search.object.SearchData;
 import ru.aviasales.template.R;
-import ru.aviasales.template.ticket.TicketManager;
 import ru.aviasales.template.utils.StringUtils;
 
 public class TicketFlightHeaderView extends RelativeLayout {
@@ -46,26 +44,24 @@ public class TicketFlightHeaderView extends RelativeLayout {
 
 	}
 
-	public void setData(TicketData ticketData, boolean thereTo) {
-		List<FlightData> flight;
-		if (thereTo) {
-			flight = ticketData.getDirectFlights();
-		} else {
+	public void setData(List<Flight> flights, int routeDurationInMin, SearchData searchData, boolean isReturn) {
+		if (isReturn) {
 			if (plane != null) {
-				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 					plane.setScaleX(-1);
 				}
 			}
-			flight = ticketData.getReturnFlights();
 		}
 
-		String origin = flight.get(0).getOrigin();
-		final String destination = flight.get(flight.size() - 1).getDestination();
-		tvFlightCities.setText(AviasalesSDK.getInstance().getSearchData().getCityNameByIata(origin) + " " + getResources().getString(R.string.dash)
-				+ " " + AviasalesSDK.getInstance().getSearchData().getCityNameByIata(destination));
+		String origin = flights.get(0).getDeparture();
+		final String destination = flights.get(flights.size() - 1).getArrival();
+
+		Map<String, AirportData> airports = searchData.getAirports();
+		tvFlightCities.setText(airports.get(origin).getCity() + " " + getResources().getString(R.string.dash)
+				+ " " + airports.get(destination).getCity());
 
 		tvFlightDuration.setText(
-				StringUtils.getDurationString(getContext(), TicketManager.getInstance().getRouteDurationInMin(flight)));
+				StringUtils.getDurationString(getContext(), routeDurationInMin));
 
 	}
 }

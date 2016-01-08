@@ -6,16 +6,16 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import ru.aviasales.core.AviasalesSDKV3;
+import ru.aviasales.core.AviasalesSDK;
 import ru.aviasales.core.search.object.AirlineData;
 import ru.aviasales.core.search.object.AirportData;
+import ru.aviasales.core.search.object.Flight;
 import ru.aviasales.core.search.object.GateData;
-import ru.aviasales.core.search_v3.objects.Flight;
-import ru.aviasales.core.search_v3.objects.Proposal;
-import ru.aviasales.core.search_v3.objects.ProposalSegment;
-import ru.aviasales.core.search_v3.objects.SearchDataV3;
-import ru.aviasales.core.search_v3.objects.Terms;
-import ru.aviasales.core.search_v3.params.SearchParamsV3;
+import ru.aviasales.core.search.object.Proposal;
+import ru.aviasales.core.search.object.ProposalSegment;
+import ru.aviasales.core.search.object.SearchData;
+import ru.aviasales.core.search.object.Terms;
+import ru.aviasales.core.search.params.SearchParams;
 
 public class ProposalManager {
 	private static final ProposalManager instance = new ProposalManager();
@@ -25,21 +25,21 @@ public class ProposalManager {
 	private Map<String, GateData> gates;
 	private Map<String, AirportData> airports;
 	private Map<String, AirlineData> airlines;
-	private SearchParamsV3 searchParams;
+	private SearchParams searchParams;
 	private Map<String, Terms> nativePrices;
 
 	public static ProposalManager getInstance() {
 		return instance;
 	}
 
-	public void init(SearchParamsV3 params, SearchDataV3 searchData, Proposal proposal) {
+	public void init(SearchParams params, SearchData searchData, Proposal proposal) {
 		init(proposal, searchData.getGatesInfo(), params,
-				AviasalesSDKV3.getInstance().getSearchData().getAirports(),
-				AviasalesSDKV3.getInstance().getSearchData().getAirlines());
+				AviasalesSDK.getInstance().getSearchData().getAirports(),
+				AviasalesSDK.getInstance().getSearchData().getAirlines());
 	}
 
 	public void init(Proposal proposal, Map<String, GateData> gates, Map<String, AirportData> airports,
-	                 Map<String, AirlineData> airlines, SearchParamsV3 searchParams) {
+	                 Map<String, AirlineData> airlines, SearchParams searchParams) {
 		this.proposalData = proposal;
 		this.gates = gates;
 		this.searchParams = searchParams;
@@ -53,13 +53,13 @@ public class ProposalManager {
 		initAgencies(proposal);
 	}
 
-	public void init(Proposal proposal, Map<String, GateData> gates, SearchParamsV3 searchParams) {
+	public void init(Proposal proposal, Map<String, GateData> gates, SearchParams searchParams) {
 		init(proposal, gates, searchParams,
-				AviasalesSDKV3.getInstance().getSearchData().getAirports(),
-				AviasalesSDKV3.getInstance().getSearchData().getAirlines());
+				AviasalesSDK.getInstance().getSearchData().getAirports(),
+				AviasalesSDK.getInstance().getSearchData().getAirlines());
 	}
 
-	public void init(Proposal proposal, Map<String, GateData> gates, SearchParamsV3 searchParams,
+	public void init(Proposal proposal, Map<String, GateData> gates, SearchParams searchParams,
 	                 Map<String, AirportData> airports, Map<String, AirlineData> airlines) {
 		this.proposalData = proposal;
 		this.gates = gates;
@@ -83,7 +83,7 @@ public class ProposalManager {
 		agencies.addAll(proposal.getFiltredNativePrices().keySet());
 		List<String> agenciesToRemove = new ArrayList<>();
 		for (String gateId : agencies) {
-			agenciesToRemove.add(gateId.replace("-", ""));
+			if (gateId.contains("-")) agenciesToRemove.add(gateId.replace("-", ""));
 		}
 		agencies.removeAll(agenciesToRemove);
 
@@ -147,7 +147,7 @@ public class ProposalManager {
 		return proposalData;
 	}
 
-	public SearchParamsV3 getSearchParams() {
+	public SearchParams getSearchParams() {
 		return searchParams;
 	}
 

@@ -19,7 +19,7 @@ import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.aviasales.core.AviasalesSDKV3;
+import ru.aviasales.core.AviasalesSDK;
 import ru.aviasales.core.locale.LocaleUtil;
 import ru.aviasales.core.search_airports.interfaces.OnSearchPlacesListener;
 import ru.aviasales.core.search_airports.object.PlaceData;
@@ -205,7 +205,7 @@ public class SelectAirportFragment extends BaseFragment {
 					updateAdapter();
 					SearchByNameParams params = setSearchByNameParams();
 
-					AviasalesSDKV3.getInstance().startPlacesSearch(params, new OnSearchPlacesListener() {
+					AviasalesSDK.getInstance().startPlacesSearch(params, new OnSearchPlacesListener() {
 						@Override
 						public void onSuccess(List<PlaceData> placeDates) {
 							placesFromServer = placeDates;
@@ -229,7 +229,7 @@ public class SelectAirportFragment extends BaseFragment {
 						}
 					});
 				} else {
-					AviasalesSDKV3.getInstance().cancelPlacesSearch();
+					AviasalesSDK.getInstance().cancelPlacesSearch();
 					infoAdapter.setInfoViewActive(false);
 					infoAdapter.setInfoText(null);
 					updateAdapter();

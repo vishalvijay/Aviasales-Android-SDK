@@ -8,7 +8,9 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Map;
 
+import ru.aviasales.core.search.object.GateData;
 import ru.aviasales.template.R;
 import ru.aviasales.template.proposal.ProposalManager;
 import ru.aviasales.template.ui.view.AgencyItemView;
@@ -16,10 +18,12 @@ import ru.aviasales.template.ui.view.AgencyItemView;
 public class AgencySpinnerAdapter implements SpinnerAdapter {
 
 	private final List<String> agencies;
+	private final Map<String, GateData> gates;
 	private OnAgencyClickListener onAgencyClickListener;
 
-	public AgencySpinnerAdapter() {
-		agencies = ProposalManager.getInstance().getAgenciesCodes();
+	public AgencySpinnerAdapter(List<String> agenciesCodes, Map<String, GateData> gates) {
+		agencies = agenciesCodes;
+		this.gates = gates;
 	}
 
 	@Override
@@ -38,7 +42,7 @@ public class AgencySpinnerAdapter implements SpinnerAdapter {
 			convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.agency_item_layout, parent, false);
 		}
 		((AgencyItemView) convertView).setData(agencies.get(position),
-				ProposalManager.getInstance().isAgencyHasMobileVersion(agencies.get(position)));
+				gates.get(agencies.get(position)).hasMobileVersion());
 		convertView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

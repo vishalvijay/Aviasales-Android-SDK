@@ -20,6 +20,8 @@ import ru.aviasales.template.R;
 
 public class DateUtils {
 
+	public static final String MIN_AIRPORT_TIME_ZONE = "-11:00";
+	public static final String DATE_FORMAT_REG_EXP = "[^M]*M{3}[^M]*";
 	private static final String AM_SYMBOL = "a";
 	private static final String PM_SYMBOL = "p";
 
@@ -90,7 +92,7 @@ public class DateUtils {
 
 	public static boolean isDateBeforeDateShiftLine(Calendar checkDate) {
 		// We don't use -12 because no any airports in that zone
-		LocalDate todayInShiftTimezone = new LocalDate(DateTimeZone.forID("-11:00"));
+		LocalDate todayInShiftTimezone = new LocalDate(DateTimeZone.forID(MIN_AIRPORT_TIME_ZONE));
 		LocalDate checkLocalDate = LocalDate.fromCalendarFields(checkDate);
 		return checkLocalDate.isBefore(todayInShiftTimezone);
 	}
@@ -99,6 +101,12 @@ public class DateUtils {
 		Calendar checkDate = Calendar.getInstance();
 		checkDate.setTime(date);
 		return isDateBeforeDateShiftLine(checkDate);
+	}
+
+	public static boolean isDateBeforeDateShiftLine(String checkDate) {
+		LocalDate todayInShiftTimezone = new LocalDate(DateTimeZone.forID(MIN_AIRPORT_TIME_ZONE));
+		LocalDate checkLocalDate = LocalDate.parse(checkDate);
+		return checkLocalDate.isBefore(todayInShiftTimezone);
 	}
 
 	public static Date getAmPmTime(Integer hr, Integer min) {
@@ -112,7 +120,7 @@ public class DateUtils {
 	public static Date getCurrentDateInGMTMinus11Timezone() {
 		Date date = new Date();
 		date.setTime(date.getTime() - 11 * 1000 * 60 * 60 -
-				TimeZone.getDefault().getOffset(date.getTime())); //Timezone -11:00 for first calendar available date
+				TimeZone.getDefault().getOffset(date.getTime()));
 		return date;
 	}
 
@@ -124,6 +132,31 @@ public class DateUtils {
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 		return cal.getTime();
+	}
+
+	public static String convertDateFromTo(String date, String formatFrom, String formatTo) {
+		SimpleDateFormat fdfFrom = new SimpleDateFormat(formatFrom);
+		SimpleDateFormat fdfTo = new SimpleDateFormat(formatTo);
+		TimeZone utc = TimeZone.getTimeZone(Defined.UTC_TIMEZONE);
+		fdfFrom.setTimeZone(utc);
+		fdfTo.setTimeZone(utc);
+
+		String dateString = convertDateFromTo(date, fdfFrom, fdfTo);
+		if (formatTo.matches(DATE_FORMAT_REG_EXP)) {
+			dateString = dateString.replace(".", "");
+		}
+
+		return dateString;
+	}
+
+	public static String convertDateFromTo(String date, SimpleDateFormat formatFrom, SimpleDateFormat formatTo) {
+		Date parsedDate = null;
+		try {
+			parsedDate = formatFrom.parse(date);
+		} catch (ParseException e) {
+			Log.e("Parse exception", e.getMessage());
+		}
+		return formatTo.format(parsedDate);
 	}
 
 }

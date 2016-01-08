@@ -8,7 +8,7 @@ import android.widget.TextView;
 import java.util.Map;
 
 import ru.aviasales.core.search.object.AirportData;
-import ru.aviasales.core.search.object.FlightData;
+import ru.aviasales.core.search.object.Flight;
 import ru.aviasales.template.R;
 import ru.aviasales.template.utils.StringUtils;
 
@@ -37,10 +37,10 @@ public class TicketTransferView extends RelativeLayout {
 		duration = (TextView) findViewById(R.id.tv_duration);
 	}
 
-	public void setData(FlightData prevFlight, FlightData nextFlight, Map<String, AirportData> airports) {
-		city.setText(airports.get(nextFlight.getOrigin()).getCity() + ", " + nextFlight.getOrigin().toUpperCase());
+	public void setData(Flight nextFlight, Map<String, AirportData> airports) {
+		city.setText(airports.get(nextFlight.getDeparture()).getCity() + ", " + nextFlight.getDeparture().toUpperCase());
 
-		int transferDuration = (int) (nextFlight.getDeparture() - prevFlight.getArrival()) / 60;
+		int transferDuration = nextFlight.getDelay();
 		duration.setText(StringUtils.getDurationString(getContext(), transferDuration));
 	}
 }

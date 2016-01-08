@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
-import ru.aviasales.core.AviasalesSDKV3;
+import ru.aviasales.core.AviasalesSDK;
 import ru.aviasales.core.search_airports.object.PlaceData;
 import ru.aviasales.template.R;
 import ru.aviasales.template.ui.listener.AviasalesImpl;
@@ -42,7 +42,7 @@ public class AviasalesFragment extends Fragment implements AviasalesImpl {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		searchFormData = new SearchFormData(getActivity().getApplicationContext());
-		AviasalesSDKV3.getInstance().init(getActivity().getApplicationContext());
+		AviasalesSDK.getInstance().init(getActivity().getApplicationContext());
 		initImageLoader(getActivity().getApplicationContext());
 	}
 

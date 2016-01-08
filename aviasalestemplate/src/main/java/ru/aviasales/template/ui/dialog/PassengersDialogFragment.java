@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import ru.aviasales.core.search_v3.params.Passengers;
+import ru.aviasales.core.search.params.Passengers;
 import ru.aviasales.template.R;
 import ru.aviasales.template.ui.view.PassengersPickerView;
 

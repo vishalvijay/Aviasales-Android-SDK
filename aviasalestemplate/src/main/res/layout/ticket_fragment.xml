@@ -38,7 +38,7 @@
 					android:id="@+id/rl_price"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:layout_centerHorizontal="true"
+					android:layout_marginLeft="14dp"
 					android:layout_marginTop="8dp">
 
 				<com.devspark.robototextview.widget.RobotoTextView
@@ -47,7 +47,7 @@
 						android:layout_height="wrap_content"
 						android:text="2 280 404"
 						android:textColor="@color/dark_blue_455A64"
-						android:textSize="32dp"
+						android:textSize="26dp"
 						app:typeface="roboto_light"/>
 
 				<com.devspark.robototextview.widget.RobotoTextView
@@ -61,8 +61,19 @@
 						android:textAllCaps="true"
 						android:textColor="@color/dark_blue_455A64"
 						android:textSize="10dp"
-						app:typeface="roboto_slab_regular"/>
+						app:typeface="roboto_regular"/>
 			</RelativeLayout>
+
+			<com.devspark.robototextview.widget.RobotoTextView
+					android:id="@+id/agency_text_name"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_toRightOf="@+id/rl_price"
+					android:layout_alignBaseline="@+id/rl_price"
+					android:layout_marginLeft="5dp"
+					android:textSize="18dp"
+					app:typeface="roboto_light"
+					android:text="@string/ticket_title_agency"/>
 
 			<com.devspark.robototextview.widget.RobotoButton
 					android:id="@+id/btn_buy"
@@ -78,6 +89,15 @@
 					android:background="@drawable/search_form_button"
 					android:text="@string/ticket_buy_btn_txt_full"
 					android:textColor="@color/white"/>
+
+			<ru.aviasales.template.ui.view.AgencySpinner
+					android:id="@+id/agency_spinner"
+					android:layout_width="60dp"
+					android:layout_height="30dp"
+					android:layout_gravity="center_vertical"
+					android:layout_alignParentRight="true"
+					android:layout_marginTop="10dp"
+					android:layout_marginRight="14dp"/>
 
 			<View
 					android:id="@+id/v_divider"

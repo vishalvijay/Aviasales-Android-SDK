@@ -7,7 +7,8 @@
 		android:orientation="vertical"
 		android:paddingLeft="14dp"
 		android:paddingRight="15dp"
-		android:paddingTop="19dp">
+		android:paddingTop="19dp"
+		android:paddingBottom="26dp">
 
 	<com.devspark.robototextview.widget.RobotoTextView
 			style="@style/dialog.title"

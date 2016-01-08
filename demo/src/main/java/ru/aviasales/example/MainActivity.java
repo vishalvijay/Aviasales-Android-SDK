@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
-import ru.aviasales.core.AviasalesSDKV3;
+import ru.aviasales.core.AviasalesSDK;
 import ru.aviasales.template.ui.fragment.AviasalesFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		AviasalesSDKV3.getInstance().init(this);
+		AviasalesSDK.getInstance().init(this);
 		setContentView(R.layout.activity_main);
 
 		init(savedInstanceState);
