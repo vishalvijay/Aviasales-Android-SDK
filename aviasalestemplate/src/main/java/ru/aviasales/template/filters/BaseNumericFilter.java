@@ -1,9 +1,8 @@
 package ru.aviasales.template.filters;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
-public class BaseNumericFilter implements Parcelable {
+public class BaseNumericFilter implements Serializable {
 
 	protected int maxValue = Integer.MIN_VALUE;
 	protected int minValue = Integer.MAX_VALUE;
@@ -21,14 +20,23 @@ public class BaseNumericFilter implements Parcelable {
 		currentMinValue = numericFilter.getCurrentMinValue();
 	}
 
-	public boolean isActive() {
-		if (maxValue == currentMaxValue && minValue == currentMinValue) {
-			return false;
+	public void mergeFilter(BaseNumericFilter filter) {
+		if (filter.isActive()) {
+			currentMinValue = Math.min(Math.max(filter.getCurrentMinValue(), minValue), maxValue);
+			currentMaxValue = Math.max(Math.min(filter.getCurrentMaxValue(), maxValue), minValue);
 		}
-		return true;
 	}
 
-	public boolean isValid(){
+	public boolean isActive() {
+		return !(maxValue == currentMaxValue && minValue == currentMinValue);
+	}
+
+	public boolean isValid() {
+		return !(maxValue == Integer.MIN_VALUE ||
+				minValue == Integer.MAX_VALUE);
+	}
+
+	public boolean isEnabled() {
 		return maxValue != minValue;
 	}
 
@@ -53,11 +61,7 @@ public class BaseNumericFilter implements Parcelable {
 	}
 
 	public void setCurrentMinValue(int currentMinValue) {
-		if(currentMinValue > minValue) {
-			this.currentMinValue = currentMinValue;
-		} else {
-			this.currentMinValue = minValue;
-		}
+		this.currentMinValue = currentMinValue;
 	}
 
 	public int getCurrentMaxValue() {
@@ -65,11 +69,7 @@ public class BaseNumericFilter implements Parcelable {
 	}
 
 	public void setCurrentMaxValue(int currentMaxValue) {
-		if(currentMaxValue < maxValue) {
-			this.currentMaxValue = currentMaxValue;
-		} else {
-			this.currentMaxValue = maxValue;
-		}
+		this.currentMaxValue = currentMaxValue;
 	}
 
 	public void clearFilter() {
@@ -77,7 +77,7 @@ public class BaseNumericFilter implements Parcelable {
 		currentMinValue = minValue;
 	}
 
-	protected boolean isActual(int value) {
+	protected boolean isActual(long value) {
 		return value >= currentMinValue && value <= currentMaxValue;
 	}
 
@@ -88,32 +88,4 @@ public class BaseNumericFilter implements Parcelable {
 	protected boolean isActualForMinValue(int value) {
 		return value >= currentMinValue;
 	}
-
-	public BaseNumericFilter(Parcel in) {
-		maxValue = in.readInt();
-		minValue = in.readInt();
-		currentMaxValue = in.readInt();
-		currentMinValue = in.readInt();
-	}
-
-	public int describeContents() {
-		return 0;
-	}
-
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeInt(maxValue);
-		dest.writeInt(minValue);
-		dest.writeInt(currentMaxValue);
-		dest.writeInt(currentMinValue);
-	}
-
-	public static final Creator<BaseNumericFilter> CREATOR = new Creator<BaseNumericFilter>() {
-		public BaseNumericFilter createFromParcel(Parcel in) {
-			return new BaseNumericFilter(in);
-		}
-
-		public BaseNumericFilter[] newArray(int size) {
-			return new BaseNumericFilter[size];
-		}
-	};
 }

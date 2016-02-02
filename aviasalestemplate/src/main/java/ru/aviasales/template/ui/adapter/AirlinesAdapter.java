@@ -9,38 +9,39 @@ import android.widget.TextView;
 import java.util.List;
 
 import ru.aviasales.expandedlistview.adapter.BaseExpandedListViewAdapter;
-import ru.aviasales.expandedlistview.interfaces.OnSomethingChange;
 import ru.aviasales.expandedlistview.listener.OnChangeState;
 import ru.aviasales.expandedlistview.view.BaseCheckedText;
 import ru.aviasales.expandedlistview.view.BaseFiltersListViewItem;
 import ru.aviasales.expandedlistview.view.SelectAllView;
 import ru.aviasales.template.R;
-import ru.aviasales.template.filters.CheckedAirline;
-import ru.aviasales.template.ui.view.AirlineItemView;
+import ru.aviasales.template.filters.FilterCheckedAirline;
+import ru.aviasales.template.ui.view.filters.airlines_filter.AirlineItemView;
 
 
 public class AirlinesAdapter extends BaseExpandedListViewAdapter {
 
-	private Context context;
-	private List<CheckedAirline> items;
+	private final Context context;
+	private final List<FilterCheckedAirline> items;
 	private AdapterCallback listener;
-	private BaseCheckedText selectAll;
+	private final BaseCheckedText selectAll;
+	private final boolean hideTitle;
 
-	public AirlinesAdapter(Context context, List<CheckedAirline> items) {
+	public AirlinesAdapter(Context context, List<FilterCheckedAirline> items, boolean hideTitle) {
 		this.context = context;
 		this.items = items;
+		this.hideTitle = hideTitle;
 		this.selectAll = new BaseCheckedText();
 		this.selectAll.setChecked(areAllItemsChecked());
-		this.selectAll.setName(context.getString(R.string.select_all));
+		this.selectAll.setName(context.getString(R.string.select_all) + " (" + Integer.toString(items.size()) + ")");
 	}
 
 	@Override
 	public View getItemView(View view, ViewGroup parent, int position) {
 		if (view == null) {
 			view = new AirlineItemView(context);
-			((AirlineItemView) view).setOnClickListener(new OnSomethingChange() {
+			((AirlineItemView) view).setOnClickListener(new View.OnClickListener() {
 				@Override
-				public void onChange() {
+				public void onClick(View v) {
 					if (listener != null) {
 						listener.onViewPressed();
 					}
@@ -48,7 +49,7 @@ public class AirlinesAdapter extends BaseExpandedListViewAdapter {
 			});
 		}
 
-		CheckedAirline checkedAirline = (CheckedAirline) getItem(position);
+		FilterCheckedAirline checkedAirline = (FilterCheckedAirline) getItem(position);
 
 		((AirlineItemView) view).getRatingBar().setRating(checkedAirline.getRating());
 		((BaseFiltersListViewItem) view).setCheckedText(checkedAirline);
@@ -114,5 +115,10 @@ public class AirlinesAdapter extends BaseExpandedListViewAdapter {
 	@Override
 	public Boolean hasSeparators() {
 		return false;
+	}
+
+	@Override
+	public boolean hideTitle() {
+		return hideTitle;
 	}
 }

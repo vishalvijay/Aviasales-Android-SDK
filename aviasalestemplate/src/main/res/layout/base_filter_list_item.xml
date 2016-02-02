@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/rlay_base_filter_list_item"
+		android:orientation="vertical"
+		android:paddingRight="5dp"
+		android:layout_width="fill_parent"
+		android:layout_height="48dp">
+
+	<CheckBox
+			android:id="@+id/cbox_base_filter_list_item"
+			android:focusableInTouchMode="false"
+			android:focusable="false"
+			android:clickable="false"
+			android:layout_marginLeft="21dp"
+			android:saveEnabled="false"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"/>
+
+	<com.devspark.robototextview.widget.RobotoTextView
+			android:id="@+id/txtv_base_filter_list_item"
+			android:layout_width="match_parent"
+			android:layout_marginLeft="18dp"
+			android:layout_marginBottom="0.5dp"
+			android:layout_toRightOf="@+id/cbox_base_filter_list_item"
+			android:layout_toLeftOf="@+id/rbar_base_filter_list_item"
+			android:layout_marginRight="1dp"
+			android:textSize="16dp"
+			android:textColor="@color/gray_828282"
+			android:layout_height="match_parent"
+			android:gravity="center_vertical"/>
+
+	<ViewStub
+			android:id="@+id/stub_import_airline"
+			android:layout="@layout/rating_bar"
+			android:inflatedId="@+id/rbar_base_filter_list_item"
+			android:layout_width="wrap_content"
+			android:layout_centerVertical="true"
+			android:layout_alignParentRight="true"
+			android:layout_marginRight="10dp"
+			android:layout_height="9.66dp"
+			android:layout_gravity="bottom"/>
+</RelativeLayout>

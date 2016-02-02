@@ -1,24 +1,24 @@
 package ru.aviasales.expandedlistview.view;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
+import java.io.Serializable;
 import java.util.Comparator;
 
-public class BaseCheckedText implements Parcelable {
+public class BaseCheckedText implements Serializable {
 	protected String name;
 	protected Boolean checked = true;
 
 	public BaseCheckedText() {
+		//не удОлять
 	}
 
 	public BaseCheckedText(String name) {
 		this.name = name;
 	}
 
-	public static Comparator<BaseCheckedText> sortByName = new Comparator<BaseCheckedText>() {
-		public int compare(BaseCheckedText checkedText, BaseCheckedText checkedText1) {
-			return checkedText.getName().toLowerCase().compareTo(checkedText1.getName().toLowerCase());
+	public final static Comparator<BaseCheckedText> sortByName = new Comparator<BaseCheckedText>() {
+		@Override
+		public int compare(BaseCheckedText lhs, BaseCheckedText rhs) {
+			return lhs.getName().toLowerCase().compareTo(rhs.getName().toLowerCase());
 		}
 	};
 
@@ -45,43 +45,20 @@ public class BaseCheckedText implements Parcelable {
 
 	@Override
 	public boolean equals(Object o) {
-		if ((name == null && ((BaseCheckedText) o).getName() != null) || (name != null && ((BaseCheckedText) o).getName() == null)) {
-			return false;
-		}
-		if ((name == null && ((BaseCheckedText) o).getName() == null)) {
-			return true;
-		}
-		if (name.equals(((BaseCheckedText) o).getName()) && checked.equals(((BaseCheckedText) o).isChecked())) {
-			return true;
-		}
-		return false; //TODO: расширить с учетом значений null
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		BaseCheckedText that = (BaseCheckedText) o;
+
+		return !(name != null ? !name.equals(that.name) : that.name != null)
+				&& !(checked != null ? !checked.equals(that.checked) : that.checked != null);
+
 	}
 
-	/**
-	 * ************ Передача данных в интент ***************
-	 */
-
-	public BaseCheckedText(Parcel in) {
-		checked = in.readByte() == 1;
-		name = in.readString();
+	@Override
+	public int hashCode() {
+		int result = name != null ? name.hashCode() : 0;
+		result = 31 * result + (checked != null ? checked.hashCode() : 0);
+		return result;
 	}
-
-	public int describeContents() {
-		return 0;
-	}
-
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeByte((byte) (checked ? 1 : 0));
-		dest.writeString(name);
-	}
-
-	public static final Creator<BaseCheckedText> CREATOR = new Creator<BaseCheckedText>() {
-		public BaseCheckedText createFromParcel(Parcel in) {
-			return new BaseCheckedText(in);
-		}
-
-		public BaseCheckedText[] newArray(int size) {
-			return new BaseCheckedText[size];
-		}
-	};
 }

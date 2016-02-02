@@ -84,6 +84,16 @@ public class SearchingFragment extends BaseFragment {
 					}
 
 					@Override
+					public void onMagicFareLoaded(SearchData searchData, boolean b) {
+
+					}
+
+					@Override
+					public void onTicketCountChanged(int i, int i1, Map<String, Double> map, boolean b) {
+
+					}
+
+					@Override
 					public void onError(int errorCode, int responseCode, String searchId) {
 						if (getActivity() == null) {
 							return;

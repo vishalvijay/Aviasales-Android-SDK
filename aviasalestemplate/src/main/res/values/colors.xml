@@ -49,5 +49,15 @@
 	<color name="colorAsPrimary">@color/gray_blue</color>
 	<color name="colorAsPrimaryDark">@color/gray_blue_dark</color>
 	<color name="colorAviasalesMain">@color/blue_main</color>
+	<color name="black_000000_opacity_50">#7F000000</color>
+
+	<color name="green_72D572">#72d572</color>
+	<color name="green_A6E6A6">#A6E6A6</color>
+	<color name="gray_B3B3B3">#b3b3b3</color>
+	<color name="gray_DBDBDB">#dbdbdb</color>
+
+	<color name="gray_CACACA">#cacaca</color>
+	<color name="gray_757575">#757575</color>
+	<color name="gray_797979">#797979</color>
 
 </resources>

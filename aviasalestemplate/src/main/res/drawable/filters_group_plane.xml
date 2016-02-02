@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+	<item>
+		<shape xmlns:android="http://schemas.android.com/apk/res/android"
+		       android:shape="oval">
+			<solid android:color="@color/colorAsPrimaryDark"/>
+			<size
+					android:width="24dp"
+					android:height="24dp"/>
+		</shape>
+	</item>
+	<item android:left="1dp">
+		<bitmap
+				android:gravity="center"
+				android:src="@drawable/ic_filters_group_plane"/>
+	</item>
+</layer-list>

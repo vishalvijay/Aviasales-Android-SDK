@@ -20,35 +20,39 @@ import ru.aviasales.expandedlistview.view.BaseCheckedText;
 import ru.aviasales.expandedlistview.view.BaseFiltersListViewItem;
 import ru.aviasales.expandedlistview.view.SelectAllView;
 import ru.aviasales.template.R;
-import ru.aviasales.template.filters.CheckedAirport;
-import ru.aviasales.template.ui.view.AirportItemView;
-import ru.aviasales.template.ui.view.AirportSectionHeader;
+import ru.aviasales.template.filters.FilterCheckedAirport;
+import ru.aviasales.template.ui.view.filters.airports_filter.AirportItemView;
+import ru.aviasales.template.ui.view.filters.airports_filter.AirportSectionHeader;
 
 public class AirportsAdapter extends BaseExpandedListViewAdapter {
 
-	private Context context;
-	private List<CheckedAirport> allAirports;
-	private Map<Integer, String> separatorsPositions;
+	private final Context context;
+	private final List<FilterCheckedAirport> allAirports;
+	private final Map<Integer, String> separatorsPositions;
 	private AdapterCallback listener;
-	private BaseCheckedText selectAll;
+	private final BaseCheckedText selectAll;
+	private final boolean hideTitle;
 
-	public AirportsAdapter(Context context, List<CheckedAirport> origin, List<CheckedAirport> destination, List<CheckedAirport> stopOver) {
+	public AirportsAdapter(Context context, List<FilterCheckedAirport> origin, List<FilterCheckedAirport> destination,
+	                       List<FilterCheckedAirport> stopOver, boolean hideTitle) {
 		this.context = context;
-		allAirports = new ArrayList<CheckedAirport>();
+		allAirports = new ArrayList<FilterCheckedAirport>();
 		separatorsPositions = new HashMap<Integer, String>();
-		if(!origin.isEmpty()) {
+		if (!origin.isEmpty()) {
 			separatorsPositions.put(allAirports.size(), origin.get(0).getCity());
 		}
 		allAirports.addAll(origin);
-		if(!destination.isEmpty()) {
+		if (!destination.isEmpty()) {
 			separatorsPositions.put(allAirports.size(), destination.get(0).getCity());
 		}
 		allAirports.addAll(destination);
 		separatorsPositions.put(allAirports.size(), context.getResources().getString(R.string.stop_over));
 		allAirports.addAll(stopOver);
+		this.hideTitle = hideTitle;
 		this.selectAll = new BaseCheckedText();
 		this.selectAll.setChecked(areAllItemsChecked());
-		this.selectAll.setName(context.getString(R.string.select_all));
+		this.selectAll.setName(context.getString(R.string.select_all) + " (" +
+				Integer.toString(origin.size() + destination.size() + stopOver.size()) + ")");
 	}
 
 	@Override
@@ -65,19 +69,21 @@ public class AirportsAdapter extends BaseExpandedListViewAdapter {
 			});
 		}
 
-		CheckedAirport checkedTextView = (CheckedAirport) getItem(position);
+		FilterCheckedAirport checkedTextView = (FilterCheckedAirport) getItem(position);
 
 		((AirportItemView) view).setCheckedText(checkedTextView);
 		((AirportItemView) view).setRating(checkedTextView.getRating());
 		((AirportItemView) view).setIata(checkedTextView.getIata());
 		((AirportItemView) view).setAirportName(checkedTextView.getCity());
 
-		AirportData airport = AviasalesSDK.getInstance().getSearchData().getAirportByIata(checkedTextView.getIata());
+		AirportData airport = AviasalesSDK.getInstance().getSearchData().getAirports().get(checkedTextView.getIata());
 		if (airport == null) {
 			((AirportItemView) view).setCityText(checkedTextView.getCity() + ", " + checkedTextView.getCountry());
 		} else {
 			((AirportItemView) view).setCityText(airport.getName() + ", " + checkedTextView.getCountry());
 		}
+
+
 
 		return view;
 	}
@@ -154,5 +160,10 @@ public class AirportsAdapter extends BaseExpandedListViewAdapter {
 	@Override
 	public List<Integer> getSeparatorIndexes() {
 		return new ArrayList<Integer>(separatorsPositions.keySet());
+	}
+
+	@Override
+	public boolean hideTitle() {
+		return hideTitle;
 	}
 }

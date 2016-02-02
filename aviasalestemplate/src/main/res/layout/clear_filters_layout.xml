@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical"
+		android:layout_width="wrap_content"
+		android:layout_height="40dp"
+		android:clickable="true"
+		android:focusable="true"
+		android:focusableInTouchMode="true"
+		android:background="@drawable/clear_filters_background">
+
+	<com.devspark.robototextview.widget.RobotoTextView
+			android:id="@+id/tv_tickets_count"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:gravity="center"
+			android:paddingLeft="16dp"
+			android:paddingRight="16dp"
+			android:layout_centerVertical="true"
+			android:textColor="@color/white"
+			android:text="Tickets found: 1023"
+			android:textSize="13dp"/>
+
+	<View
+			android:id="@+id/divider"
+			android:layout_width="1dp"
+			android:layout_height="24dp"
+			android:visibility="visible"
+			android:layout_toRightOf="@id/tv_tickets_count"
+			android:layout_centerVertical="true"
+			android:background="@color/gray_A7A7A7"/>
+
+	<com.devspark.robototextview.widget.RobotoTextView
+			android:id="@+id/btn_clear"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:paddingRight="16dp"
+			android:layout_gravity="center_vertical"
+			android:gravity="center"
+			android:layout_centerVertical="true"
+			android:paddingLeft="16dp"
+			android:textColor="@color/white"
+			android:visibility="visible"
+			android:textSize="12dp"
+			android:textAllCaps="true"
+			android:background="@drawable/button_light_bkg"
+			android:layout_toRightOf="@+id/divider"
+			android:text="@string/clear_filters"/>
+
+</RelativeLayout>

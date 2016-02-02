@@ -43,6 +43,10 @@ abstract public class BaseExpandedListViewAdapter implements ExpandableListViewI
 		return true;
 	}
 
+	public boolean hideTitle() {
+		return false;
+	}
+
 	public View getSeparatorView(int index) {
 		return null;
 	}

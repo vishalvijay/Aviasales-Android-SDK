@@ -5,8 +5,7 @@ import android.os.Parcelable;
 
 import java.util.List;
 
-import ru.aviasales.core.legacy.search.object.OldFlightData;
-
+import ru.aviasales.core.search_real_time.objects.Flight;
 
 public class StopOverFilter implements Parcelable {
 
@@ -18,9 +17,13 @@ public class StopOverFilter implements Parcelable {
 	private boolean isWithoutStopOverViewEnabled = true;
 	private boolean isTwoPlusStopOverViewEnabled = true;
 
-	private int oneStopOverMinPrice = Integer.MAX_VALUE;
-	private int withoutStopOverMinPrice = Integer.MAX_VALUE;
-	private int twoStopOverMinPrice = Integer.MAX_VALUE;
+	public void copyMinMaxValues(StopOverFilter stopOverFilter) {
+		if (stopOverFilter.isActive()) {
+			withoutStopOver = stopOverFilter.withoutStopOver;
+			oneStopOver = stopOverFilter.oneStopOver;
+			twoPlusStopOver = stopOverFilter.twoPlusStopOver;
+		}
+	}
 
 	public StopOverFilter() {
 	}
@@ -32,9 +35,6 @@ public class StopOverFilter implements Parcelable {
 		isOneStopOverViewEnabled = stopOverFilter.isOneStopOverViewEnabled();
 		isWithoutStopOverViewEnabled = stopOverFilter.isWithoutStopOverViewEnabled();
 		isTwoPlusStopOverViewEnabled = stopOverFilter.isTwoPlusStopOverViewEnabled();
-		oneStopOverMinPrice = stopOverFilter.getOneStopOverMinPrice();
-		withoutStopOverMinPrice = stopOverFilter.getWithoutStopOverMinPrice();
-		twoStopOverMinPrice = stopOverFilter.getWithoutStopOverMinPrice();
 	}
 
 	public void clearFilter() {
@@ -49,7 +49,7 @@ public class StopOverFilter implements Parcelable {
 				(twoPlusStopOver || !isTwoPlusStopOverViewEnabled));
 	}
 
-	public boolean isActual(List<OldFlightData> flightDatas) {
+	public boolean isActual(List<Flight> flightDatas) {
 		int stopOverCount = flightDatas.size();
 		return ((oneStopOver && stopOverCount == 2) ||
 				(withoutStopOver && stopOverCount == 1) ||
@@ -110,41 +110,9 @@ public class StopOverFilter implements Parcelable {
 		isTwoPlusStopOverViewEnabled = twoPlusStopOverEnabled;
 	}
 
-	public int getTwoStopOverMinPrice() {
-		return twoStopOverMinPrice;
-	}
-
-	public void setTwoStopOverMinPrice(int twoStopOverMinPrice) {
-		this.twoStopOverMinPrice = twoStopOverMinPrice;
-	}
-
-	public int getWithoutStopOverMinPrice() {
-		return withoutStopOverMinPrice;
-	}
-
-	public void setWithoutStopOverMinPrice(int withoutStopOverMinPrice) {
-		this.withoutStopOverMinPrice = withoutStopOverMinPrice;
-	}
-
-	public int getOneStopOverMinPrice() {
-		return oneStopOverMinPrice;
-	}
-
-	public void setOneStopOverMinPrice(int oneStopOverMinPrice) {
-		this.oneStopOverMinPrice = oneStopOverMinPrice;
-	}
-
-	public void setMinPrices(int withoutStopOverMinPrice, int oneStopOverMinPrice, int twoPlusStopOverMinPrice) {
-		this.withoutStopOverMinPrice = withoutStopOverMinPrice;
-		this.oneStopOverMinPrice = oneStopOverMinPrice;
-		this.twoStopOverMinPrice = twoPlusStopOverMinPrice;
-
-		withoutStopOver = isWithoutStopOverViewEnabled = withoutStopOverMinPrice != Integer.MAX_VALUE;
-		oneStopOver = isOneStopOverViewEnabled = oneStopOverMinPrice != Integer.MAX_VALUE;
-		twoPlusStopOver = isTwoPlusStopOverViewEnabled = twoPlusStopOverMinPrice != Integer.MAX_VALUE;
-	}
-
-
+	/**
+	 * ************ Передача данных в интент ***************
+	 */
 	public StopOverFilter(Parcel in) {
 		oneStopOver = in.readByte() == 1;
 		withoutStopOver = in.readByte() == 1;
@@ -153,10 +121,6 @@ public class StopOverFilter implements Parcelable {
 		isOneStopOverViewEnabled = in.readByte() == 1;
 		isWithoutStopOverViewEnabled = in.readByte() == 1;
 		isTwoPlusStopOverViewEnabled = in.readByte() == 1;
-
-		oneStopOverMinPrice = in.readInt();
-		withoutStopOverMinPrice = in.readInt();
-		twoStopOverMinPrice = in.readInt();
 	}
 
 	public int describeContents() {
@@ -171,13 +135,9 @@ public class StopOverFilter implements Parcelable {
 		dest.writeByte((byte) (isOneStopOverViewEnabled ? 1 : 0));
 		dest.writeByte((byte) (isWithoutStopOverViewEnabled ? 1 : 0));
 		dest.writeByte((byte) (isTwoPlusStopOverViewEnabled ? 1 : 0));
-
-		dest.writeInt(oneStopOverMinPrice);
-		dest.writeInt(withoutStopOverMinPrice);
-		dest.writeInt(twoStopOverMinPrice);
 	}
 
-	public static final Creator<StopOverFilter> CREATOR = new Creator<StopOverFilter>() {
+	public static final Parcelable.Creator<StopOverFilter> CREATOR = new Parcelable.Creator<StopOverFilter>() {
 		public StopOverFilter createFromParcel(Parcel in) {
 			return new StopOverFilter(in);
 		}

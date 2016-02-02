@@ -1,54 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-		android:id="@+id/llay_base_range_seekbar_filter_view"
+<LinearLayout
 		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:id="@+id/llay_base_range_seekbar_filter_view"
 		android:layout_width="fill_parent"
-		android:layout_height="98dp"
-		android:orientation="vertical">
+		android:orientation="vertical"
+		android:background="@color/white"
+		android:paddingTop="19dp"
+		android:layout_height="wrap_content">
 
 	<com.devspark.robototextview.widget.RobotoTextView
-			android:id="@+id/txtv_base_range_seekbar_fitler_vew_title"
-			android:layout_width="match_parent"
+			android:id="@+id/tv_title"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_alignParentLeft="true"
+			android:textSize="14dp"
+			app:typeface="roboto_medium"
 			android:layout_marginLeft="16dp"
-			android:layout_marginTop="13dp"
-			android:layout_toLeftOf="@+id/v_center"
-			android:singleLine="false"
-			android:textColor="@color/gray_828282"
-			android:textSize="16dp"/>
+			android:layout_marginRight="16dp"
+			android:textColor="@color/base_filter_title_text_color"/>
 
 	<com.devspark.robototextview.widget.RobotoTextView
-			android:id="@+id/txtv_base_range_seekbar_filter_view_max"
+			android:id="@+id/tv_values"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_alignBaseline="@+id/txtv_base_range_seekbar_fitler_vew_title"
-			android:layout_alignParentRight="true"
+			android:layout_marginTop="22dp"
+			android:gravity="center_horizontal"
+			android:textColor="@color/base_filter_value_color"
+			app:typeface="roboto_medium"
 			android:layout_marginRight="16dp"
-			android:layout_toRightOf="@+id/v_center"
-			android:gravity="right"
-			android:singleLine="false"
-			android:textColor="@color/colorAviasalesMain"
-			android:textSize="14.66dp"/>
-
-	<View
-			android:id="@+id/v_center"
-			android:layout_width="1px"
-			android:layout_height="1px"
-			android:layout_centerHorizontal="true"/>
+			android:layout_marginLeft="16dp"/>
 
 	<LinearLayout
 			android:id="@+id/llay_base_range_seekbar_filter_view_filter"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_alignParentBottom="true"
-			android:layout_centerHorizontal="true"
-			android:layout_gravity="center"
-			android:layout_marginBottom="10dp"
-			android:layout_marginLeft="26dp"
-			android:layout_marginRight="26dp"
 			android:orientation="vertical"
-			android:visibility="visible">
+			android:visibility="visible"
+			android:layout_centerHorizontal="true"
+			android:layout_marginBottom="21dp"
+			android:layout_marginTop="20dp"
+			android:layout_marginLeft="18dp"
+			android:layout_marginRight="18dp"
+			android:layout_alignParentBottom="true"
+			android:layout_gravity="center"
+			android:layout_height="wrap_content">
 	</LinearLayout>
-</RelativeLayout>
+</LinearLayout>
