@@ -13,17 +13,17 @@ import ru.aviasales.core.search.object.Flight;
 import ru.aviasales.expandedlistview.view.BaseCheckedText;
 import ru.aviasales.template.R;
 
-public class AllianceListFilter extends BaseListFilter implements Serializable {
+public class AllianceFilter extends BaseListFilter implements Serializable {
 
 	private transient Context context;
 	private List<BaseCheckedText> allianceList;
 
-	public AllianceListFilter(Context context) {
+	public AllianceFilter(Context context) {
 		this.context = context;
 		allianceList = new ArrayList<>();
 	}
 
-	public AllianceListFilter(Context context, AllianceListFilter allianceFilter) {
+	public AllianceFilter(Context context, AllianceFilter allianceFilter) {
 		if (allianceFilter.getAllianceList() == null) return;
 		this.context = context;
 
@@ -46,18 +46,6 @@ public class AllianceListFilter extends BaseListFilter implements Serializable {
 
 	public void setAllianceList(List<BaseCheckedText> allianceList) {
 		this.allianceList = allianceList;
-	}
-
-	public void mergeFilter(AllianceListFilter allianceFilter) {
-		if (allianceFilter.isActive()) {
-			for (BaseCheckedText checkedText : allianceList) {
-				for (BaseCheckedText checkedText1 : allianceFilter.getAllianceList()) {
-					if (checkedText.getName().equals(checkedText1.getName())) {
-						checkedText.setChecked(checkedText1.isChecked());
-					}
-				}
-			}
-		}
 	}
 
 	public boolean isActual(String alliance) {

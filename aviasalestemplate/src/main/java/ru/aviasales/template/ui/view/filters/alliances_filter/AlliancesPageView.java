@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.aviasales.expandedlistview.view.ExpandedListView;
-import ru.aviasales.template.filters.AllianceListFilter;
+import ru.aviasales.template.filters.AllianceFilter;
 import ru.aviasales.template.filters.OpenJawFiltersSet;
 import ru.aviasales.template.ui.adapter.AlliancesAdapter;
 import ru.aviasales.template.ui.view.filters.BaseFiltersScrollView;
@@ -65,7 +65,7 @@ public class AlliancesPageView extends BaseFiltersScrollView {
 		}
 	}
 
-	private ExpandedListView createAlliancesListView(AllianceListFilter alliancesFilter, boolean hideTitle) {
+	private ExpandedListView createAlliancesListView(AllianceFilter alliancesFilter, boolean hideTitle) {
 		ExpandedListView alliancesListView = new ExpandedListView(getContext(), null);
 		AlliancesAdapter adapter = new AlliancesAdapter(getContext(), alliancesFilter.getAllianceList(), hideTitle);
 		alliancesListView.setAdapter(adapter);

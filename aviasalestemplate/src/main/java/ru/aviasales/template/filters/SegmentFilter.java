@@ -25,14 +25,14 @@ public class SegmentFilter implements Serializable {
 	private final BaseNumericFilter takeoffTimeFilter;
 	private final BaseNumericFilter stopOverCountFilter;
 	private final OvernightFilter overnightFilter;
-	private final AllianceListFilter allianceFilter;
+	private final AllianceFilter allianceFilter;
 	private final AirlinesFilter airlinesFilter;
 	private final AirportsFilter airportsFilter;
 
 	public SegmentFilter(Context context) {
 		airlinesFilter = new AirlinesFilter();
 		airportsFilter = new AirportsFilter();
-		allianceFilter = new AllianceListFilter(context);
+		allianceFilter = new AllianceFilter(context);
 		stopOverDelayFilter = new BaseNumericFilter();
 		takeoffTimeFilter = new BaseNumericFilter();
 		landingTimeFilter = new BaseNumericFilter();
@@ -44,7 +44,7 @@ public class SegmentFilter implements Serializable {
 	public SegmentFilter(Context context, SegmentFilter segmentFilter) {
 		airlinesFilter = new AirlinesFilter(segmentFilter.getAirlinesFilter());
 		airportsFilter = new AirportsFilter(segmentFilter.getAirportsFilter());
-		allianceFilter = new AllianceListFilter(context, segmentFilter.getAllianceFilter());
+		allianceFilter = new AllianceFilter(context, segmentFilter.getAllianceFilter());
 		durationFilter = new BaseNumericFilter(segmentFilter.getDurationFilter());
 		stopOverDelayFilter = new BaseNumericFilter(segmentFilter.getStopOverDelayFilter());
 		takeoffTimeFilter = new BaseNumericFilter(segmentFilter.getTakeoffTimeFilter());
@@ -73,7 +73,7 @@ public class SegmentFilter implements Serializable {
 		return overnightFilter;
 	}
 
-	public AllianceListFilter getAllianceFilter() {
+	public AllianceFilter getAllianceFilter() {
 		return allianceFilter;
 	}
 

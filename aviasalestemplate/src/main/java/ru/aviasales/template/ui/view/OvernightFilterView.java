@@ -1,7 +1,6 @@
 package ru.aviasales.template.ui.view;
 
 import android.content.Context;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
@@ -23,10 +22,10 @@ public class OvernightFilterView extends FrameLayout {
 
 	public OvernightFilterView(Context context, boolean airportOvernight, OnOvernightStateChange listener) {
 		super(context);
-		setupViews(airportOvernight, listener);
+		setUpViews(airportOvernight, listener);
 	}
 
-	private void setupViews(boolean airportOvernight, OnOvernightStateChange listener) {
+	private void setUpViews(boolean airportOvernight, OnOvernightStateChange listener) {
 
 		LayoutInflater.from(getContext())
 				.inflate(R.layout.overnight_filter_view, this, true);
