@@ -61,7 +61,7 @@
 	<string name="base_filter_takeoff">Вылет туда</string>
 	<string name="range_flight_from">Вылет туда</string>
 	<string name="range_flight_return">Вылет обратно</string>
-	<string name="filters_price">до </string>
+	<string name="filters_price">до %s</string>
 	<string name="filters_hours_and_minutes">до %1$02d ч %2$02d мин</string>
 	<string name="range_from">от</string>
 	<string name="range_with">с</string>

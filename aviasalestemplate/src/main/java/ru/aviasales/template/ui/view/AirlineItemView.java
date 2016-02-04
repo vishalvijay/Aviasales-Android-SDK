@@ -6,7 +6,6 @@ import android.widget.RatingBar;
 
 import ru.aviasales.expandedlistview.view.BaseFiltersListViewItem;
 import ru.aviasales.template.R;
-import ru.aviasales.template.filters.CheckedAirline;
 
 public class AirlineItemView extends BaseFiltersListViewItem {
 

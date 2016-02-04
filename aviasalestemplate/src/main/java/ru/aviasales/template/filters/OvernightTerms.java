@@ -1,6 +1,8 @@
 package ru.aviasales.template.filters;
 
-public class OvernightTerms {
+import java.io.Serializable;
+
+public class OvernightTerms implements Serializable{
 	private int minDurationMinutes;
 	private int maxDurationMinutes;
 
@@ -40,11 +42,7 @@ public class OvernightTerms {
 	}
 
 	public boolean isInInterval(long duration) {
-		if (duration >= minDurationMinutes && duration < maxDurationMinutes) {
-			return true;
-		} else {
-			return false;
-		}
+		return duration >= minDurationMinutes && duration < maxDurationMinutes;
 	}
 
 	public int getMinLandingTime() {

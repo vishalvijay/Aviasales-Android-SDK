@@ -202,4 +202,24 @@
 		<item name="android:progressDrawable">@drawable/filters_seekbar</item>
 		<item name="android:thumb">@drawable/seek_bar_thumb</item>
 	</style>
+
+	<declare-styleable name="RangeBar">
+		<attr name="absoluteMinValue"
+		      format="integer|float"/>
+		<attr name="absoluteMaxValue"
+		      format="integer|float"/>
+		<attr name="singleThumb"
+		      format="boolean"/>
+		<attr name="backgroundColor"
+		      format="color"/>
+		<attr name="progressColor"
+		      format="color"/>
+		<attr name="thumbColor"
+		      format="color"/>
+		<attr name="thumbRippleColor"
+		      format="color"/>
+		<attr name="disabledColor"
+		      format="color"/>
+	</declare-styleable>
+
 </resources>

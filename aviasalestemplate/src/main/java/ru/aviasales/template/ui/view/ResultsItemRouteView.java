@@ -73,10 +73,6 @@ public class ResultsItemRouteView extends RelativeLayout {
 		SimpleDateFormat dfDate = new SimpleDateFormat(
 				Defined.RESULTS_SHORT_DATE_FORMAT, DateUtils.getFormatSymbolsShort(getContext()));
 
-		TimeZone utc = TimeZone.getTimeZone(Defined.UTC_TIMEZONE);
-		dfTime.setTimeZone(utc);
-		dfDate.setTimeZone(utc);
-
 		tvIatas.setText(flights.get(0).getDeparture() + " " + getResources().getText(R.string.dot) +
 				" " + flights.get(flights.size() - 1).getArrival());
 

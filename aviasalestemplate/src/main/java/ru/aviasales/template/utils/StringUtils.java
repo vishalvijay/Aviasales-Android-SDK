@@ -1,9 +1,11 @@
 package ru.aviasales.template.utils;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.text.ParcelableSpan;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
 
 import java.util.List;
@@ -14,6 +16,7 @@ import ru.aviasales.core.search.object.Flight;
 import ru.aviasales.core.search.params.SearchParams;
 import ru.aviasales.core.search.params.Segment;
 import ru.aviasales.template.R;
+import ru.aviasales.template.ui.view.filters.CustomTypefaceSpan;
 
 public class StringUtils {
 
@@ -136,4 +139,21 @@ public class StringUtils {
 
 		}
 	}
+
+	public static String getStringWithDelimeterFromLong(long value, String delimeter, int symbolsToDelimeter) {
+		StringBuilder sb = new StringBuilder();
+		String priceStr = String.valueOf(value);
+		int count = 0;
+		for (int i = priceStr.length() - 1; i >= 0; i--) {
+			sb.append(priceStr.charAt(i));
+			count++;
+			if (count == symbolsToDelimeter && i > 0) {
+				sb.append(delimeter);
+				count = 0;
+			}
+		}
+		return sb.reverse().toString();
+
+	}
+
 }

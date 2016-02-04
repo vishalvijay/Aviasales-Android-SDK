@@ -18,14 +18,16 @@ import ru.aviasales.template.R;
 
 public class AlliancesAdapter extends BaseExpandedListViewAdapter {
 
-	private Context context;
-	private List<BaseCheckedText> items;
+	private final Context context;
+	private final List<BaseCheckedText> items;
 	private AdapterCallback listener;
-	private BaseCheckedText selectAll;
+	private final BaseCheckedText selectAll;
+	private final boolean hideTitle;
 
-	public AlliancesAdapter(Context context, List<BaseCheckedText> items) {
+	public AlliancesAdapter(Context context, List<BaseCheckedText> items, boolean hideTitle) {
 		this.context = context;
 		this.items = items;
+		this.hideTitle = hideTitle;
 		this.selectAll = new BaseCheckedText();
 		this.selectAll.setChecked(areAllItemsChecked());
 		this.selectAll.setName(context.getString(R.string.select_all_alliances));
@@ -48,6 +50,7 @@ public class AlliancesAdapter extends BaseExpandedListViewAdapter {
 		BaseCheckedText checkedTextView = (BaseCheckedText) getItem(position);
 
 		((BaseFiltersListViewItem) view).setCheckedText(checkedTextView);
+//		((BaseFiltersListViewItem) view).getRatingBar().setVisibility(View.GONE);
 		return view;
 	}
 
@@ -109,5 +112,10 @@ public class AlliancesAdapter extends BaseExpandedListViewAdapter {
 	@Override
 	public Boolean hasSeparators() {
 		return false;
+	}
+
+	@Override
+	public boolean hideTitle() {
+		return hideTitle;
 	}
 }

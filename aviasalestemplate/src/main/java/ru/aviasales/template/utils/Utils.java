@@ -7,7 +7,10 @@ import android.net.NetworkInfo;
 
 import java.util.List;
 
+import ru.aviasales.core.http.exception.ApiException;
 import ru.aviasales.core.search.object.Flight;
+import ru.aviasales.core.search_real_time.objects.Proposal;
+import ru.aviasales.core.search_real_time.objects.ResultsSegment;
 
 public class Utils {
 
@@ -45,6 +48,5 @@ public class Utils {
 		float scale = context.getResources().getDisplayMetrics().density;
 		return (int) (dps * scale + 0.5f);
 	}
-
 
 }

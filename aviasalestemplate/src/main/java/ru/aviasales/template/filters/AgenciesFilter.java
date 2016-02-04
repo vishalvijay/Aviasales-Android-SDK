@@ -1,108 +1,77 @@
 package ru.aviasales.template.filters;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
-import ru.aviasales.core.legacy.search.object.TicketData;
 import ru.aviasales.core.search.object.GateData;
+import ru.aviasales.core.search.object.Proposal;
+import ru.aviasales.expandedlistview.view.BaseCheckedText;
 
+public class AgenciesFilter extends BaseListFilter implements Serializable {
 
-public class AgenciesFilter implements Parcelable {
-
-	private List<CheckedAgency> agenciesList;
+	private final List<FilterCheckedAgency> agenciesList = new ArrayList<>();
 
 	public AgenciesFilter() {
-		agenciesList = new ArrayList<CheckedAgency>();
 	}
 
 	public AgenciesFilter(AgenciesFilter agenciesFilter) {
 		if (agenciesFilter.getAgenciesList() == null) return;
 
-		agenciesList = new ArrayList<CheckedAgency>();
 		for (int i = 0; i < agenciesFilter.getAgenciesList().size(); i++) {
-			agenciesList.add(new CheckedAgency(agenciesFilter.getAgenciesList().get(i)));
+			agenciesList.add(new FilterCheckedAgency(agenciesFilter.getAgenciesList().get(i)));
 		}
 	}
 
-	public void addAgency(String agencyId, String agencyName) {
-		agenciesList.add(new CheckedAgency(agencyId, agencyName));
-	}
-
-	public List<CheckedAgency> getAgenciesList() {
+	public List<FilterCheckedAgency> getAgenciesList() {
 		return agenciesList;
 	}
 
-	public void setAgenciesList(List<CheckedAgency> agenciesList) {
-		this.agenciesList = agenciesList;
-	}
-
 	public void sortByName() {
-		Collections.sort(agenciesList, CheckedAgency.sortByName);
+		Collections.sort(agenciesList, BaseCheckedText.nameComparator);
 	}
 
-	public void setGatesFromGsonClass(List<GateData> gateDatas) {
-		for (GateData gateData : gateDatas) {
-			agenciesList.add(new CheckedAgency(gateData.getId(), gateData.getLabel()));
+	public void addGates(Map<String, GateData> gateDatas) {
+		for (GateData gateData : gateDatas.values()) {
+			agenciesList.add(new FilterCheckedAgency(gateData.getId(), gateData.getLabel()));
 		}
 		sortByName();
 	}
 
-	public boolean isActual(TicketData ticket) {
-		List<String> agenciesToRemove = new ArrayList<String>();
-		for (CheckedAgency agency : agenciesList) {
-			if (!agency.isChecked() && !agenciesToRemove.contains(agency.getId())) {
-				agenciesToRemove.add(agency.getId());
+	public boolean isActual(Proposal proposal) {
+		return proposal.getFiltredNativePrices().size() != 0;
+	}
+
+	public void validateProposal(Proposal proposal) {
+		List<String> agenciesToRemove = new ArrayList<>();
+		for (FilterCheckedAgency agency : agenciesList) {
+			String agencyIdWithoutMagicFare;
+			String agencyIdWithMagicFare;
+			try {
+				agencyIdWithoutMagicFare = Integer.toString(Math.abs(Integer.parseInt(agency.getId())));
+				agencyIdWithMagicFare = "-" + agencyIdWithoutMagicFare;
+			} catch (Exception e) {
+				agencyIdWithoutMagicFare = agency.getId();
+				agencyIdWithMagicFare = "-" + agency.getId();
+			}
+
+			if (!agency.isChecked() && (!agenciesToRemove.contains(agencyIdWithoutMagicFare) || !agenciesToRemove.contains(agencyIdWithMagicFare))) {
+				agenciesToRemove.add(agencyIdWithoutMagicFare);
+				agenciesToRemove.add(agencyIdWithMagicFare);
 			}
 		}
 		for (String agencyToRemove : agenciesToRemove) {
-			if (ticket.getFiltredNativePrices().containsKey(agencyToRemove)) {
-				ticket.getFiltredNativePrices().remove(agencyToRemove);
+			if (proposal.getFiltredNativePrices().containsKey(agencyToRemove)) {
+				proposal.getFiltredNativePrices().remove(agencyToRemove);
 			}
 		}
-		return ticket.getFiltredNativePrices().size() != 0;
 	}
 
-	public boolean isActive() {
-		for (CheckedAgency agency : agenciesList) {
-			if (!agency.isChecked()) {
-				return true;
-			}
-		}
-		return false;
+	@Override
+	public List<? extends BaseCheckedText> getCheckedTextList() {
+		return agenciesList;
 	}
 
-	public void clearFilter() {
-		for (CheckedAgency agency : agenciesList) {
-			agency.setChecked(true);
-		}
-	}
-
-	public AgenciesFilter(Parcel in) {
-		if (agenciesList == null) {
-			agenciesList = new ArrayList<CheckedAgency>();
-		}
-		in.readTypedList(agenciesList, CheckedAgency.CREATOR);
-	}
-
-	public int describeContents() {
-		return 0;
-	}
-
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeTypedList(agenciesList);
-	}
-
-	public static final Creator<AgenciesFilter> CREATOR = new Creator<AgenciesFilter>() {
-		public AgenciesFilter createFromParcel(Parcel in) {
-			return new AgenciesFilter(in);
-		}
-
-		public AgenciesFilter[] newArray(int size) {
-			return new AgenciesFilter[size];
-		}
-	};
 }

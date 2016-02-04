@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+	<RelativeLayout
+			android:id="@+id/rl_title"
+			android:layout_width="match_parent"
+			android:layout_height="48dp">
+
+		<ImageView
+				android:id="@+id/iv_plane"
+				android:layout_width="24dp"
+				android:layout_height="24dp"
+				android:layout_marginLeft="16dp"
+				android:layout_marginRight="15dp"
+				android:layout_centerVertical="true"
+				android:src="@drawable/filters_group_plane"/>
+
+		<com.devspark.robototextview.widget.RobotoTextView
+				android:id="@+id/tv_segment_iatas"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:typeface="roboto_medium"
+				android:textSize="14dp"
+				android:layout_centerVertical="true"
+				android:layout_marginLeft="16dp"
+				android:textColor="@color/gray_797979"
+				android:layout_toRightOf="@+id/iv_plane"/>
+
+		<ImageView
+				android:id="@+id/iv_expand_icon"
+				android:layout_width="24dp"
+				android:layout_height="24dp"
+				android:layout_alignParentRight="true"
+				android:layout_centerVertical="true"
+				android:scaleType="center"
+				android:layout_marginRight="16dp"
+				android:src="@drawable/ic_filters_down"/>
+	</RelativeLayout>
+
+	<LinearLayout
+			android:id="@+id/ll_content_layout"
+			android:layout_width="match_parent"
+			android:layout_below="@+id/rl_title"
+			android:paddingBottom="16dp"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"/>
+
+</RelativeLayout>

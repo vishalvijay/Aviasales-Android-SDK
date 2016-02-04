@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import ru.aviasales.expandedlistview.view.BaseFiltersListViewItem;
 import ru.aviasales.template.R;
-import ru.aviasales.template.filters.CheckedAirline;
 
 public class AirportItemView extends BaseFiltersListViewItem {
 

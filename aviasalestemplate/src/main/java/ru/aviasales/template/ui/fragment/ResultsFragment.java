@@ -263,15 +263,4 @@ public class ResultsFragment extends BaseFragment {
 		}
 	}
 
-	private void clearFilters() {
-		FiltersManager.getInstance().getFilters().clearFilters();
-		// TODO: 12/3/15 Filters починить
-//		FiltersManager.getInstance().filterSearchData(AviasalesSDKV3.getInstance().getSearchData(), new FiltersManager.OnFilterResultListener() {
-//			@Override
-//			public void onFilteringFinished(List<TicketData> filteredTicketsData) {
-//				updateResults();
-//			}
-//		});
-	}
-
 }
