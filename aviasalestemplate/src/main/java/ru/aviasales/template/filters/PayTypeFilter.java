@@ -12,7 +12,7 @@ import ru.aviasales.core.search.object.Proposal;
 import ru.aviasales.expandedlistview.view.BaseCheckedText;
 
 
-public class PayTypeFilter implements Serializable {
+public class PayTypeFilter extends BaseListFilter implements Serializable {
 
 	private transient Context context;
 
@@ -34,18 +34,6 @@ public class PayTypeFilter implements Serializable {
 		}
 
 		restrictedGates = payTypeFilter.getRestrictedGates();
-	}
-
-	public void mergeFilter(PayTypeFilter payTypeFilter) {
-		if (payTypeFilter.isActive()) {
-			for (BaseCheckedText checkedText : payTypeList) {
-				for (BaseCheckedText checkedText1 : payTypeFilter.getPayTypeList()) {
-					if (checkedText.getName().equals(checkedText1.getName())) {
-						checkedText.setChecked(checkedText1.isChecked());
-					}
-				}
-			}
-		}
 	}
 
 	// must be called before isActual()
@@ -78,7 +66,7 @@ public class PayTypeFilter implements Serializable {
 	}
 
 	public void sortByName() {
-		Collections.sort(payTypeList, BaseCheckedText.sortByName);
+		Collections.sort(payTypeList, BaseCheckedText.nameComparator);
 	}
 
 	public List<String> getRestrictedGates() {
@@ -110,15 +98,13 @@ public class PayTypeFilter implements Serializable {
 		return proposal.getFiltredNativePrices().size() != 0;
 	}
 
-	public boolean isActive() {
-		for (BaseCheckedText payType : payTypeList) {
-			if (!payType.isChecked()) {
-				return true;
-			}
-		}
-		return false;
+
+	@Override
+	public List<? extends BaseCheckedText> getCheckedTextList() {
+		return payTypeList;
 	}
 
+	@Override
 	public void clearFilter() {
 		for (BaseCheckedText payType : payTypeList) {
 			payType.setChecked(true);
@@ -126,7 +112,4 @@ public class PayTypeFilter implements Serializable {
 		}
 	}
 
-	public boolean isValid() {
-		return !payTypeList.isEmpty();
-	}
 }

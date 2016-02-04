@@ -36,7 +36,7 @@ public class StopOverAndPriceFiltersPageView extends BaseFiltersScrollView {
 	}
 
 	@Override
-	protected void setupSimplePageView() {
+	protected void setUpSimplePageView() {
 		SimpleSearchFilters filters = getSimpleGeneralFilters();
 		if (filters.getStopOverSizeFilter().isValid() || filters.getStopOverDelayFilter().isValid()) {
 			StopOverFilterView view = createStopOverFilterView(filters.getStopOverSizeFilter(),
@@ -54,7 +54,7 @@ public class StopOverAndPriceFiltersPageView extends BaseFiltersScrollView {
 	}
 
 	@Override
-	protected void setupOpenJawPageView() {
+	protected void setUpOpenJawPageView() {
 		OpenJawFiltersSet filters = getOpenJawGeneralFilters();
 
 		for (Integer segmentNumber : filters.getSegmentFilters().keySet()) {

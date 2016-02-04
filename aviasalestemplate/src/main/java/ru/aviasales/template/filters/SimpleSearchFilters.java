@@ -33,7 +33,7 @@ public class SimpleSearchFilters implements Serializable, FiltersSet {
 	private final BaseNumericFilter landingBackTimeFilter;
 	private final BaseNumericFilter stopOverSizeFilter;
 	private final OvernightFilter overnightFilter;
-	private final AllianceFilter allianceFilter;
+	private final AllianceListFilter allianceFilter;
 	private final AirlinesFilter airlinesFilter;
 	private final AirportsFilter airportsFilter;
 
@@ -42,7 +42,7 @@ public class SimpleSearchFilters implements Serializable, FiltersSet {
 		priceFilter = new BaseNumericFilter();
 		airlinesFilter = new AirlinesFilter();
 		airportsFilter = new AirportsFilter();
-		allianceFilter = new AllianceFilter(context);
+		allianceFilter = new AllianceListFilter(context);
 		payTypeFilter = new PayTypeFilter(context);
 		stopOverDelayFilter = new BaseNumericFilter();
 		takeoffTimeFilter = new BaseNumericFilter();
@@ -59,7 +59,7 @@ public class SimpleSearchFilters implements Serializable, FiltersSet {
 		airportsFilter = new AirportsFilter(generalFilter.getAirportsFilter());
 		agenciesFilter = new AgenciesFilter(generalFilter.getAgenciesFilter());
 		priceFilter = new BaseNumericFilter(generalFilter.getPriceFilter());
-		allianceFilter = new AllianceFilter(context, generalFilter.getAllianceFilter());
+		allianceFilter = new AllianceListFilter(context, generalFilter.getAllianceFilter());
 		payTypeFilter = new PayTypeFilter(context, generalFilter.getPayTypeFilter());
 		durationFilter = new BaseNumericFilter(generalFilter.getDurationFilter());
 		stopOverDelayFilter = new BaseNumericFilter(generalFilter.getStopOverDelayFilter());
@@ -289,6 +289,7 @@ public class SimpleSearchFilters implements Serializable, FiltersSet {
 
 	public boolean isSuitedByAgencies(Proposal proposal) {
 		if (agenciesFilter.isActive()) {
+			agenciesFilter.validateProposal(proposal);
 			if (agenciesFilter.isActual(proposal)) {
 				try {
 					proposal.setTotalWithFilters(FiltersUtils.calculateMinimalPriceForProposal(proposal));
@@ -375,7 +376,7 @@ public class SimpleSearchFilters implements Serializable, FiltersSet {
 		return takeoffBackTimeFilter;
 	}
 
-	public AllianceFilter getAllianceFilter() {
+	public AllianceListFilter getAllianceFilter() {
 		return allianceFilter;
 	}
 
@@ -490,10 +491,10 @@ public class SimpleSearchFilters implements Serializable, FiltersSet {
 			}
 		}
 
-		getAirportsFilter().setSectionedAirportsFromGsonClassSimple(airportDataMap, searchData.getProposals());
-		getAllianceFilter().setAlliancesFromGsonClass(airlineDataMap);
-		getAirlinesFilter().setAirlinesFromGsonClass(airlineDataMap);
-		getAgenciesFilter().setGatesFromGsonClass(onlyActualGates);
+		getAirportsFilter().addSimpleSectionedAirportsData(airportDataMap, searchData.getProposals());
+		getAllianceFilter().addAlliancesData(airlineDataMap);
+		getAirlinesFilter().addAirlinesData(airlineDataMap);
+		getAgenciesFilter().addGates(onlyActualGates);
 
 		getAirlinesFilter().sortByName();
 		getAllianceFilter().sortByName();

@@ -25,14 +25,14 @@ public class SegmentFilter implements Serializable {
 	private final BaseNumericFilter takeoffTimeFilter;
 	private final BaseNumericFilter stopOverCountFilter;
 	private final OvernightFilter overnightFilter;
-	private final AllianceFilter allianceFilter;
+	private final AllianceListFilter allianceFilter;
 	private final AirlinesFilter airlinesFilter;
 	private final AirportsFilter airportsFilter;
 
 	public SegmentFilter(Context context) {
 		airlinesFilter = new AirlinesFilter();
 		airportsFilter = new AirportsFilter();
-		allianceFilter = new AllianceFilter(context);
+		allianceFilter = new AllianceListFilter(context);
 		stopOverDelayFilter = new BaseNumericFilter();
 		takeoffTimeFilter = new BaseNumericFilter();
 		landingTimeFilter = new BaseNumericFilter();
@@ -44,7 +44,7 @@ public class SegmentFilter implements Serializable {
 	public SegmentFilter(Context context, SegmentFilter segmentFilter) {
 		airlinesFilter = new AirlinesFilter(segmentFilter.getAirlinesFilter());
 		airportsFilter = new AirportsFilter(segmentFilter.getAirportsFilter());
-		allianceFilter = new AllianceFilter(context, segmentFilter.getAllianceFilter());
+		allianceFilter = new AllianceListFilter(context, segmentFilter.getAllianceFilter());
 		durationFilter = new BaseNumericFilter(segmentFilter.getDurationFilter());
 		stopOverDelayFilter = new BaseNumericFilter(segmentFilter.getStopOverDelayFilter());
 		takeoffTimeFilter = new BaseNumericFilter(segmentFilter.getTakeoffTimeFilter());
@@ -73,7 +73,7 @@ public class SegmentFilter implements Serializable {
 		return overnightFilter;
 	}
 
-	public AllianceFilter getAllianceFilter() {
+	public AllianceListFilter getAllianceFilter() {
 		return allianceFilter;
 	}
 
@@ -217,16 +217,18 @@ public class SegmentFilter implements Serializable {
 
 	public void initMinMaxValues(List<Flight> flights, Map<String, AirportData> airportDataMap,
 	                             Map<String, AirlineData> airlineDataMap) {
+		int departureInMinutesFromDayBeginning = flights.get(0).getDepartureInMinutesFromDayBeginning();
 		takeoffTimeFilter.setMinValue(Math.min(takeoffTimeFilter.getMinValue(),
-				flights.get(0).getDepartureInMinutesFromDayBeginning()));
+				departureInMinutesFromDayBeginning));
 		takeoffTimeFilter.setMaxValue(Math.max(takeoffTimeFilter.getMaxValue(),
-				flights.get(0).getDepartureInMinutesFromDayBeginning()));
+				departureInMinutesFromDayBeginning));
 
+		int arrivaInMinutesFromDayBeginning = flights.get(0).getArrivaInMinutesFromDayBeginning();
 		landingTimeFilter.setMinValue(Math.min(landingTimeFilter.getMinValue(),
-				flights.get(0).getArrivaInMinutesFromDayBeginning()));
+				arrivaInMinutesFromDayBeginning));
 
 		landingTimeFilter.setMaxValue(Math.max(landingTimeFilter.getMaxValue(),
-				flights.get(0).getArrivaInMinutesFromDayBeginning()));
+				arrivaInMinutesFromDayBeginning));
 
 		if (!overnightFilter.isAirportOvernightViewEnabled() && overnightFilter.hasOvernight(flights)) {
 			overnightFilter.setAirportOvernightEnabled(true);
@@ -244,9 +246,9 @@ public class SegmentFilter implements Serializable {
 		stopOverDelayFilter.setMaxValue(Math.max(stopOverDelayFilter.getMaxValue(), stopOverMinMaxDelay.get(TicketData.MAX)));
 		stopOverDelayFilter.setMinValue(Math.min(stopOverDelayFilter.getMinValue(), stopOverMinMaxDelay.get(TicketData.MIN)));
 
-		airportsFilter.setSectionedAirportsFromGsonClass(airportDataMap, flights);
-		allianceFilter.setAlliancesFromGsonClass(airlineDataMap, flights);
-		airlinesFilter.setAirlinesFromGsonClass(airlineDataMap, flights);
+		airportsFilter.addSectionedAirportsData(airportDataMap, flights);
+		allianceFilter.addAlliancesData(airlineDataMap, flights);
+		airlinesFilter.addAirlinesData(airlineDataMap, flights);
 	}
 
 	public Map<String, Integer> getDirectMinAndMaxStopOverDurationInMinutes(List<Flight> flights) {

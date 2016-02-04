@@ -15,12 +15,6 @@ public class BaseCheckedText implements Serializable {
 		this.name = name;
 	}
 
-	public final static Comparator<BaseCheckedText> sortByName = new Comparator<BaseCheckedText>() {
-		@Override
-		public int compare(BaseCheckedText lhs, BaseCheckedText rhs) {
-			return lhs.getName().toLowerCase().compareTo(rhs.getName().toLowerCase());
-		}
-	};
 
 	public BaseCheckedText(BaseCheckedText baseCheckedText) {
 		name = baseCheckedText.getName();
@@ -61,4 +55,11 @@ public class BaseCheckedText implements Serializable {
 		result = 31 * result + (checked != null ? checked.hashCode() : 0);
 		return result;
 	}
+
+	public final static Comparator<BaseCheckedText> nameComparator = new Comparator<BaseCheckedText>() {
+		@Override
+		public int compare(BaseCheckedText lhs, BaseCheckedText rhs) {
+			return lhs.getName().toLowerCase().compareTo(rhs.getName().toLowerCase());
+		}
+	};
 }

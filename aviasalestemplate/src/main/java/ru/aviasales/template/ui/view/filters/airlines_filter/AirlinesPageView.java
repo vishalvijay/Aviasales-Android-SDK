@@ -34,7 +34,7 @@ public class AirlinesPageView extends BaseFiltersScrollView {
 	}
 
 	@Override
-	protected void setupSimplePageView() {
+	protected void setUpSimplePageView() {
 		if (getSimpleGeneralFilters().getAirlinesFilter().isValid()) {
 			ExpandedListView view = createAirlinesFilterView(getSimpleGeneralFilters().getAirlinesFilter(), hideTitle);
 			viewListView.add(view);
@@ -43,7 +43,7 @@ public class AirlinesPageView extends BaseFiltersScrollView {
 	}
 
 	@Override
-	protected void setupOpenJawPageView() {
+	protected void setUpOpenJawPageView() {
 		OpenJawFiltersSet filters = getOpenJawGeneralFilters();
 
 		for (Integer segmentNumber : filters.getSegmentFilters().keySet()) {

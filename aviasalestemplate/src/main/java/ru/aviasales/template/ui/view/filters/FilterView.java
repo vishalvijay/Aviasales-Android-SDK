@@ -16,7 +16,7 @@ import ru.aviasales.template.R;
 import ru.aviasales.template.filters.AgenciesFilter;
 import ru.aviasales.template.filters.AirlinesFilter;
 import ru.aviasales.template.filters.AirportsFilter;
-import ru.aviasales.template.filters.AllianceFilter;
+import ru.aviasales.template.filters.AllianceListFilter;
 import ru.aviasales.template.filters.BaseNumericFilter;
 import ru.aviasales.template.filters.FiltersSet;
 import ru.aviasales.template.filters.OpenJawFiltersSet;
@@ -266,7 +266,7 @@ public class FilterView extends LinearLayout {
 		return airportListView;
 	}
 
-	private ExpandedListView createAlliancesFilterView(AllianceFilter allianceFilter) {
+	private ExpandedListView createAlliancesFilterView(AllianceListFilter allianceFilter) {
 		ExpandedListView alliancesListView = new ExpandedListView(getContext(), null);
 		AlliancesAdapter adapter = new AlliancesAdapter(getContext(), allianceFilter.getAllianceList(), false);
 		alliancesListView.setAdapter(adapter);

@@ -29,7 +29,7 @@ public class AgenciesPageView extends BaseFiltersScrollView {
 	}
 
 	@Override
-	protected void setupSimplePageView() {
+	protected void setUpSimplePageView() {
 		if (getSimpleGeneralFilters().getAgenciesFilter().isValid()) {
 			agenciesExpandedListView = createAgenciesListView(getSimpleGeneralFilters().getAgenciesFilter(), hideTitle);
 			addView(agenciesExpandedListView);
@@ -37,7 +37,7 @@ public class AgenciesPageView extends BaseFiltersScrollView {
 	}
 
 	@Override
-	protected void setupOpenJawPageView() {
+	protected void setUpOpenJawPageView() {
 		if (getOpenJawGeneralFilters().getAgenciesFilter().isValid()) {
 			agenciesExpandedListView = createAgenciesListView(getOpenJawGeneralFilters().getAgenciesFilter(), hideTitle);
 			addView(agenciesExpandedListView);

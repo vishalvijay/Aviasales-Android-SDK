@@ -11,7 +11,7 @@ public class FilterCheckedAirport extends BaseCheckedText implements Serializabl
 	private String country;
 	private float rating;
 
-	public final static Comparator<FilterCheckedAirport> sortByName = new Comparator<FilterCheckedAirport>() {
+	public final static Comparator<FilterCheckedAirport> cityComparator = new Comparator<FilterCheckedAirport>() {
 		@Override
 		public int compare(FilterCheckedAirport lhs, FilterCheckedAirport rhs) {
 			return lhs.getCity().toLowerCase().compareTo(rhs.getCity().toLowerCase());

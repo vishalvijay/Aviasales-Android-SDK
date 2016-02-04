@@ -10,7 +10,7 @@ import ru.aviasales.core.search.object.AirlineData;
 import ru.aviasales.core.search.object.Flight;
 import ru.aviasales.expandedlistview.view.BaseCheckedText;
 
-public class AirlinesFilter implements Serializable {
+public class AirlinesFilter extends BaseListFilter implements Serializable {
 
 	private final List<FilterCheckedAirline> airlineList = new ArrayList<>();
 
@@ -34,22 +34,10 @@ public class AirlinesFilter implements Serializable {
 	}
 
 	public void sortByName() {
-		Collections.sort(airlineList, FilterCheckedAirline.sortByName);
+		Collections.sort(airlineList, BaseCheckedText.nameComparator);
 	}
 
-	public void mergeFilter(AirlinesFilter airlinesFilter) {
-		if (airlinesFilter.isActive()) {
-			for (BaseCheckedText checkedText : airlineList) {
-				for (BaseCheckedText checkedText1 : airlinesFilter.getAirlineList()) {
-					if (checkedText.getName().equals(checkedText1.getName())) {
-						checkedText.setChecked(checkedText1.isChecked());
-					}
-				}
-			}
-		}
-	}
-
-	public void setAirlinesFromGsonClass(Map<String, AirlineData> airlineMap) {
+	public void addAirlinesData(Map<String, AirlineData> airlineMap) {
 		for (String iata : airlineMap.keySet()) {
 			FilterCheckedAirline airline = new FilterCheckedAirline(iata);
 			if (airlineMap.get(iata) != null && airlineMap.get(iata).getName() != null) {
@@ -68,24 +56,30 @@ public class AirlinesFilter implements Serializable {
 		sortByName();
 	}
 
-	public void setAirlinesFromGsonClass(Map<String, AirlineData> airlineMap, List<Flight> flights) {
+	public void addAirlinesData(Map<String, AirlineData> airlineMap, List<Flight> flights) {
 		for (String iata : airlineMap.keySet()) {
-			FilterCheckedAirline airline = new FilterCheckedAirline(iata);
-			if (airlineMap.get(iata) != null && airlineMap.get(iata).getName() != null) {
-				airline.setName(airlineMap.get(iata).getName());
-			} else {
-				airline.setName(iata);
-			}
+			FilterCheckedAirline airline = toAirline(airlineMap, iata);
 
-			if (airlineMap.get(iata) != null && airlineMap.get(iata).getAverageRate() != null) {
-				airline.setRating(airlineMap.get(iata).getAverageRate());
-			}
 			for (Flight flight : flights) {
 				if (flight.getOperatingCarrier().equalsIgnoreCase(iata) && !airlineList.contains(airline)) {
 					airlineList.add(airline);
 				}
 			}
 		}
+	}
+
+	private FilterCheckedAirline toAirline(Map<String, AirlineData> airlineMap, String iata) {
+		FilterCheckedAirline airline = new FilterCheckedAirline(iata);
+		if (airlineMap.get(iata) != null && airlineMap.get(iata).getName() != null) {
+			airline.setName(airlineMap.get(iata).getName());
+		} else {
+			airline.setName(iata);
+		}
+
+		if (airlineMap.get(iata) != null && airlineMap.get(iata).getAverageRate() != null) {
+			airline.setRating(airlineMap.get(iata).getAverageRate());
+		}
+		return airline;
 	}
 
 	public boolean isActual(String airline) {
@@ -97,22 +91,9 @@ public class AirlinesFilter implements Serializable {
 		return true;
 	}
 
-	public boolean isActive() {
-		for (FilterCheckedAirline airline : airlineList) {
-			if (!airline.isChecked()) {
-				return true;
-			}
-		}
-		return false;
+	@Override
+	public List<FilterCheckedAirline> getCheckedTextList() {
+		return airlineList;
 	}
 
-	public void clearFilter() {
-		for (FilterCheckedAirline airline : airlineList) {
-			airline.setChecked(true);
-		}
-	}
-
-	public boolean isValid() {
-		return airlineList.size() > 0;
-	}
 }

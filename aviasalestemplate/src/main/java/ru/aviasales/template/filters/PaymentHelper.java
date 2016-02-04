@@ -17,8 +17,6 @@ public class PaymentHelper {
 	private static final String BANK = "bank";
 	private static final String CONTACT = "contact";
 
-	private static volatile PaymentHelper instance;
-
 	public static String getPaymentStringByCode(Context context, String code) {
 		if (code.equalsIgnoreCase(EXP)) {
 			return context.getResources().getString(R.string.filter_payment_method_exp);
@@ -46,30 +44,4 @@ public class PaymentHelper {
 		return code;
 	}
 
-	public static String getPaymentCodeByString(Context context, String string) {
-		if (string.equalsIgnoreCase(context.getResources().getString(R.string.filter_payment_method_exp))) {
-			return EXP;
-		} else if (string.equalsIgnoreCase(context.getResources().getString(R.string.filter_payment_method_euroset))) {
-			return EUROSET;
-		} else if (string.equalsIgnoreCase(context.getResources().getString(R.string.filter_payment_method_cash))) {
-			return CASH;
-		} else if (string.equalsIgnoreCase(context.getResources().getString(R.string.filter_payment_method_card))) {
-			return CARD;
-		} else if (string.equalsIgnoreCase(context.getResources().getString(R.string.filter_payment_method_yandex_money))) {
-			return YANDEX_MONEY;
-		} else if (string.equalsIgnoreCase(context.getResources().getString(R.string.filter_payment_method_webmoney))) {
-			return WEB_MONEY;
-		} else if (string.equalsIgnoreCase(context.getResources().getString(R.string.filter_payment_method_terminal))) {
-			return TERMINAL;
-		} else if (string.equalsIgnoreCase(context.getResources().getString(R.string.filter_payment_method_svyaznoy))) {
-			return SVYAZNOY;
-		} else if (string.equalsIgnoreCase(context.getResources().getString(R.string.filter_payment_method_elexnet))) {
-			return ELEXNET;
-		} else if (string.equalsIgnoreCase(context.getResources().getString(R.string.filter_payment_method_bank))) {
-			return BANK;
-		} else if (string.equalsIgnoreCase(context.getResources().getString(R.string.filter_payment_method_contact))) {
-			return CONTACT;
-		}
-		return "";
-	}
 }

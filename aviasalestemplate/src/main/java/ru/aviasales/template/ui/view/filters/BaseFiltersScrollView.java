@@ -68,9 +68,9 @@ public abstract class BaseFiltersScrollView extends ScrollView {
 		this.segmentList = segmentList;
 
 		if (filters instanceof SimpleSearchFilters) {
-			setupSimplePageView();
+			setUpSimplePageView();
 		} else {
-			setupOpenJawPageView();
+			setUpOpenJawPageView();
 		}
 	}
 
@@ -103,9 +103,9 @@ public abstract class BaseFiltersScrollView extends ScrollView {
 	}
 
 
-	protected abstract void setupSimplePageView();
+	protected abstract void setUpSimplePageView();
 
-	protected abstract void setupOpenJawPageView();
+	protected abstract void setUpOpenJawPageView();
 
 	public abstract void clearFilters();
 }

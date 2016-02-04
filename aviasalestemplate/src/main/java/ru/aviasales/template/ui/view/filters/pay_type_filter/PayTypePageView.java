@@ -29,7 +29,7 @@ public class PayTypePageView extends BaseFiltersScrollView {
 	}
 
 	@Override
-	protected void setupSimplePageView() {
+	protected void setUpSimplePageView() {
 		if (getSimpleGeneralFilters().getPayTypeFilter().isValid()) {
 			expandedListView = createPayTypeListView(getSimpleGeneralFilters().getPayTypeFilter(), hideTitle);
 			addView(expandedListView);
@@ -37,7 +37,7 @@ public class PayTypePageView extends BaseFiltersScrollView {
 	}
 
 	@Override
-	protected void setupOpenJawPageView() {
+	protected void setUpOpenJawPageView() {
 		if (getOpenJawGeneralFilters().getPayTypeFilter().isValid()) {
 			expandedListView = createPayTypeListView(getOpenJawGeneralFilters().getPayTypeFilter(), hideTitle);
 			addView(expandedListView);

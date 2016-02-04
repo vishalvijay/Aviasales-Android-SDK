@@ -13,17 +13,17 @@ import ru.aviasales.core.search.object.Flight;
 import ru.aviasales.expandedlistview.view.BaseCheckedText;
 import ru.aviasales.template.R;
 
-public class AllianceFilter implements Serializable {
+public class AllianceListFilter extends BaseListFilter implements Serializable {
 
 	private transient Context context;
 	private List<BaseCheckedText> allianceList;
 
-	public AllianceFilter(Context context) {
+	public AllianceListFilter(Context context) {
 		this.context = context;
 		allianceList = new ArrayList<>();
 	}
 
-	public AllianceFilter(Context context, AllianceFilter allianceFilter) {
+	public AllianceListFilter(Context context, AllianceListFilter allianceFilter) {
 		if (allianceFilter.getAllianceList() == null) return;
 		this.context = context;
 
@@ -48,7 +48,7 @@ public class AllianceFilter implements Serializable {
 		this.allianceList = allianceList;
 	}
 
-	public void mergeFilter(AllianceFilter allianceFilter) {
+	public void mergeFilter(AllianceListFilter allianceFilter) {
 		if (allianceFilter.isActive()) {
 			for (BaseCheckedText checkedText : allianceList) {
 				for (BaseCheckedText checkedText1 : allianceFilter.getAllianceList()) {
@@ -74,7 +74,7 @@ public class AllianceFilter implements Serializable {
 		return true;
 	}
 
-	public void setAlliancesFromGsonClass(Map<String, AirlineData> airlineMap) {
+	public void addAlliancesData(Map<String, AirlineData> airlineMap) {
 		for (String airline : airlineMap.keySet()) {
 			if (airlineMap.get(airline) != null && airlineMap.get(airline).getAllianceName() != null) {
 				BaseCheckedText cAlliance = new BaseCheckedText(airlineMap.get(airline).getAllianceName());
@@ -90,15 +90,15 @@ public class AllianceFilter implements Serializable {
 		allianceList.add(anotherAlliances);
 	}
 
-	public void setAlliancesFromGsonClass(Map<String, AirlineData> airlineMap, List<Flight> flights) {
+	public void addAlliancesData(Map<String, AirlineData> airlineMap, List<Flight> flights) {
 		for (String airline : airlineMap.keySet()) {
 			if (airlineMap.get(airline) != null && airlineMap.get(airline).getAllianceName() != null) {
-				BaseCheckedText cAlliance = new BaseCheckedText(airlineMap.get(airline).getAllianceName());
+				BaseCheckedText checkedAlliance = new BaseCheckedText(airlineMap.get(airline).getAllianceName());
 
 				for (Flight flight : flights) {
-					if (!allianceList.contains(cAlliance) && cAlliance.getName() != null &&
+					if (!allianceList.contains(checkedAlliance) && checkedAlliance.getName() != null &&
 							flight.getOperatingCarrier().equalsIgnoreCase(airline)) {
-						allianceList.add(cAlliance);
+						allianceList.add(checkedAlliance);
 					}
 				}
 			}
@@ -112,25 +112,12 @@ public class AllianceFilter implements Serializable {
 	}
 
 	public void sortByName() {
-		Collections.sort(allianceList, BaseCheckedText.sortByName);
+		Collections.sort(allianceList, BaseCheckedText.nameComparator);
 	}
 
-	public boolean isActive() {
-		for (BaseCheckedText alliance : allianceList) {
-			if (!alliance.isChecked()) {
-				return true;
-			}
-		}
-		return false;
-	}
 
-	public void clearFilter() {
-		for (BaseCheckedText alliance : allianceList) {
-			alliance.setChecked(true);
-		}
-	}
-
-	public boolean isValid() {
-		return allianceList.size() > 0;
+	@Override
+	public List<BaseCheckedText> getCheckedTextList() {
+		return allianceList;
 	}
 }

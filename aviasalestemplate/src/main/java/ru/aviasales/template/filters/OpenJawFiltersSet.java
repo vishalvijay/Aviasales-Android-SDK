@@ -94,6 +94,7 @@ public class OpenJawFiltersSet implements Serializable, FiltersSet {
 
 	public boolean isSuitedByAgencies(Proposal proposal) {
 		if (agenciesFilter.isActive()) {
+			agenciesFilter.validateProposal(proposal);
 			if (agenciesFilter.isActual(proposal)) {
 				try {
 					proposal.setTotalWithFilters(FiltersUtils.calculateMinimalPriceForProposal(proposal));
@@ -126,16 +127,17 @@ public class OpenJawFiltersSet implements Serializable, FiltersSet {
 
 	public boolean isSuitedBySegmentFilters(Map<String, AirlineData> airlines, Proposal proposal) {
 		for (int i = 0; i < proposal.getSegments().size(); i++) {
-			if (segmentFilters.get(i).isActive()) {
-				if (!segmentFilters.get(i).isSuitedByAirline(proposal.getSegmentFlights(i))
-						|| !segmentFilters.get(i).isSuitedByAirport(proposal.getSegmentFlights(i))
-						|| !segmentFilters.get(i).isSuitedByAlliance(airlines, proposal.getSegmentFlights(i))
-						|| !segmentFilters.get(i).isSuitedByDuration(proposal.getSegmentFlights(i))
-						|| !segmentFilters.get(i).isSuitedByOvernight(proposal.getSegmentFlights(i))
-						|| !segmentFilters.get(i).isSuitedByStopOver(proposal)
-						|| !segmentFilters.get(i).isSuitedByStopOverDelay(proposal.getSegmentFlights(i))
-						|| !segmentFilters.get(i).isSuitedByTakeoffTime(proposal.getSegmentFlights(i))
-						|| !segmentFilters.get(i).isSuitedByLandingTime(proposal.getSegmentFlights(i))) {
+			SegmentFilter segmentFilter = segmentFilters.get(i);
+			if (segmentFilter.isActive()) {
+				if (!segmentFilter.isSuitedByAirline(proposal.getSegmentFlights(i))
+						|| !segmentFilter.isSuitedByAirport(proposal.getSegmentFlights(i))
+						|| !segmentFilter.isSuitedByAlliance(airlines, proposal.getSegmentFlights(i))
+						|| !segmentFilter.isSuitedByDuration(proposal.getSegmentFlights(i))
+						|| !segmentFilter.isSuitedByOvernight(proposal.getSegmentFlights(i))
+						|| !segmentFilter.isSuitedByStopOver(proposal)
+						|| !segmentFilter.isSuitedByStopOverDelay(proposal.getSegmentFlights(i))
+						|| !segmentFilter.isSuitedByTakeoffTime(proposal.getSegmentFlights(i))
+						|| !segmentFilter.isSuitedByLandingTime(proposal.getSegmentFlights(i))) {
 					return false;
 				}
 			}
@@ -235,7 +237,7 @@ public class OpenJawFiltersSet implements Serializable, FiltersSet {
 						airportDataMap, airlineDataMap);
 			}
 		}
-		getAgenciesFilter().setGatesFromGsonClass(onlyActualGates);
+		getAgenciesFilter().addGates(onlyActualGates);
 		getPayTypeFilter().setPayTypesFromGsonClass(paymentMethods);
 		for (Integer segmentId : segmentFilters.keySet()) {
 			segmentFilters.get(segmentId).getAirlinesFilter().sortByName();

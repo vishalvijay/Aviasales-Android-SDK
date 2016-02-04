@@ -110,9 +110,6 @@ public class StopOverFilter implements Parcelable {
 		isTwoPlusStopOverViewEnabled = twoPlusStopOverEnabled;
 	}
 
-	/**
-	 * ************ Передача данных в интент ***************
-	 */
 	public StopOverFilter(Parcel in) {
 		oneStopOver = in.readByte() == 1;
 		withoutStopOver = in.readByte() == 1;

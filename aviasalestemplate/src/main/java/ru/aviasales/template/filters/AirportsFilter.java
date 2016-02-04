@@ -32,11 +32,12 @@ public class AirportsFilter implements Serializable {
 		}
 	}
 
-	public void mergeCheckedState(List<FilterCheckedAirport> checkedAirports, List<FilterCheckedAirport> checkedAirports1) {
-		for (FilterCheckedAirport checkedAirport : checkedAirports) {
-			for (FilterCheckedAirport checkedAirport1 : checkedAirports1) {
-				if (checkedAirport.getIata() != null && checkedAirport1.getIata() != null && checkedAirport.getIata().equals(checkedAirport1.getIata())) {
-					checkedAirport.setChecked(checkedAirport1.isChecked());
+	public void mergeCheckedState(List<FilterCheckedAirport> lCheckedAirports, List<FilterCheckedAirport> rCheckedAirports) {
+		for (FilterCheckedAirport lCheckedAirport : lCheckedAirports) {
+			for (FilterCheckedAirport rCheckedAirport : rCheckedAirports) {
+				if (lCheckedAirport.getIata() != null && rCheckedAirport.getIata() != null
+						&& lCheckedAirport.getIata().equals(rCheckedAirport.getIata())) {
+					lCheckedAirport.setChecked(rCheckedAirport.isChecked());
 				}
 			}
 		}
@@ -61,7 +62,7 @@ public class AirportsFilter implements Serializable {
 		return stopOverAirportList;
 	}
 
-	public void setSectionedAirportsFromGsonClassSimple(Map<String, AirportData> airportMap, List<Proposal> proposals) {
+	public void addSimpleSectionedAirportsData(Map<String, AirportData> airportMap, List<Proposal> proposals) {
 
 		for (Proposal proposal : proposals) {
 			FilterCheckedAirport originAirport = createAirport(proposal.getSegmentFlights(0).get(0).getDeparture(), airportMap);
@@ -92,15 +93,15 @@ public class AirportsFilter implements Serializable {
 		}
 
 		for (String airport : airportMap.keySet()) {
-			FilterCheckedAirport cAirport = createAirport(airport, airportMap);
-			if (cAirport != null && !originAirportList.contains(cAirport) && !destinationAirportList.contains(cAirport) &&
-					!stopOverAirportList.contains(cAirport)) {
-				stopOverAirportList.add(cAirport);
+			FilterCheckedAirport checkedAirport = createAirport(airport, airportMap);
+			if (checkedAirport != null && !originAirportList.contains(checkedAirport) && !destinationAirportList.contains(checkedAirport) &&
+					!stopOverAirportList.contains(checkedAirport)) {
+				stopOverAirportList.add(checkedAirport);
 			}
 		}
 	}
 
-	public void setSectionedAirportsFromGsonClass(Map<String, AirportData> airportMap, List<Flight> flights) {
+	public void addSectionedAirportsData(Map<String, AirportData> airportMap, List<Flight> flights) {
 
 		FilterCheckedAirport originAirport = createAirport(flights.get(0).getDeparture(), airportMap);
 		if (originAirport != null && !originAirportList.contains(originAirport)) {
@@ -124,9 +125,9 @@ public class AirportsFilter implements Serializable {
 	}
 
 	public void sortByName() {
-		Collections.sort(originAirportList, FilterCheckedAirport.sortByName);
-		Collections.sort(destinationAirportList, FilterCheckedAirport.sortByName);
-		Collections.sort(stopOverAirportList, FilterCheckedAirport.sortByName);
+		Collections.sort(originAirportList, FilterCheckedAirport.cityComparator);
+		Collections.sort(destinationAirportList, FilterCheckedAirport.cityComparator);
+		Collections.sort(stopOverAirportList, FilterCheckedAirport.cityComparator);
 
 	}
 
@@ -175,30 +176,30 @@ public class AirportsFilter implements Serializable {
 	}
 
 	private FilterCheckedAirport createAirport(String airport, Map<String, AirportData> airportMap) {
-		FilterCheckedAirport cAirport = new FilterCheckedAirport(airport);
+		FilterCheckedAirport checkedAirport = new FilterCheckedAirport(airport);
 		if (airportMap.get(airport) != null) {
 			if (airportMap.get(airport).getCity() != null) {
-				cAirport.setCity(airportMap.get(airport).getCity());
+				checkedAirport.setCity(airportMap.get(airport).getCity());
 			} else {
-				cAirport.setCity("");
+				checkedAirport.setCity("");
 			}
 			if (airportMap.get(airport).getCountry() != null) {
-				cAirport.setCountry(airportMap.get(airport).getCountry());
+				checkedAirport.setCountry(airportMap.get(airport).getCountry());
 			} else {
-				cAirport.setCountry("");
+				checkedAirport.setCountry("");
 			}
 			if (airportMap.get(airport).getName() != null) {
-				cAirport.setName(airportMap.get(airport).getName());
+				checkedAirport.setName(airportMap.get(airport).getName());
 			} else {
-				cAirport.setName("");
+				checkedAirport.setName("");
 			}
 			if (airportMap.get(airport).getAverageRate() != null) {
-				cAirport.setRating(airportMap.get(airport).getAverageRate());
+				checkedAirport.setRating(airportMap.get(airport).getAverageRate());
 			}
 		} else {
 			return null;
 		}
-		return cAirport;
+		return checkedAirport;
 	}
 
 	public boolean isValid() {
