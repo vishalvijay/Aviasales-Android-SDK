@@ -57,14 +57,14 @@ uploadArchives {
 
 
 
-task copyLanguageFolders(type: Copy) { values ->
+task copyLanguageFolders() {
 
-	task "copyFromRuTo$values"(type: Copy) {
-		from(new File(project(':aviasalestemplate').projectDir, 'src/main/res/values-ru')) {
-			include '**/*.xml'
+	['values-az/', 'values-hy/', 'values-be/', 'values-kk/', 'values-ky/', 'values-ro/', 'values-uz/', 'values-uk/', 'values-ka/'].each { dest ->
+		copy {
+			from 'src/main/res/values-ru/'
+			into 'src/main/res/' + dest
+			include('strings.xml')
 		}
-		into new File(project(':aviasalestemplate').projectDir, "src/main/res/values-$values")
-
 	}
 }
 
