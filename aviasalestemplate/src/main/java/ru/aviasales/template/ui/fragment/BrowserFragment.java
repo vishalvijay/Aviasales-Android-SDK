@@ -5,10 +5,11 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.FragmentManager;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,7 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.SslErrorHandler;
+import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -28,18 +29,16 @@ import java.util.TimerTask;
 
 import ru.aviasales.template.R;
 import ru.aviasales.template.ui.dialog.BrowserLoadingDialogFragment;
-import ru.aviasales.template.utils.Utils;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class BrowserFragment extends BaseFragment {
-
-	private static final String EXTRA_SHOULD_SHOW_DIALOG = "extra_should_show_dialog";
 
 	public static final String PROPERTY_BUY_URL = "BUY_URL";
 	public static final String PROPERTY_BUY_AGENCY = "BUY_AGENCY";
 
 	private boolean needToDismissDialog = false;
 	private WebView webView;
+	private WebView secondaryWebView;
 
 	private BrowserLoadingDialogFragment dialog;
 	private String agency;
@@ -47,19 +46,22 @@ public class BrowserFragment extends BaseFragment {
 	private MenuItem btnBack;
 	private MenuItem btnForward;
 	private ProgressBar progressbar;
+	private FrameLayout webViewPlaceHolder;
 
 	public static BrowserFragment newInstance() {
 		BrowserFragment browserFragment = new BrowserFragment();
 		Bundle bundle = new Bundle();
-		bundle.putBoolean(EXTRA_SHOULD_SHOW_DIALOG, true);
 		return browserFragment;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		agency = Utils.getPreferences(getActivity()).getString(PROPERTY_BUY_AGENCY, null);
+		agency = getPreferences().getString(PROPERTY_BUY_AGENCY, null);
 
 		super.onCreate(savedInstanceState);
+
+		setRetainInstance(true);
+		getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
 		setHasOptionsMenu(true);
 	}
@@ -76,33 +78,19 @@ public class BrowserFragment extends BaseFragment {
 	}
 
 	private void setupViews(ViewGroup layout) {
-		FrameLayout webViewPlaceHolder = (FrameLayout) layout.findViewById(R.id.webview_placeholder);
+		webViewPlaceHolder = (FrameLayout) layout.findViewById(R.id.webview_placeholder);
 		progressbar = (ProgressBar) layout.findViewById(R.id.progressbar);
 		progressbar.setAlpha(0);
 
-		String url = Utils.getPreferences(getActivity()).getString(PROPERTY_BUY_URL, null);
+		String url = getPreferences().getString(PROPERTY_BUY_URL, null);
 		setupWebView(webViewPlaceHolder, url);
 	}
 
 	@SuppressLint("SetJavaScriptEnabled")
-	private void setupWebView(FrameLayout webViewPlaceHolder, String url) {
+	private void setupWebView(final FrameLayout webViewPlaceHolder, String url) {
 		if (webView == null) {
-
 			webView = new WebView(getActivity());
 			webView.setLayoutParams(getWebViewLayoutParams());
-
-			webView.getSettings().setJavaScriptEnabled(true);
-			webView.getSettings().setUseWideViewPort(true);
-			webView.getSettings().setLoadWithOverviewMode(true);
-			webView.getSettings().setSupportZoom(true);
-			webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-			webView.getSettings().setBuiltInZoomControls(true);
-			webView.getSettings().setDisplayZoomControls(false);
-			webView.getSettings().setDomStorageEnabled(true);
-
-			webView.loadUrl(url);
-
-			webView.setWebViewClient(new AsWebViewClient());
 
 			webView.setWebChromeClient(new WebChromeClient() {
 				@Override
@@ -124,7 +112,44 @@ public class BrowserFragment extends BaseFragment {
 						}).start();
 					}
 				}
+
+				// Add new webview in same window
+				@Override
+				public boolean onCreateWindow(WebView view, boolean dialog,
+				                              boolean userGesture, Message resultMsg) {
+					if (secondaryWebView != null) webViewPlaceHolder.removeView(secondaryWebView);
+					secondaryWebView = new WebView(getActivity());
+					secondaryWebView.getSettings().setJavaScriptEnabled(true);
+					secondaryWebView.setWebChromeClient(this);
+					secondaryWebView.setWebViewClient(new WebViewClient());
+					secondaryWebView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.FILL_PARENT));
+					webViewPlaceHolder.addView(secondaryWebView);
+					WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+					transport.setWebView(secondaryWebView);
+					resultMsg.sendToTarget();
+					return true;
+				}
+
+				// remove new added webview whenever onCloseWindow gets called for new webview.
+				@Override
+				public void onCloseWindow(WebView window) {
+					if (secondaryWebView != null) webViewPlaceHolder.removeView(secondaryWebView);
+				}
 			});
+			webView.setWebViewClient(new AsWebViewClient());
+			webView.getSettings().setJavaScriptEnabled(true);
+			webView.getSettings().setUseWideViewPort(true);
+			webView.getSettings().setLoadWithOverviewMode(true);
+			webView.getSettings().setSupportZoom(true);
+			webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+			webView.getSettings().setBuiltInZoomControls(true);
+			webView.getSettings().setDisplayZoomControls(false);
+			webView.getSettings().setDomStorageEnabled(true);
+			CookieManager.getInstance().setAcceptCookie(true);
+
+			webView.getSettings().setSupportMultipleWindows(true);
+
+			webView.loadUrl(url);
 		} else {
 			if (webView.getParent() != null) {
 				((ViewGroup) webView.getParent()).removeView(webView);
@@ -161,6 +186,10 @@ public class BrowserFragment extends BaseFragment {
 	}
 
 	private void showLoadingDialog() {
+		if (getActivity() == null
+				|| getActivity().isFinishing()) {
+			return;
+		}
 		if (dialog != null) {
 			try {
 				dialog.dismiss();
@@ -206,8 +235,12 @@ public class BrowserFragment extends BaseFragment {
 
 	}
 
-
 	private void dismissDialogFragment() {
+
+		if (getActivity() == null
+				|| getActivity().isFinishing()) {
+			return;
+		}
 		if (dialog != null) {
 			try {
 				dialog.dismiss();
@@ -226,35 +259,18 @@ public class BrowserFragment extends BaseFragment {
 		}
 
 		@Override
-		public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-			handler.proceed(); // Ignore SSL certificate errors
-		}
-
-		@Override
-		public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-			super.onReceivedError(view, errorCode, description, failingUrl);
-		}
-
-		@Override
 		public void onPageStarted(WebView view, String url, Bitmap favicon) {
 			super.onPageStarted(view, url, favicon);
-
 			setBrowserNav();
 		}
 
 		@Override
 		public void onPageFinished(WebView view, String url) {
 			super.onPageFinished(view, url);
-
 			loadingFinished = true;
 
 			dismissDialogFragment();
 			setBrowserNav();
-		}
-
-		@Override
-		public void onLoadResource(WebView view, String url) {
-			super.onLoadResource(view, url);
 		}
 	}
 
@@ -284,18 +300,15 @@ public class BrowserFragment extends BaseFragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
-
-		if(id == R.id.back){
+		int i = item.getItemId();
+		if (i == R.id.back) {
 			webView.goBack();
 			return true;
-		} else if(id == R.id. forward){
+		} else if (i == R.id.forward) {
 			webView.goForward();
 			return true;
 		} else {
 			return super.onOptionsItemSelected(item);
 		}
-
 	}
-
 }
