@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.RatingBar;
 
+import ru.aviasales.expandedlistview.interfaces.OnSomethingChange;
 import ru.aviasales.expandedlistview.view.BaseFiltersListViewItem;
 import ru.aviasales.template.R;
 import ru.aviasales.template.filters.FilterCheckedAirline;
@@ -35,4 +36,5 @@ public class AirlineItemView extends BaseFiltersListViewItem {
 	public RatingBar getRatingBar() {
 		return ratingBar;
 	}
+
 }

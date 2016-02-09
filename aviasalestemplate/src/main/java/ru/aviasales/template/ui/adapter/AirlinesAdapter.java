@@ -9,6 +9,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import ru.aviasales.expandedlistview.adapter.BaseExpandedListViewAdapter;
+import ru.aviasales.expandedlistview.interfaces.OnSomethingChange;
 import ru.aviasales.expandedlistview.listener.OnChangeState;
 import ru.aviasales.expandedlistview.view.BaseCheckedText;
 import ru.aviasales.expandedlistview.view.BaseFiltersListViewItem;
@@ -39,9 +40,9 @@ public class AirlinesAdapter extends BaseExpandedListViewAdapter {
 	public View getItemView(View view, ViewGroup parent, int position) {
 		if (view == null) {
 			view = new AirlineItemView(context);
-			((AirlineItemView) view).setOnClickListener(new View.OnClickListener() {
+			((AirlineItemView) view).setOnClickListener(new OnSomethingChange() {
 				@Override
-				public void onClick(View v) {
+				public void onChange() {
 					if (listener != null) {
 						listener.onViewPressed();
 					}

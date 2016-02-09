@@ -19,9 +19,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-		<meta-data android:name="ru.aviasales.marker" android:value="@string/aviasales_marker"/>
-		<meta-data android:name="ru.aviasales.api_token" android:value="@string/aviasales_api_token"/>
 
     </application>
 

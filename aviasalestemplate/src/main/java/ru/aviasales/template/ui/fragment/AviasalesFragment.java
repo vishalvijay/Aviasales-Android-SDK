@@ -14,6 +14,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import ru.aviasales.core.AviasalesSDK;
+import ru.aviasales.core.identification.IdentificationData;
 import ru.aviasales.core.search_airports.object.PlaceData;
 import ru.aviasales.template.R;
 import ru.aviasales.template.ui.listener.AviasalesImpl;
@@ -42,7 +43,7 @@ public class AviasalesFragment extends Fragment implements AviasalesImpl {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		searchFormData = new SearchFormData(getActivity().getApplicationContext());
-		AviasalesSDK.getInstance().init(getActivity().getApplicationContext());
+		AviasalesSDK.getInstance().init(getActivity().getApplicationContext(), new IdentificationData("74590", "complex_master_api_token_here"));
 		initImageLoader(getActivity().getApplicationContext());
 	}
 

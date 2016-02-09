@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import ru.aviasales.core.AviasalesSDK;
+import ru.aviasales.core.identification.IdentificationData;
 import ru.aviasales.template.ui.fragment.AviasalesFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -16,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		AviasalesSDK.getInstance().init(this);
+		AviasalesSDK.getInstance().init(this, new IdentificationData("74590", "9f16d617b9df8b2b6b5d0372711e9d6b"));
 		setContentView(R.layout.activity_main);
 
 		init(savedInstanceState);

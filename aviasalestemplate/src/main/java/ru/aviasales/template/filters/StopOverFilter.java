@@ -5,7 +5,8 @@ import android.os.Parcelable;
 
 import java.util.List;
 
-import ru.aviasales.core.search_real_time.objects.Flight;
+import ru.aviasales.core.search.object.Flight;
+
 
 public class StopOverFilter implements Parcelable {
 
