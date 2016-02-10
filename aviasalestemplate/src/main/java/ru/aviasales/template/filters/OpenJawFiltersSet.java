@@ -5,6 +5,7 @@ import android.content.Context;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,14 +28,14 @@ public class OpenJawFiltersSet implements Serializable, FiltersSet {
 		agenciesFilter = new AgenciesFilter();
 		priceFilter = new BaseNumericFilter();
 		payTypeFilter = new PayTypeFilter(context);
-		segmentFilters = new HashMap<>();
+		segmentFilters = new LinkedHashMap<>();
 	}
 
 	public OpenJawFiltersSet(Context context, OpenJawFiltersSet openJawFiltersSet) {
 		agenciesFilter = new AgenciesFilter(openJawFiltersSet.getAgenciesFilter());
 		priceFilter = new BaseNumericFilter(openJawFiltersSet.getPriceFilter());
 		payTypeFilter = new PayTypeFilter(context, openJawFiltersSet.getPayTypeFilter());
-		segmentFilters = new HashMap<>();
+		segmentFilters = new LinkedHashMap<>();
 		for (Integer key : openJawFiltersSet.getSegmentFilters().keySet()) {
 			segmentFilters.put(key, new SegmentFilter(context, openJawFiltersSet.getSegmentFilters().get(key)));
 		}
