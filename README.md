@@ -1,4 +1,4 @@
-Aviasales/JetRadar Android SDK
+Aviasales/JetRadar Android SDK 2.0
 =================
 
 Aviasales/JetRadar Android SDK is a framework integrating flight search engine into your app. When your customer books a flight, we pay you a [commission fee](https://www.travelpayouts.com). Framework is based on leading flight search engines [Aviasales](http://www.aviasales.ru) and [JetRadar](http://www.jetradar.com).
