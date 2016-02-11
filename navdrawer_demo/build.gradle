@@ -5,7 +5,7 @@ android {
 	buildToolsVersion "23.0.2"
 
 	defaultConfig {
-		applicationId "ru.aviasales.testnavapp"
+		applicationId "ru.aviasales.navdrawerdemo"
 		minSdkVersion 15
 		targetSdkVersion 23
 		versionCode 1

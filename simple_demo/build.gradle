@@ -6,7 +6,7 @@ android {
 	buildToolsVersion '23.0.2'
 
 	defaultConfig {
-		applicationId "ru.aviasales.template"
+		applicationId "ru.aviasales.example"
 		minSdkVersion 11
 		targetSdkVersion 23
 		versionCode 1
