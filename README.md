@@ -86,7 +86,7 @@ Add fragment to `MainActivity`
   		AviasalesSDK.getInstance().init(this, new IdentificationData("74590", "9f16d617b9df8b2b6b5d0372711e9d6b")); 
   		setContentView(R.layout.activity_main);
      
-     		initFragment();
+  		initFragment();
   
       ...
   
