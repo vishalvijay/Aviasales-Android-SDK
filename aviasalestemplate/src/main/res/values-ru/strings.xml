@@ -204,9 +204,9 @@
 	<string name="clear_filters">Сбросить</string>
 	<string name="apply_filters">Применить фильтры</string>
 	<string name="pay_type">Способы оплаты</string>
-	<string name="base_filter_stop_over_count">Layovers</string>
-	<string name="base_filter_landing">To</string>
-	<string name="base_filter_landing_back">Return Landing Time</string>
+	<string name="base_filter_stop_over_count">Пересадки</string>
+	<string name="base_filter_landing">Прибытие</string>
+	<string name="base_filter_landing_back">Прибытие обратно</string>
 
 	<!--<string name="ticket_flight_text">Рейс</string>-->
 

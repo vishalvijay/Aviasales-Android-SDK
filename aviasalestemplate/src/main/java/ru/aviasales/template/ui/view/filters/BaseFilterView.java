@@ -41,6 +41,7 @@ public class BaseFilterView extends LinearLayout {
 		values = (TextView) findViewById(R.id.tv_values);
 
 		seekBar = (RangeBar) findViewById(R.id.sbar_price_filter_view);
+		seekBar.setProgressColor(getResources().getColor(R.color.colorAsPrimary));
 		seekBar.setSaveEnabled(false); // switch off autorotate
 		seekBar.setSingleThumb(true);
 		title = (TextView) findViewById(R.id.tv_title);

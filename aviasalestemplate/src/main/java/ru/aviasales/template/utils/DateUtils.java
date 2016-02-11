@@ -159,4 +159,36 @@ public class DateUtils {
 		return formatTo.format(parsedDate);
 	}
 
+
+	public static boolean isFirstDateBeforeSecondDateWithDayAccuracy(Date firstDate, Date secondDate) {
+		Calendar firstCalendar = Calendar.getInstance();
+		firstCalendar.setTime(firstDate);
+
+		Calendar secondCalendar = Calendar.getInstance();
+		secondCalendar.setTime(secondDate);
+
+		return firstCalendar.before(secondCalendar) && !areDatesOfOneDay(firstCalendar, secondCalendar);
+	}
+
+	public static boolean areDatesOfOneMonth(Calendar firstDate, Calendar secondDate) {
+		return firstDate.get(Calendar.YEAR) == secondDate.get(Calendar.YEAR)
+				&& firstDate.get(Calendar.MONTH) == secondDate.get(Calendar.MONTH);
+	}
+
+	public static boolean areDatesOfOneDay(Calendar firstDate, Calendar secondDate) {
+		return firstDate.get(Calendar.YEAR) == secondDate.get(Calendar.YEAR)
+				&& firstDate.get(Calendar.MONTH) == secondDate.get(Calendar.MONTH)
+				&& firstDate.get(Calendar.DAY_OF_MONTH) == secondDate.get(Calendar.DAY_OF_MONTH);
+	}
+
+	public static boolean isDateMoreThanOneYearAfterToday(Date checkDate) {
+		Calendar calendarWithYearPassed = Calendar.getInstance();
+		calendarWithYearPassed.add(Calendar.YEAR, 1);
+
+		Calendar checkCalendar = Calendar.getInstance();
+		checkCalendar.setTime(checkDate);
+
+		return calendarWithYearPassed.before(checkCalendar);
+	}
+
 }

@@ -78,8 +78,8 @@ public class ResultsFragment extends BaseFragment {
 	}
 
 	private void setupActionBarCustomView() {
-		getActionBar().show();
-		getActionBar().setTitle(StringUtils.getFirstAndLastIatasString(getSearchParams()));
+		showActionBar(true);
+		setTextToActionBar(StringUtils.getFirstAndLastIatasString(getSearchParams()));
 	}
 
 	private void setUpViews() {

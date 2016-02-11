@@ -6,7 +6,7 @@
 		<selector>
 			<item android:state_pressed="false">
 				<shape android:shape="rectangle">
-					<solid android:color="@color/grey_90A4AE"/>
+					<solid android:color="@color/colorAsPrimary"/>
 					<corners android:radius="4dp"/>
 				</shape>
 			</item>

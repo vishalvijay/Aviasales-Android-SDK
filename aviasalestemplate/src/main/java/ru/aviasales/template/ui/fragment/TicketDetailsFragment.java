@@ -17,7 +17,7 @@ import java.util.Map;
 
 import ru.aviasales.core.AviasalesSDK;
 import ru.aviasales.core.buy.object.BuyData;
-import ru.aviasales.core.buy.query.OnBuyDataListener;
+import ru.aviasales.core.buy.query.BuyProcessListener;
 import ru.aviasales.core.http.exception.ApiExceptions;
 import ru.aviasales.core.search.object.AirlineData;
 import ru.aviasales.core.search.object.AirportData;
@@ -25,7 +25,7 @@ import ru.aviasales.core.search.object.GateData;
 import ru.aviasales.core.search.object.Proposal;
 import ru.aviasales.core.search.object.SearchData;
 import ru.aviasales.core.search.params.SearchParams;
-import ru.aviasales.core.search.searching.SimpleOnSearchListener;
+import ru.aviasales.core.search.searching.SimpleSearchListener;
 import ru.aviasales.template.BrowserActivity;
 import ru.aviasales.template.R;
 import ru.aviasales.template.proposal.ProposalManager;
@@ -230,7 +230,7 @@ public class TicketDetailsFragment extends BaseFragment {
 						return;
 					}
 
-					AviasalesSDK.getInstance().startTicketsSearch(AviasalesSDK.getInstance().getSearchParamsOfLastSearch(), new SimpleOnSearchListener() {
+					AviasalesSDK.getInstance().startTicketsSearch(AviasalesSDK.getInstance().getSearchParamsOfLastSearch(), new SimpleSearchListener() {
 
 					});
 
@@ -297,7 +297,7 @@ public class TicketDetailsFragment extends BaseFragment {
 		}
 	}
 
-	private OnBuyDataListener listener = new OnBuyDataListener() {
+	private BuyProcessListener listener = new BuyProcessListener() {
 		@Override
 		public void onSuccess(BuyData data, String gateKey) {
 			dismissDialog();

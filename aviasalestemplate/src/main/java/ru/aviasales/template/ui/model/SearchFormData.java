@@ -353,17 +353,17 @@ public class SearchFormData {
 	}
 
 	public boolean isSimpleSearchReturnDatePassed() {
-		return CoreDateUtils.isDateBeforeDateShiftLine(simpleSearchParams.getReturnDateString());
+		return DateUtils.isDateBeforeDateShiftLine(simpleSearchParams.getReturnDateString());
 	}
 
 	public boolean isSimpleSearchReturnEarlierThanDeparture() {
-		return CoreDateUtils.isFirstDateBeforeSecondDateWithDayAccuracy(getDate(simpleSearchParams.getReturnDateString()),
+		return DateUtils.isFirstDateBeforeSecondDateWithDayAccuracy(getDate(simpleSearchParams.getReturnDateString()),
 				simpleSearchParams.getDepartDate());
 	}
 
 	public boolean isSimpleSearchDatedMoreThanYearAhead() {
-		return CoreDateUtils.isDateMoreThanOneYearAfterToday(simpleSearchParams.getDepartDate()) ||
-				CoreDateUtils.isDateMoreThanOneYearAfterToday(simpleSearchParams.getReturnDate());
+		return DateUtils.isDateMoreThanOneYearAfterToday(simpleSearchParams.getDepartDate()) ||
+				DateUtils.isDateMoreThanOneYearAfterToday(simpleSearchParams.getReturnDate());
 	}
 
 }

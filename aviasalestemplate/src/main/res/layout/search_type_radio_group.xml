@@ -17,6 +17,7 @@
 			android:background="@drawable/search_type_radio_button_selector"
 			android:button="@android:color/transparent"
 			android:checked="true"
+			android:textAllCaps="true"
 			android:text="@string/search_form_tab_simple"/>
 
 	<com.devspark.robototextview.widget.RobotoRadioButton
@@ -29,5 +30,6 @@
 			android:layout_weight="1"
 			android:background="@drawable/search_type_radio_button_selector"
 			android:button="@android:color/transparent"
+			android:textAllCaps="true"
 			android:text="@string/search_form_tab_complex"/>
 </RadioGroup>

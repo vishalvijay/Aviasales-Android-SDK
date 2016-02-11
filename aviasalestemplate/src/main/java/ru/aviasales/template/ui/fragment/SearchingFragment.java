@@ -15,12 +15,10 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorListenerAdapter;
 import com.nineoldandroids.animation.ValueAnimator;
 
-import java.util.Map;
-
 import ru.aviasales.core.AviasalesSDK;
 import ru.aviasales.core.http.exception.ApiExceptions;
 import ru.aviasales.core.search.object.SearchData;
-import ru.aviasales.core.search.searching.OnSearchListener;
+import ru.aviasales.core.search.searching.SearchListener;
 import ru.aviasales.template.R;
 import ru.aviasales.template.filters.manager.FiltersManager;
 import ru.aviasales.template.utils.SortUtils;
@@ -49,7 +47,7 @@ public class SearchingFragment extends BaseFragment {
 		setupViews(rootView);
 		showActionBar(true);
 		setTextToActionBar(getString(R.string.searching_information));
-		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
+		setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
 
 		return rootView;
 	}
@@ -64,7 +62,7 @@ public class SearchingFragment extends BaseFragment {
 
 		switch (AviasalesSDK.getInstance().getSearchingTicketsStatus()) {
 			case SEARCHING:
-				AviasalesSDK.getInstance().setOnTicketsSearchListener(new OnSearchListener() {
+				AviasalesSDK.getInstance().setOnTicketsSearchListener(new SearchListener() {
 					@Override
 					public void onSuccess(SearchData searchData) {
 						SortUtils.resetSavedSortingType();

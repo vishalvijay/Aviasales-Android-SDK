@@ -164,7 +164,7 @@
 	<string name="ticket_flight_text">Flight</string>
 
 	<string name="search_form_complex_search_add">Add</string>
-	<string name="search_form_complex_search_remove">Remove</string>
+	<string name="search_form_complex_search_remove">Delete</string>
 
 	<string name="search_form_tab_simple">simple</string>
 	<string name="search_form_tab_complex">complex</string>

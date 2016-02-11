@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -78,7 +79,18 @@ public abstract class BaseFragment extends Fragment implements BackPressable {
 		showDialog();
 	}
 
+
+	protected void setDisplayOptions(int displayShowTitle) {
+		if (getActionBar() == null) {
+			return;
+		}
+		getActionBar().setDisplayOptions(displayShowTitle);
+	}
+
 	protected void showActionBar(boolean isShowActionBar) {
+		if (getActionBar() == null) {
+			return;
+		}
 		getActionBar().setShowHideAnimationEnabled(false);
 		if (isShowActionBar) {
 			getActionBar().show();
@@ -87,11 +99,15 @@ public abstract class BaseFragment extends Fragment implements BackPressable {
 		}
 	}
 
+	@Nullable
 	protected ActionBar getActionBar() {
 		return ((AppCompatActivity) getActivity()).getSupportActionBar();
 	}
 
 	protected void setTextToActionBar(String textToActionBar) {
+		if (getActionBar() == null) {
+			return;
+		}
 		getActionBar().setTitle(textToActionBar);
 	}
 
