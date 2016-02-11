@@ -33,7 +33,7 @@ uploadArchives {
 			repository(url: "http://android.aviasales.ru/repositories"){
 				authentication(userName: mavenUser, password: mavenPassword)
 			}
-			pom.version = "1.0"
+			pom.version = "1.1"
 			pom.artifactId = "aviasalesExpandedlistview"
 			pom.groupId = "ru.aviasales.expandedlistview"
 		}
