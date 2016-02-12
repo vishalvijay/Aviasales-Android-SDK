@@ -18,11 +18,11 @@ Learn more and complete integration with [Aviasales Android SDK Documentation](h
 More languages: [RUS] [Документация Aviasaels Android SDK](https://github.com/KosyanMedia/Aviasales-Android-SDK/wiki/%D0%94%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F-Aviasales-Android-SDK).
 
 
-## V2.0 Installation
+## Installation
 
 ### Add gradle dependencies 
 
-To add dependencies in the project use gradle:
+To add Aviasales SDK Library to your project use gradle:
 
 ```gradle
 repositories {
@@ -36,7 +36,7 @@ dependencies {
 
 
 
-If you are planning to use standalone Aviasales SDK, you can add it like this  :
+If you want to use complete Aviasales SDK Template, you can add it like this  :
 
 ```gradle
 repositories {
