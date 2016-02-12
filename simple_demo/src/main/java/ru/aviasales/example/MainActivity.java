@@ -12,12 +12,14 @@ import ru.aviasales.template.ui.fragment.AviasalesFragment;
 public class MainActivity extends AppCompatActivity {
 
 	private AviasalesFragment aviasalesFragment;
+	private final static String TRAVEL_PAYOUTS_MARKER = "your_travel_payouts_marker";
+	private final static String TRAVEL_PAYOUTS_TOKEN = "your_travel_payouts_token";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		AviasalesSDK.getInstance().init(this, new IdentificationData("74590", "9f16d617b9df8b2b6b5d0372711e9d6b"));
+		AviasalesSDK.getInstance().init(this, new IdentificationData(TRAVEL_PAYOUTS_MARKER, TRAVEL_PAYOUTS_TOKEN));
 		setContentView(R.layout.activity_main);
 
 		init(savedInstanceState);
