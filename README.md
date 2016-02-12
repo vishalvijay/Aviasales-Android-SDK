@@ -22,7 +22,7 @@ More languages: [RUS] [Документация Aviasaels Android SDK](https://g
 
 ### Add gradle dependencies 
 
-To add dependencies in the project use the gradle:
+To add dependencies in the project use gradle:
 
 ```gradle
 repositories {
@@ -30,9 +30,11 @@ repositories {
 }
 
 dependencies {
-    compile 'ru.aviasales.template:aviasalesSdkTemplate:2.0.1-sdk'
+    compile 'ru.aviasales.template:aviasalesSdk:2.0.5-sdk'
 }
 ```
+
+
 
 If you are planning to use standalone Aviasales SDK, you can add it like this  :
 
@@ -42,7 +44,7 @@ repositories {
 }
 
 dependencies {
-    compile 'ru.aviasales.template:aviasalesSdk:2.0.1-sdk'
+    compile 'ru.aviasales.template:aviasalesSdkTemplate:2.0.5-sdk'
 }
 ```
 
@@ -74,7 +76,9 @@ Add fragment to `MainActivity`
 
 ```java	
   public class MainActivity extends AppCompatActivity {
-  
+  	//Replace these variables on your TravelPayouts marker and token
+  	private final static String TRAVEL_PAYOUTS_MARKER = "your_travel_payouts_marker";
+	private final static String TRAVEL_PAYOUTS_TOKEN = "your_travel_payouts_token";
   	private AviasalesFragment aviasalesFragment;
     ...
   
@@ -82,12 +86,12 @@ Add fragment to `MainActivity`
   	protected void onCreate(Bundle savedInstanceState) {
   		super.onCreate(savedInstanceState);
   
-   // initialization of AviasalesSDK. Replace params in IdentificationData on your TravelPayouts marker and token
-  		AviasalesSDK.getInstance().init(this, new IdentificationData("74590", "9f16d617b9df8b2b6b5d0372711e9d6b")); 
+   		// Initialization of AviasalesSDK. 
+		AviasalesSDK.getInstance().init(this, new IdentificationData(TRAVEL_PAYOUTS_MARKER, TRAVEL_PAYOUTS_TOKEN));
   		setContentView(R.layout.activity_main);
      
   		initFragment();
-  
+ 	}
       ...
   
   	private void initFragment() {
@@ -104,7 +108,18 @@ Add fragment to `MainActivity`
   		fragmentTransaction.replace(R.id.fragment_place, aviasalesFragment, AviasalesFragment.TAG);
   		fragmentTransaction.commit();
   	}
+}
 ```
+
+### Specify permissions
+
+Don't forget to specify permissions `INTERNET` and `ACCESS_NETWORK_STATE` by adding `<uses-permission>` elements as children of the `<manifest>` element. 
+
+```xml
+	<uses-permission android:name="android.permission.INTERNET"/>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+```
+
 
 ### Adding onBackPressed 
 
@@ -123,17 +138,7 @@ For proper back navigation between aviasales child fragments add fragment `onBac
 	}
 ```
 
-### Specify permissions
-
-Don't forget to specify permissions `INTERNET` and `ACCESS_NETWORK_STATE` by adding `<uses-permission>` elements as children of the `<manifest>` element. 
-
-```xml
-	<uses-permission android:name="android.permission.INTERNET"/>
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-```
-
-
-## Customization
+### Customization
 
 For proper customization of Aviasales Template use `AviasalesTemplateTheme` or extend your theme from it. For example, in `AndroidManifest.xml` specify your theme
 
