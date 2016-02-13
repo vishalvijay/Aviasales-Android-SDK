@@ -13,8 +13,7 @@
 			android:layout_height="wrap_content"
 			android:layout_centerVertical="true"
 			android:layout_marginLeft="8dp"
-			android:src="@drawable/ic_ticket_plane"
-			android:tint="@color/colorAviasalesMain"/>
+			android:src="@drawable/ticket_plane"/>
 
 	<RelativeLayout
 			android:layout_width="match_parent"

@@ -13,7 +13,8 @@
 			android:id="@+id/iv_adult"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:src="@drawable/ic_adult"/>
+			android:src="@drawable/ic_adult"
+			android:tint="@color/colorAsPrimary"/>
 
 	<com.devspark.robototextview.widget.RobotoTextView
 			android:id="@+id/tv_adults"
@@ -31,7 +32,8 @@
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_vertical"
 			android:layout_marginTop="0.34dp"
-			android:src="@drawable/ic_child"/>
+			android:src="@drawable/ic_child"
+			android:tint="@color/colorAsPrimary"/>
 
 	<com.devspark.robototextview.widget.RobotoTextView
 			android:id="@+id/tv_children"
@@ -48,7 +50,8 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="0.34dp"
-			android:src="@drawable/ic_infant"/>
+			android:src="@drawable/ic_infant"
+			android:tint="@color/colorAsPrimary"/>
 
 	<com.devspark.robototextview.widget.RobotoTextView
 			android:id="@+id/tv_infants"

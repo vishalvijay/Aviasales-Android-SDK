@@ -7,7 +7,7 @@ android {
 	defaultConfig {
 		minSdkVersion 9
 		targetSdkVersion 23
-		versionCode 5
+		versionCode 6
 		versionName computeVersionName()
 	}
 	buildTypes {
@@ -28,7 +28,7 @@ dependencies {
 	compile fileTree(dir: 'libs', include: ['*.jar'])
 	compile 'com.android.support:appcompat-v7:23.1.1'
 
-	compile 'ru.aviasales:aviasalesSdk:2.0.5-sdk-beta'
+	compile 'ru.aviasales:aviasalesSdk:2.0.7-sdk'
 	compile 'ru.aviasales.expandedlistview:aviasalesExpandedlistview:1.1'
 	compile 'joda-time:joda-time:2.3'
 
@@ -70,5 +70,5 @@ task copyLanguageFolders() {
 }
 
 def computeVersionName() {
-	return "2.0.5-sdk"
+	return "2.0.6-sdk"
 }

@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
