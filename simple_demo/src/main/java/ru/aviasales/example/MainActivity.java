@@ -12,6 +12,8 @@ import ru.aviasales.template.ui.fragment.AviasalesFragment;
 public class MainActivity extends AppCompatActivity {
 
 	private AviasalesFragment aviasalesFragment;
+
+	// replace to your travel payout credentiials
 	private final static String TRAVEL_PAYOUTS_MARKER = "your_travel_payouts_marker";
 	private final static String TRAVEL_PAYOUTS_TOKEN = "your_travel_payouts_token";
 
