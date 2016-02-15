@@ -30,7 +30,7 @@ repositories {
 }
 
 dependencies {
-    compile 'ru.aviasales.template:aviasalesSdk:2.0.5-sdk'
+    compile 'ru.aviasales.template:aviasalesSdk:2.0.8-sdk'
 }
 ```
 
@@ -44,7 +44,7 @@ repositories {
 }
 
 dependencies {
-    compile 'ru.aviasales.template:aviasalesSdkTemplate:2.0.5-sdk'
+    compile 'ru.aviasales.template:aviasalesSdkTemplate:2.0.8-sdk'
 }
 ```
 
@@ -165,7 +165,19 @@ To change colors of your app override `colorAsPrimary`, `colorAsPrimaryDark` and
     <color name="colorAsPrimary">#3F51B5</color>
     <color name="colorAsPrimaryDark">#3F51B5</color>
     <color name="colorAviasalesMain">#3F51B5</color>
+```
 
+Also you can change background and price tag colors
+```xml
+	<color name="aviasales_results_background">@color/grey_background</color>
+	<color name="aviasales_search_form_background">@color/white</color>
+	<color name="aviasales_filters_background">@color/white</color>
+
+	<color name="aviasales_select_airport_background">@color/white</color>
+	<color name="aviasales_ticket_background">@color/grey_background</color>
+
+	<color name="aviasales_results_card_color">@color/white</color>
+	<color name="aviasales_price_color">@color/yellow_FDCC50</color>
 ```
 
 For more information see the [demo project](https://github.com/KosyanMedia/Aviasales-Android-SDK/tree/master/demo)
