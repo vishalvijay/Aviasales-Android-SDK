@@ -1,50 +1,45 @@
 package ru.aviasales.template.filters;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import ru.aviasales.core.search.object.AirlineData;
+import ru.aviasales.core.search.object.Flight;
+import ru.aviasales.expandedlistview.view.BaseCheckedText;
 
-public class AirlinesFilter implements Parcelable {
+public class AirlinesFilter extends BaseListFilter implements Serializable {
 
-	private List<CheckedAirline> airlineList;
+	private final List<FilterCheckedAirline> airlineList = new ArrayList<>();
 
 	public AirlinesFilter() {
-		airlineList = new ArrayList<CheckedAirline>();
+
 	}
 
 	public AirlinesFilter(AirlinesFilter airlinesFilter) {
 		if (airlinesFilter.getAirlineList() == null) return;
-		airlineList = new ArrayList<CheckedAirline>();
 		for (int i = 0; i < airlinesFilter.getAirlineList().size(); i++) {
-			airlineList.add(new CheckedAirline(airlinesFilter.getAirlineList().get(i)));
+			airlineList.add(new FilterCheckedAirline(airlinesFilter.getAirlineList().get(i)));
 		}
 	}
 
 	public void addAirline(String iata) {
-		airlineList.add(new CheckedAirline(iata));
+		airlineList.add(new FilterCheckedAirline(iata));
 	}
 
-	public List<CheckedAirline> getAirlineList() {
+	public List<FilterCheckedAirline> getAirlineList() {
 		return airlineList;
 	}
 
-	public void setAirlineList(List<CheckedAirline> airlineList) {
-		this.airlineList = airlineList;
-	}
-
 	public void sortByName() {
-		Collections.sort(airlineList, CheckedAirline.sortByName);
+		Collections.sort(airlineList, BaseCheckedText.nameComparator);
 	}
 
-	public void setAirlinesFromGsonClass(Map<String, AirlineData> airlineMap) {
+	public void addAirlinesData(Map<String, AirlineData> airlineMap) {
 		for (String iata : airlineMap.keySet()) {
-			CheckedAirline airline = new CheckedAirline(iata);
+			FilterCheckedAirline airline = new FilterCheckedAirline(iata);
 			if (airlineMap.get(iata) != null && airlineMap.get(iata).getName() != null) {
 				airline.setName(airlineMap.get(iata).getName());
 			} else {
@@ -54,13 +49,41 @@ public class AirlinesFilter implements Parcelable {
 			if (airlineMap.get(iata) != null && airlineMap.get(iata).getAverageRate() != null) {
 				airline.setRating(airlineMap.get(iata).getAverageRate());
 			}
-			airlineList.add(airline);
+			if (!airlineList.contains(airline)) {
+				airlineList.add(airline);
+			}
 		}
 		sortByName();
 	}
 
+	public void addAirlinesData(Map<String, AirlineData> airlineMap, List<Flight> flights) {
+		for (String iata : airlineMap.keySet()) {
+			FilterCheckedAirline airline = toAirline(airlineMap, iata);
+
+			for (Flight flight : flights) {
+				if (flight.getOperatingCarrier().equalsIgnoreCase(iata) && !airlineList.contains(airline)) {
+					airlineList.add(airline);
+				}
+			}
+		}
+	}
+
+	private FilterCheckedAirline toAirline(Map<String, AirlineData> airlineMap, String iata) {
+		FilterCheckedAirline airline = new FilterCheckedAirline(iata);
+		if (airlineMap.get(iata) != null && airlineMap.get(iata).getName() != null) {
+			airline.setName(airlineMap.get(iata).getName());
+		} else {
+			airline.setName(iata);
+		}
+
+		if (airlineMap.get(iata) != null && airlineMap.get(iata).getAverageRate() != null) {
+			airline.setRating(airlineMap.get(iata).getAverageRate());
+		}
+		return airline;
+	}
+
 	public boolean isActual(String airline) {
-		for (CheckedAirline checkedAirline : airlineList) {
+		for (FilterCheckedAirline checkedAirline : airlineList) {
 			if (checkedAirline.getAirline().equals(airline) && !checkedAirline.isChecked()) {
 				return false;
 			}
@@ -68,43 +91,9 @@ public class AirlinesFilter implements Parcelable {
 		return true;
 	}
 
-	public boolean isActive() {
-		for (CheckedAirline airline : airlineList) {
-			if (!airline.isChecked()) {
-				return true;
-			}
-		}
-		return false;
+	@Override
+	public List<FilterCheckedAirline> getCheckedTextList() {
+		return airlineList;
 	}
 
-	public void clearFilter() {
-		for (CheckedAirline airline : airlineList) {
-			airline.setChecked(true);
-		}
-	}
-
-	public AirlinesFilter(Parcel in) {
-		if (airlineList == null) {
-			airlineList = new ArrayList<CheckedAirline>();
-		}
-		in.readTypedList(airlineList, CheckedAirline.CREATOR);
-	}
-
-	public int describeContents() {
-		return 0;
-	}
-
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeTypedList(airlineList);
-	}
-
-	public static final Creator<AirlinesFilter> CREATOR = new Creator<AirlinesFilter>() {
-		public AirlinesFilter createFromParcel(Parcel in) {
-			return new AirlinesFilter(in);
-		}
-
-		public AirlinesFilter[] newArray(int size) {
-			return new AirlinesFilter[size];
-		}
-	};
 }

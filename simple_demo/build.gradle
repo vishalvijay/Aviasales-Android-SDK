@@ -1,0 +1,42 @@
+apply plugin: 'com.android.application'
+
+
+android {
+	compileSdkVersion 23
+	buildToolsVersion '23.0.2'
+
+	defaultConfig {
+		applicationId "ru.aviasales.example"
+		minSdkVersion 11
+		targetSdkVersion 23
+		versionCode 1
+		versionName "1.0.1"
+	}
+	buildTypes {
+		debug {
+			ext.betaDistributionNotifications = true
+			ext.betaDistributionGroupAliases = "as-android-dev"
+		}
+
+		release {
+			minifyEnabled false
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+		}
+	}
+	repositories {
+		jcenter()
+		mavenCentral()
+		maven { url 'http://android.aviasales.ru/repositories/' }
+
+	}
+}
+
+dependencies {
+	compile fileTree(dir: 'libs', include: ['*.jar'])
+
+	compile project(':aviasalestemplate')
+
+	//for compiling from maven repository
+	//compile 'ru.aviasales.template:aviasalesSdkTemplate:2.0.8-sdk'
+	compile 'com.android.support:appcompat-v7:23.1.1'
+}

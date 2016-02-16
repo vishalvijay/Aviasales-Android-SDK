@@ -14,10 +14,10 @@ public class CurrencyUtils {
 	private static final String PREF_CURRENCY_CODE = "currency_code";
 
 	public static Map<String, Double> getCurrencyRates() {
-		return AviasalesSDK.getInstance().getSearchData().getCurrencyRates();
+		return AviasalesSDK.getInstance().getSearchData().getCurrencies();
 	}
 
-	public static long getPriceInAppCurrency(int priceInDefaultCur, String appCurCode, Map<String, Double> currencies) {
+	public static long getPriceInAppCurrency(long priceInDefaultCur, String appCurCode, Map<String, Double> currencies) {
 		if (currencies == null) return 0;
 		long price = priceInDefaultCur;
 		if (!appCurCode.equalsIgnoreCase(Defined.RESPONSE_DEFAULT_CURRENCY)) {
@@ -39,11 +39,11 @@ public class CurrencyUtils {
 
 
 	public static List<Currency> getCurrenciesList() {
-		Map<String,String> currencyCodes = Defined.getCurrenciesArray();
+		Map<String, String> currencyCodes = Defined.getCurrenciesArray();
 
 		List<Currency> currencies = new ArrayList<Currency>();
 
-		for (Map.Entry<String,String> currencyEntry : currencyCodes.entrySet()) {
+		for (Map.Entry<String, String> currencyEntry : currencyCodes.entrySet()) {
 
 			Currency currency = new Currency();
 			currency.setCode(currencyEntry.getKey());

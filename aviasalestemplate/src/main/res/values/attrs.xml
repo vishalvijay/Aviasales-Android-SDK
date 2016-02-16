@@ -41,4 +41,16 @@
 		<enum name="infants" value="2"/>
 	</attr>
 
+	<declare-styleable name="ComplexInfoBlockView">
+		<attr name="type"
+		      format="enum">
+			<enum name="location_departure"
+			      value="0"/>
+			<enum name="location_arrival"
+			      value="1"/>
+			<enum name="date"
+			      value="2"/>
+		</attr>
+	</declare-styleable>
+
 </resources>

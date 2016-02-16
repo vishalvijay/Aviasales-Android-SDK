@@ -1,5 +1,6 @@
 package ru.aviasales.template.ui.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -17,9 +18,10 @@ import com.nineoldandroids.animation.ValueAnimator;
 import ru.aviasales.core.AviasalesSDK;
 import ru.aviasales.core.http.exception.ApiExceptions;
 import ru.aviasales.core.search.object.SearchData;
-import ru.aviasales.core.search.searching.OnTicketsSearchListener;
+import ru.aviasales.core.search.searching.SearchListener;
 import ru.aviasales.template.R;
 import ru.aviasales.template.filters.manager.FiltersManager;
+import ru.aviasales.template.utils.SortUtils;
 
 public class SearchingFragment extends BaseFragment {
 
@@ -27,7 +29,7 @@ public class SearchingFragment extends BaseFragment {
 	public static final int PROGRESS_BAR_LENGTH = 1000;
 
 	private ProgressBar progressBar;
-	private boolean isStopped = false;
+	private boolean isPaused = false;
 
 	public static SearchingFragment newInstance() {
 		return new SearchingFragment();
@@ -45,7 +47,7 @@ public class SearchingFragment extends BaseFragment {
 		setupViews(rootView);
 		showActionBar(true);
 		setTextToActionBar(getString(R.string.searching_information));
-		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
+		setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
 
 		return rootView;
 	}
@@ -60,10 +62,12 @@ public class SearchingFragment extends BaseFragment {
 
 		switch (AviasalesSDK.getInstance().getSearchingTicketsStatus()) {
 			case SEARCHING:
-				AviasalesSDK.getInstance().setOnTicketsSearchListener(new OnTicketsSearchListener() {
+				AviasalesSDK.getInstance().setOnTicketsSearchListener(new SearchListener() {
 					@Override
 					public void onSuccess(SearchData searchData) {
+						SortUtils.resetSavedSortingType();
 						FiltersManager.getInstance().initFilter(searchData, getActivity());
+
 						onSearchSuccessFinish();
 					}
 
@@ -122,35 +126,40 @@ public class SearchingFragment extends BaseFragment {
 			showResults();
 		}
 
-		ValueAnimator progressAnimator = ValueAnimator.ofInt(progressBar.getProgress(), PROGRESS_BAR_LENGTH);
-		progressAnimator.setDuration(ANIMATION_FINISH_DURATION);
-		progressAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-		progressAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-			@Override
-			public void onAnimationUpdate(ValueAnimator animation) {
-				int progress = (Integer) animation.getAnimatedValue();
-				progressBar.setProgress(progress);
-			}
-		});
-		progressAnimator.addListener(new AnimatorListenerAdapter() {
-			@Override
-			public void onAnimationEnd(Animator animation) {
-				showResults();
-			}
-		});
-		progressAnimator.start();
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			ValueAnimator progressAnimator = ValueAnimator.ofInt(progressBar.getProgress(), PROGRESS_BAR_LENGTH);
+			progressAnimator.setDuration(ANIMATION_FINISH_DURATION);
+			progressAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+			progressAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+				@Override
+				public void onAnimationUpdate(ValueAnimator animation) {
+					int progress = (Integer) animation.getAnimatedValue();
+					progressBar.setProgress(progress);
+				}
+			});
+			progressAnimator.addListener(new AnimatorListenerAdapter() {
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					showResults();
+				}
+			});
+			progressAnimator.start();
+		} else {
+			showResults();
+		}
+
 	}
 
 	private void showToastAndReturnToSearchForm(String toast) {
 		if (getActivity() == null) return;
 		Toast.makeText(getActivity(), toast, Toast.LENGTH_LONG).show();
-		if (!isStopped) {
+		if (!isPaused) {
 			getActivity().onBackPressed();
 		}
 	}
 
 	private void showResults() {
-		if (!isStopped) {
+		if (!isPaused) {
 			popFragmentFromBackStack();
 			startFragment(ResultsFragment.newInstance(), true);
 		}
@@ -159,14 +168,12 @@ public class SearchingFragment extends BaseFragment {
 	@Override
 	public void onStop() {
 		super.onStop();
-		isStopped = true;
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
-
-		isStopped = false;
+	public void onResume() {
+		super.onResume();
+		isPaused = false;
 		switch (AviasalesSDK.getInstance().getSearchingTicketsStatus()) {
 			case CANCELED:
 			case ERROR:
@@ -176,5 +183,11 @@ public class SearchingFragment extends BaseFragment {
 				showResults();
 				break;
 		}
+	}
+
+	@Override
+	public void onPause() {
+		isPaused = true;
+		super.onPause();
 	}
 }

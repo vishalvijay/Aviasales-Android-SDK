@@ -10,14 +10,14 @@ public class OldAndroidDatePickerDialog extends DatePickerDialog {
 
 	private Calendar minDate;
 	private Calendar maxDate;
-	private java.text.DateFormat mTitleDateFormat;
+	private java.text.DateFormat titleDateFormat;
 
 	public OldAndroidDatePickerDialog(Context context, OnDateSetListener callBack,
 	                                  int year, int monthOfYear, int dayOfMonth, Calendar minDate, Calendar maxDate) {
 		super(context,callBack,year,monthOfYear,dayOfMonth);
 		this.minDate=minDate;
 		this.maxDate=maxDate;
-		mTitleDateFormat = java.text.DateFormat.getDateInstance(java.text.DateFormat.FULL);
+		titleDateFormat = java.text.DateFormat.getDateInstance(java.text.DateFormat.FULL);
 	}
 
 	@Override
@@ -28,14 +28,14 @@ public class OldAndroidDatePickerDialog extends DatePickerDialog {
 		if(minDate!=null && minDate.after(newDate))   {
 			view.init(minDate.get(Calendar.YEAR),minDate.get(Calendar.MONTH),
 					minDate.get(Calendar.DAY_OF_MONTH),this);
-			setTitle(mTitleDateFormat.format(minDate.getTime()));
+			setTitle(titleDateFormat.format(minDate.getTime()));
 		}       else if(maxDate!=null && maxDate.before(newDate)) {
 			view.init(maxDate.get(Calendar.YEAR),maxDate.get(Calendar.MONTH),
 					maxDate.get(Calendar.DAY_OF_MONTH),this);
-			setTitle(mTitleDateFormat.format(maxDate.getTime()));
+			setTitle(titleDateFormat.format(maxDate.getTime()));
 		}      else {
 			view.init(year, month, day,this);
-			setTitle(mTitleDateFormat.format(newDate.getTime()));
+			setTitle(titleDateFormat.format(newDate.getTime()));
 		}
 	}
 }

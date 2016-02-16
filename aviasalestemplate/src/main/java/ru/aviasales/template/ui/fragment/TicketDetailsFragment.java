@@ -6,30 +6,31 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.view.*;
-import android.widget.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Map;
 
 import ru.aviasales.core.AviasalesSDK;
 import ru.aviasales.core.buy.object.BuyData;
-import ru.aviasales.core.buy.query.OnBuyProcessListener;
+import ru.aviasales.core.buy.query.BuyProcessListener;
 import ru.aviasales.core.http.exception.ApiExceptions;
 import ru.aviasales.core.search.object.AirlineData;
 import ru.aviasales.core.search.object.AirportData;
 import ru.aviasales.core.search.object.GateData;
+import ru.aviasales.core.search.object.Proposal;
 import ru.aviasales.core.search.object.SearchData;
-import ru.aviasales.core.search.object.TicketData;
 import ru.aviasales.core.search.params.SearchParams;
-import ru.aviasales.core.search.searching.OnTicketsSearchListener;
+import ru.aviasales.core.search.searching.SimpleSearchListener;
 import ru.aviasales.template.BrowserActivity;
 import ru.aviasales.template.R;
-import ru.aviasales.template.ticket.TicketManager;
-import ru.aviasales.template.ui.adapter.AgencySpinnerAdapter;
+import ru.aviasales.template.proposal.ProposalManager;
 import ru.aviasales.template.ui.dialog.ProgressDialogWindow;
+import ru.aviasales.template.ui.view.AgencySpinner;
 import ru.aviasales.template.ui.view.TicketView;
 import ru.aviasales.template.utils.CurrencyUtils;
 import ru.aviasales.template.utils.DateUtils;
@@ -38,10 +39,10 @@ import ru.aviasales.template.utils.Utils;
 
 public class TicketDetailsFragment extends BaseFragment {
 
-	private final String UPDATE_DIALOG_TAG = "update_dialog_tag";
-	private TicketData ticketData;
+	private final static int VALID_SEARCH_CACHE_TIME = 15 * 60 * 1000;
 
-	private Spinner agencySpinner;
+	private final String UPDATE_DIALOG_TAG = "update_dialog_tag";
+	private Proposal proposalData;
 
 	private AlertDialog updateDialog;
 
@@ -61,57 +62,44 @@ public class TicketDetailsFragment extends BaseFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.ticket_fragment, container, false);
 
-		setAgencySpinnerInActionBar();
 
-		ticketData = getTicketData();
+		proposalData = getProposalData();
 
-		setupViews(layout);
+		setUpViews(layout);
 
 		return layout;
 	}
 
 
-	private void setAgencySpinnerInActionBar() {
-		final FrameLayout spinnerLayout = (FrameLayout) LayoutInflater.from(getActivity()).inflate(R.layout.ticket_agency_spinner, null);
-		agencySpinner = (Spinner) spinnerLayout.findViewById(R.id.spinner);
-		spinnerLayout.findViewById(R.id.fl_spinner_container).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				agencySpinner.performClick();
-			}
-		});
-		agencySpinner.setClickable(false);
-		agencySpinner.setFocusable(false);
-		agencySpinner.setFocusableInTouchMode(false);
-		final TextView spinnerTextView = (TextView) spinnerLayout.findViewById(R.id.tv_spinner);
-		final AgencySpinnerAdapter agencyAdapter = new AgencySpinnerAdapter();
-		if (TicketManager.getInstance().getAgenciesCodes().size() == 1) {
+	private void setUpAgencySpinner(ViewGroup layout) {
+		AgencySpinner agencySpinner = (AgencySpinner) layout.findViewById(R.id.agency_spinner);
+
+		String agencyName = ProposalManager.getInstance().getAgencyName(ProposalManager.getInstance().getAgenciesCodes().get(0));
+
+		TextView agencyNameTextView = (TextView) layout.findViewById(R.id.agency_text_name);
+		agencyNameTextView.setText(String.format(getString(R.string.ticket_title_agency), agencyName));
+
+		if (ProposalManager.getInstance().getAgenciesCodes().size() == 1) {
 			agencySpinner.setVisibility(View.GONE);
-			spinnerTextView.setVisibility(View.VISIBLE);
-			spinnerTextView.setText(TicketManager.getInstance().getAgencyName(TicketManager.getInstance().getAgenciesCodes().get(0)));
 		} else {
 			agencySpinner.setVisibility(View.VISIBLE);
-			spinnerTextView.setVisibility(View.GONE);
 
-			agencyAdapter.setOnAgencyClickListener(new AgencySpinnerAdapter.OnAgencyClickListener() {
+			agencySpinner.setupAgencies(ProposalManager.getInstance().getAgenciesCodes(), ProposalManager.getInstance().getGates());
+			agencySpinner.setOnAgencyClickedListener(new AgencySpinner.OnAgencyClickedListener() {
 				@Override
 				public void onAgencyClick(String agency, int position) {
-					hideSpinner();
 					launchBrowser(agency);
 				}
 			});
-			agencySpinner.setAdapter(agencyAdapter);
 		}
 
-		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-		getActionBar().setCustomView(spinnerLayout);
 	}
 
 	public interface OnAgencySelected {
 		void onClick(View view, boolean isAdditional);
 	}
 
-	private void setupViews(ViewGroup layout) {
+	private void setUpViews(ViewGroup layout) {
 		final OnAgencySelected buyListener = new OnAgencySelected() {
 			@Override
 			public void onClick(View view, boolean isAdditional) {
@@ -121,23 +109,25 @@ public class TicketDetailsFragment extends BaseFragment {
 			}
 		};
 
-		String price = StringUtils.formatPriceInAppCurrency(TicketManager.getInstance().getBestAgencyPrice(), getActivity());
+		String price = StringUtils.formatPriceInAppCurrency(ProposalManager.getInstance().getBestAgencyPrice(), getActivity());
 		String currency = CurrencyUtils.getAppCurrency(getActivity());
 
 		setBuyBtn(layout, buyListener);
 
-		setupBestPrice(layout, price, currency);
+		setUpBestPrice(layout, price, currency);
 
-		setupTicketView(layout);
+		setUpTicketView(layout);
+
+		setUpAgencySpinner(layout);
 
 	}
 
-	private void setupTicketView(ViewGroup layout) {
+	private void setUpTicketView(ViewGroup layout) {
 		TicketView ticketView = (TicketView) layout.findViewById(R.id.ticket);
-		ticketView.setUpViews(getActivity(), ticketData);
+		ticketView.setUpViews(getActivity(), proposalData, getSearchParams(), getSearchData());
 	}
 
-	private void setupBestPrice(ViewGroup layout, String price, String currency) {
+	private void setUpBestPrice(ViewGroup layout, String price, String currency) {
 		TextView tvPrice = (TextView) layout.findViewById(R.id.tv_price);
 		TextView tvCurrency = (TextView) layout.findViewById(R.id.tv_currency);
 
@@ -147,7 +137,7 @@ public class TicketDetailsFragment extends BaseFragment {
 
 	private void setBuyBtn(ViewGroup layout, final OnAgencySelected buyListener) {
 		Button buyButton = (Button) layout.findViewById(R.id.btn_buy);
-		buyButton.setTag(TicketManager.getInstance().getAgenciesCodes().get(0));
+		buyButton.setTag(ProposalManager.getInstance().getAgenciesCodes().get(0));
 		buyButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -169,7 +159,7 @@ public class TicketDetailsFragment extends BaseFragment {
 	}
 
 	public GateData getGateById(String id) {
-		for (GateData gateData : getGatesInfo()) {
+		for (GateData gateData : getGatesInfo().values()) {
 			if (gateData.getId().equals(id)) {
 				return gateData;
 			}
@@ -181,7 +171,7 @@ public class TicketDetailsFragment extends BaseFragment {
 		if (checkTimeAndShowDialogIfNeed()) {
 			return;
 		}
-		AviasalesSDK.getInstance().startBuyProcess(ticketData, gateKey, listener);
+		AviasalesSDK.getInstance().startBuyProcess(proposalData, gateKey, listener);
 		createProgressDialog();
 	}
 
@@ -214,7 +204,7 @@ public class TicketDetailsFragment extends BaseFragment {
 	}
 
 	protected int getExpTimeInMls() {
-		return getSearchData().getSearchCacheTime() * 60 * 1000;
+		return VALID_SEARCH_CACHE_TIME;
 	}
 
 	protected DialogInterface.OnClickListener getReturnToSearchFormListener() {
@@ -229,9 +219,9 @@ public class TicketDetailsFragment extends BaseFragment {
 	protected DialogInterface.OnClickListener getUpdateSearchListener() {
 		return new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				if (DateUtils.isDateBeforeDateShiftLine(getSearchParams().getDepartCalendarObject())) {
+				if (DateUtils.isDateBeforeDateShiftLine(getSearchParams().getSegments().get(0).getDate())) {
 					Toast.makeText(getActivity(), getString(R.string.ticket_refresh_dates_passed), Toast.LENGTH_SHORT).show();
-					startFragment(SearchFromFragment.newInstance(), true);
+					startFragment(SearchFormFragment.newInstance(), true);
 				} else {
 
 					if (!Utils.isOnline(getActivity())) {
@@ -240,23 +230,8 @@ public class TicketDetailsFragment extends BaseFragment {
 						return;
 					}
 
-					AviasalesSDK.getInstance().startTicketsSearch(AviasalesSDK.getInstance().getSearchParamsOfLastSearch(), new OnTicketsSearchListener() {
-						@Override
-						public void onSuccess(SearchData searchData) {
-						}
+					AviasalesSDK.getInstance().startTicketsSearch(AviasalesSDK.getInstance().getSearchParamsOfLastSearch(), new SimpleSearchListener() {
 
-						@Override
-						public void onProgressUpdate(int i) {
-
-						}
-
-						@Override
-						public void onCanceled() {
-						}
-
-						@Override
-						public void onError(int i, int i2, String s) {
-						}
 					});
 
 					popBackStackInclusive(ResultsFragment.class.getSimpleName());
@@ -284,10 +259,10 @@ public class TicketDetailsFragment extends BaseFragment {
 	}
 
 	protected long getSearchTime() {
-		return getSearchData().getLastSearchFinishTime();
+		return getSearchData().getSearchCompletionTime();
 	}
 
-	protected List<GateData> getGatesInfo() {
+	protected Map<String, GateData> getGatesInfo() {
 		return getSearchData().getGatesInfo();
 	}
 
@@ -295,8 +270,8 @@ public class TicketDetailsFragment extends BaseFragment {
 		return AviasalesSDK.getInstance().getSearchData();
 	}
 
-	protected TicketData getTicketData() {
-		return TicketManager.getInstance().getTicket();
+	protected Proposal getProposalData() {
+		return ProposalManager.getInstance().getProposal();
 	}
 
 	protected SearchParams getSearchParams() {
@@ -322,7 +297,7 @@ public class TicketDetailsFragment extends BaseFragment {
 		}
 	}
 
-	private OnBuyProcessListener listener = new OnBuyProcessListener() {
+	private BuyProcessListener listener = new BuyProcessListener() {
 		@Override
 		public void onSuccess(BuyData data, String gateKey) {
 			dismissDialog();
@@ -389,20 +364,10 @@ public class TicketDetailsFragment extends BaseFragment {
 		getActivity().startActivity(intent);
 	}
 
-	private void hideSpinner(){
-		try {
-			Method method = Spinner.class.getDeclaredMethod("onDetachedFromWindow");
-			method.setAccessible(true);
-			method.invoke(agencySpinner);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 
-		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB){
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
 			if (updateDialog != null && updateDialog.isShowing()) {
 				removedDialogFragmentTag = UPDATE_DIALOG_TAG;
 			}

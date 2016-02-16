@@ -89,6 +89,14 @@
 		<item name="android:textColor">@color/grey_37474F</item>
 	</style>
 
+	<style name="search.title_button">
+		<item name="android:textSize">14dp</item>
+		<item name="android:textAllCaps">false</item>
+		<item name="android:gravity">center</item>
+		<item name="typeface">roboto_regular</item>
+		<item name="android:textColor">@color/grey_626262</item>
+	</style>
+
 	<style name="CustomDialog" parent="Base.Theme.AppCompat.Light.Dialog">
 		<item name="android:windowBackground">@drawable/rounded_dialog</item>
 		<item name="android:windowNoTitle">true</item>
@@ -194,4 +202,24 @@
 		<item name="android:progressDrawable">@drawable/filters_seekbar</item>
 		<item name="android:thumb">@drawable/seek_bar_thumb</item>
 	</style>
+
+	<declare-styleable name="RangeBar">
+		<attr name="absoluteMinValue"
+		      format="integer|float"/>
+		<attr name="absoluteMaxValue"
+		      format="integer|float"/>
+		<attr name="singleThumb"
+		      format="boolean"/>
+		<attr name="backgroundColor"
+		      format="color"/>
+		<attr name="progressColor"
+		      format="color"/>
+		<attr name="thumbColor"
+		      format="color"/>
+		<attr name="thumbRippleColor"
+		      format="color"/>
+		<attr name="disabledColor"
+		      format="color"/>
+	</declare-styleable>
+
 </resources>

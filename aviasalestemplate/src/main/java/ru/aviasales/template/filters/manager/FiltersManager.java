@@ -8,42 +8,42 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import ru.aviasales.core.AviasalesSDK;
+import ru.aviasales.core.search.object.Proposal;
 import ru.aviasales.core.search.object.SearchData;
-import ru.aviasales.core.search.object.TicketData;
-import ru.aviasales.template.filters.GeneralFilter;
-import ru.aviasales.template.filters.PreInitializeFilters;
-import ru.aviasales.template.ticket.TicketManager;
+import ru.aviasales.template.filters.FiltersSet;
+import ru.aviasales.template.filters.OpenJawFiltersSet;
+import ru.aviasales.template.filters.SimpleSearchFilters;
+import ru.aviasales.template.proposal.ProposalManager;
 
 public class FiltersManager {
-	private static volatile FiltersManager sInstance;
+	private static volatile FiltersManager instance = new FiltersManager();
 
-	public interface OnFilterResultListener {
-		void onFilteringFinished(List<TicketData> filteredTicketsData);
-	}
-
-	private GeneralFilter mFilter;
+	private FiltersSet filtersSet;
 
 	private ExecutorService pool;
 
 	private Handler mHandler = new Handler();
 	private OnFilterResultListener mOnFilterResultsListener;
 
-	private List<TicketData> mFilteredTickets;
+	private List<Proposal> filteredProposals;
 
 	public static FiltersManager getInstance() {
-		if (sInstance == null) {
-			synchronized (FiltersManager.class) {
-				if (sInstance == null) {
-					sInstance = new FiltersManager();
-				}
-			}
-		}
-		return sInstance;
+		return instance;
 	}
 
+	public void setFilteredProposals(List<Proposal> filteredProposals) {
+		this.filteredProposals = filteredProposals;
+	}
 
-	public void filterSearchData(final SearchData searchData, OnFilterResultListener listener) {
+	public void setFiltersSet(FiltersSet filtersSet) {
+		this.filtersSet = filtersSet;
+	}
+
+	public interface OnFilterResultListener {
+		void onFilteringFinished(List<Proposal> filteredTicketsData);
+	}
+
+	public void filterSearchData(final FiltersSet localFiltersSet, final SearchData searchData, OnFilterResultListener listener) {
 
 		mOnFilterResultsListener = listener;
 
@@ -52,8 +52,7 @@ public class FiltersManager {
 		pool.submit(new Runnable() {
 			@Override
 			public void run() {
-
-				List<TicketData> filteredTickets = mFilter.applyFilters(searchData);
+				List<Proposal> filteredTickets = localFiltersSet.applyFilters(searchData);
 				mHandler.post(new EndRunnable(filteredTickets));
 
 			}
@@ -67,55 +66,62 @@ public class FiltersManager {
 		}
 	}
 
-	public void setOnFilterResultsListener(OnFilterResultListener onFilterResultsListener){
+	public void setOnFilterResultsListener(OnFilterResultListener onFilterResultsListener) {
 		this.mOnFilterResultsListener = onFilterResultsListener;
 	}
 
-	public List<TicketData> getFilteredTickets(){
-		return mFilteredTickets;
+	public List<Proposal> getFilteredProposals() {
+		return filteredProposals;
 	}
 
 	public class EndRunnable implements Runnable {
 
-		public EndRunnable(List<TicketData> filteredTickets) {
-			mFilteredTickets = filteredTickets;
+		private List<Proposal> filteredTickets;
+
+		public EndRunnable(List<Proposal> filteredTickets) {
+			this.filteredTickets = filteredTickets;
 		}
 
 		@Override
 		public void run() {
 			if (mOnFilterResultsListener != null) {
-				mOnFilterResultsListener.onFilteringFinished(mFilteredTickets);
+				mOnFilterResultsListener.onFilteringFinished(filteredTickets);
 			}
 		}
 	}
 
-	public GeneralFilter getFilters() {
-		return mFilter;
+	public FiltersSet getFiltersSet() {
+		return filtersSet;
 	}
 
-	public void initFilter(final SearchData searchData,final Context context) {
+	public void initFilter(final SearchData searchData, final Context context) {
 
 		createPool();
 
-		mFilteredTickets = AviasalesSDK.getInstance().getSearchData().getTickets();
+		filteredProposals = searchData.getProposals();
+
 		pool.submit(new Runnable() {
 			@Override
 			public void run() {
 				if (context == null) {
 					return;
 				}
-				mFilter = new GeneralFilter(context);
+				if (searchData.getProposals() != null) {
 
-				if (searchData.getTickets() != null) {
+					if (searchData.isComplexSearch()) {
+						filtersSet = new OpenJawFiltersSet(context);
+					} else {
+						filtersSet = new SimpleSearchFilters(context);
+					}
 
-					PreInitializeFilters preInitializeFilters = new PreInitializeFilters(context, searchData);
-					preInitializeFilters.setupFilters();
-					mFilter. init(searchData, preInitializeFilters);
+					filtersSet.initMinAndMaxValues(context, searchData, searchData.getProposals());
+					filtersSet.clearFilters();
 
-					List<TicketData> filteredTickets = mFilter.applyFilters(searchData);
-					Collections.sort(filteredTickets, TicketManager.getInstance().getTicketComparator());
+					List<Proposal> filteredTickets = filtersSet.applyFilters(searchData);
+					Collections.sort(filteredTickets, ProposalManager.getInstance().getProposalComparator());
 
-					mFilteredTickets = filteredTickets;
+					filteredProposals = filteredTickets;
+
 				}
 
 			}

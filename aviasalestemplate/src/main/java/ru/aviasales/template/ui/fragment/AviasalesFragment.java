@@ -13,26 +13,25 @@ import android.view.ViewGroup;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
-import ru.aviasales.core.AviasalesSDK;
 import ru.aviasales.core.search_airports.object.PlaceData;
 import ru.aviasales.template.R;
-import ru.aviasales.template.ui.listener.AviasalesInterface;
+import ru.aviasales.template.ui.listener.AviasalesImpl;
 import ru.aviasales.template.ui.model.SearchFormData;
 
-public class AviasalesFragment extends Fragment implements AviasalesInterface {
+public class AviasalesFragment extends Fragment implements AviasalesImpl {
 
 	public final static String TAG = "aviasales_fragment";
-	public final static String TAG_CHILD = "aviasales_child_fragment";
+	private final static String TAG_CHILD = "aviasales_child_fragment";
 
-	public final static int CACHE_SIZE = 20 * 1024 * 1024;
-	public final static int CACHE_FILE_COUNT = 100;
-	public final static int MEMORY_CACHE_SIZE = 5 * 1024 * 1024;
+	private final static int CACHE_SIZE = 20 * 1024 * 1024;
+	private final static int CACHE_FILE_COUNT = 100;
+	private final static int MEMORY_CACHE_SIZE = 5 * 1024 * 1024;
 
-	private FragmentManager mFragmentManager;
+	private FragmentManager fragmentManager;
 
-	private SearchFormData mSearchFormData;
+	private SearchFormData searchFormData;
 
-	private View mView;
+	private View rootView;
 
 	public static Fragment newInstance() {
 		return new AviasalesFragment();
@@ -41,28 +40,26 @@ public class AviasalesFragment extends Fragment implements AviasalesInterface {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mSearchFormData = new SearchFormData(getActivity());
-		AviasalesSDK.getInstance().init(getActivity());
-		initImageLoader(getActivity());
+		searchFormData = new SearchFormData(getActivity().getApplicationContext());
+		initImageLoader(getActivity().getApplicationContext());
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-		mView = inflater.inflate(R.layout.aviasales_fragment_layout, null);
+		rootView = inflater.inflate(R.layout.aviasales_fragment_layout, null);
 
-
-		return mView;
+		return rootView;
 	}
 
 	public FragmentManager getAviasalesFragmentManager() {
-		return mFragmentManager;
+		return fragmentManager;
 	}
 
 	public void startFragment(BaseFragment fragment, boolean shouldAddToBackStack) {
 
-		FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-		fragmentTransaction.replace(R.id.fragment_child_place, (Fragment) fragment, fragment.getClass().getSimpleName());
+		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+		fragmentTransaction.replace(R.id.fragment_child_place, fragment, fragment.getClass().getSimpleName());
 		if (shouldAddToBackStack) {
 			fragmentTransaction.addToBackStack(fragment.getClass().getSimpleName());
 		}
@@ -70,7 +67,7 @@ public class AviasalesFragment extends Fragment implements AviasalesInterface {
 
 	}
 
-	public void popFragmentFromBackStack(){
+	public void popFragmentFromBackStack() {
 		onBackPressed();
 	}
 
@@ -88,40 +85,40 @@ public class AviasalesFragment extends Fragment implements AviasalesInterface {
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
-		mFragmentManager = this.getChildFragmentManager();
+		fragmentManager = this.getChildFragmentManager();
 
 		Fragment fragment;
-		if((mFragmentManager.findFragmentByTag(TAG_CHILD)) == null) {
-			fragment = SearchFromFragment.newInstance();
-			mFragmentManager.beginTransaction().replace(R.id.fragment_child_place, fragment, TAG_CHILD).commit();
+		if ((fragmentManager.findFragmentByTag(TAG_CHILD)) == null) {
+			fragment = SearchFormFragment.newInstance();
+			fragmentManager.beginTransaction().replace(R.id.fragment_child_place, fragment, TAG_CHILD).commit();
 		}
 
 	}
 
 	public boolean onBackPressed() {
-		if (mFragmentManager.getBackStackEntryCount() > 0) {
-			mFragmentManager.popBackStack();
+		if (fragmentManager != null && fragmentManager.getBackStackEntryCount() > 0 && isVisible()) {
+			fragmentManager.popBackStack();
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public void popBackStackInclusive(String tag){
-		mFragmentManager.popBackStack(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+	public void popBackStackInclusive(String tag) {
+		fragmentManager.popBackStack(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 	}
 
 	@Override
 	public void onStop() {
-		mSearchFormData.saveState();
+		searchFormData.saveState();
 		super.onStop();
 	}
 
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		if (mView != null) {
-			ViewGroup parentViewGroup = (ViewGroup) mView.getParent();
+		if (rootView != null) {
+			ViewGroup parentViewGroup = (ViewGroup) rootView.getParent();
 			if (parentViewGroup != null) {
 				parentViewGroup.removeAllViews();
 			}
@@ -129,31 +126,29 @@ public class AviasalesFragment extends Fragment implements AviasalesInterface {
 	}
 
 	@Override
-	public void onAirportSelected(PlaceData placeData, int type) {
-		if (type == SelectAirportFragment.TYPE_ORIGIN) {
-			setOriginData(placeData);
+	public void onAirportSelected(PlaceData placeData, int typeOfDate, int segment, boolean isComplex) {
+		if (isComplex) {
+			if (typeOfDate == SelectAirportFragment.TYPE_ORIGIN) {
+				getSearchFormData().getComplexSearchSegments().get(segment).setOrigin(placeData);
+			} else {
+				getSearchFormData().getComplexSearchSegments().get(segment).setDestination(placeData);
+			}
 		} else {
-			setDestinationData(placeData);
+			if (typeOfDate == SelectAirportFragment.TYPE_ORIGIN) {
+				getSearchFormData().getSimpleSearchParams().setOrigin(placeData);
+			} else {
+				getSearchFormData().getSimpleSearchParams().setDestination(placeData);
+			}
 		}
 	}
 
 	@Override
-	public void setOriginData(PlaceData placeData) {
-		mSearchFormData.setOrigin(placeData);
-	}
-
-	@Override
-	public void setDestinationData(PlaceData placeData) {
-		mSearchFormData.setDestination(placeData);
-	}
-
-	@Override
 	public SearchFormData getSearchFormData() {
-		return mSearchFormData;
+		return searchFormData;
 	}
 
 	@Override
-	public void saveState(){
-		mSearchFormData.saveState();
+	public void saveState() {
+		searchFormData.saveState();
 	}
 }

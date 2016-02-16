@@ -1,1 +1,1 @@
-include ':demo', ':expandedlistview', ':aviasalestemplate'
+include ':simple_demo', ':expandedlistview', ':aviasalestemplate', ':navdrawer_demo'

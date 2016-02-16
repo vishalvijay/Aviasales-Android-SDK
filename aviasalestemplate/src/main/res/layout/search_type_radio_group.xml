@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/search_form_titles_margin_bottom"
+            android:layout_marginTop="@dimen/search_form_titles_margin_top"
+            android:orientation="horizontal">
+
+	<com.devspark.robototextview.widget.RobotoRadioButton
+			android:id="@+id/rb_simple_search"
+			style="@style/search.title_button"
+			android:layout_width="156dp"
+			android:layout_height="36dp"
+			android:layout_marginLeft="16dp"
+			android:layout_marginRight="8dp"
+			android:layout_weight="1"
+			android:background="@drawable/search_type_radio_button_selector"
+			android:button="@android:color/transparent"
+			android:checked="true"
+			android:textAllCaps="true"
+			android:text="@string/search_form_tab_simple"/>
+
+	<com.devspark.robototextview.widget.RobotoRadioButton
+			android:id="@+id/rb_complex_search"
+			style="@style/search.title_button"
+			android:layout_width="156dp"
+			android:layout_height="36dp"
+			android:layout_marginLeft="8dp"
+			android:layout_marginRight="16dp"
+			android:layout_weight="1"
+			android:background="@drawable/search_type_radio_button_selector"
+			android:button="@android:color/transparent"
+			android:textAllCaps="true"
+			android:text="@string/search_form_tab_complex"/>
+</RadioGroup>

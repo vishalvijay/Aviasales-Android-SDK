@@ -2,73 +2,46 @@
 
 <RelativeLayout
 		xmlns:android="http://schemas.android.com/apk/res/android"
-		xmlns:app="http://schemas.android.com/apk/res-auto"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
-		android:background="@color/white"
+		android:background="@color/aviasales_results_background"
 		android:orientation="vertical">
 
 	<ScrollView
-			android:id="@+id/scroll_view"
+			android:id="@+id/view_pager"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:fillViewport="true"
-			android:overScrollMode="never">
+			android:layout_height="match_parent"
+			android:layout_marginBottom="50dp"
+			android:orientation="vertical">
 
 		<LinearLayout
-				android:id="@+id/llay_filters_fragment_components"
+				android:id="@+id/ll_filters_container"
 				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="5.66dp"
+				android:layout_height="match_parent"
 				android:orientation="vertical"
-				android:paddingBottom="16dp">
+				android:paddingBottom="80dp"/>
 
-			<!-- Hack to prevent jerking when we hide/show some of container views-->
-			<View
-					android:id="@+id/focus_view"
-					android:layout_width="fill_parent"
-					android:layout_height="0dp"
-					android:focusable="true"
-					android:focusableInTouchMode="true">
-
-				<requestFocus/>
-			</View>
-
-			<LinearLayout
-					android:id="@+id/tabInfo"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:orientation="vertical">
-
-				<com.devspark.robototextview.widget.RobotoTextView
-						android:id="@+id/tv_filters_fragment_found_tickets"
-						android:layout_width="match_parent"
-						android:layout_height="match_parent"
-						android:layout_marginBottom="8dp"
-						android:layout_marginTop="8dp"
-						android:gravity="center"
-						android:textColor="@color/gray_828282"
-						android:textSize="13.33dp"/>
-
-				<com.devspark.robototextview.widget.RobotoButton
-						android:id="@+id/btn_filters_fragment_clear"
-						android:layout_width="124dp"
-						android:layout_height="30dp"
-						android:layout_gravity="center_horizontal"
-						android:layout_marginBottom="5dp"
-						android:background="@drawable/button_light_bkg"
-						android:enabled="false"
-						android:text="@string/filters_reset"
-						android:textColor="@drawable/color_text_selectable"
-						android:textSize="9.33dp"
-						app:typeface="roboto_medium"/>
-
-			</LinearLayout>
-
-			<View
-					android:layout_width="match_parent"
-					android:layout_height="1px"
-					android:background="@color/gray_828282"/>
-		</LinearLayout>
 	</ScrollView>
+
+	<ru.aviasales.template.ui.view.filters.ClearFiltersView
+			android:id="@+id/clear_filters_view"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentBottom="true"
+			android:layout_centerHorizontal="true"
+			android:layout_marginBottom="70dp"/>
+
+	<com.devspark.robototextview.widget.RobotoTextView
+			android:id="@+id/btn_apply"
+			android:layout_width="match_parent"
+			android:layout_height="50dp"
+			android:layout_alignParentBottom="true"
+			android:layout_gravity="bottom"
+			android:background="@drawable/filters_apply_button"
+			android:gravity="center"
+			android:text="@string/apply_filters"
+			android:textAllCaps="true"
+			android:textColor="@color/white"
+			android:textSize="16dp"/>
+
 </RelativeLayout>

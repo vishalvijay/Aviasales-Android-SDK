@@ -7,7 +7,7 @@ import android.net.NetworkInfo;
 
 import java.util.List;
 
-import ru.aviasales.core.search.object.FlightData;
+import ru.aviasales.core.search.object.Flight;
 
 public class Utils {
 
@@ -29,7 +29,7 @@ public class Utils {
 		return original.substring(0, 1).toUpperCase() + original.substring(1);
 	}
 
-	public static int getRouteDurationInMin(List<FlightData> flights) {
+	public static int getRouteDurationInMin(List<Flight> flights) {
 		if (flights == null) return 0;
 		int duration = 0;
 		for (int i = 0; i < flights.size(); i++) {
@@ -45,7 +45,5 @@ public class Utils {
 		float scale = context.getResources().getDisplayMetrics().density;
 		return (int) (dps * scale + 0.5f);
 	}
-
-
 
 }

@@ -15,7 +15,7 @@ import java.util.Calendar;
 
 import ru.aviasales.template.R;
 
-public class DatePickerDialogFragment extends BaseDialogFragment implements DatePickerDialog.OnDateSetListener{
+public class DatePickerDialogFragment extends BaseDialogFragment implements DatePickerDialog.OnDateSetListener {
 
 	public final static String TAG = "fragment.DatePickerDialogFragment";
 
@@ -26,19 +26,20 @@ public class DatePickerDialogFragment extends BaseDialogFragment implements Date
 	private Calendar minDate;
 	private Calendar maxDate;
 
-	private int year ;
-	private int month ;
-	private int day ;
+	private int year;
+	private int month;
+	private int day;
 
 	private OnDateChangedListener onDateChangedListener;
 
 
-	public interface OnDateChangedListener{
+	public interface OnDateChangedListener {
 		void onDateChanged(Calendar calendar);
+
 		void onCancel();
 	}
 
-	public static DatePickerDialogFragment newInstance(Calendar minDate, Calendar maxDate, Calendar currentDate){
+	public static DatePickerDialogFragment newInstance(Calendar minDate, Calendar maxDate, Calendar currentDate) {
 		DatePickerDialogFragment fragment = new DatePickerDialogFragment();
 		Bundle bundle = new Bundle();
 		bundle.putSerializable(EXTRA_CALENDAR_MIN_DATE, minDate);
@@ -66,6 +67,10 @@ public class DatePickerDialogFragment extends BaseDialogFragment implements Date
 		month = currentDate.get(Calendar.MONTH);
 		day = currentDate.get(Calendar.DAY_OF_MONTH);
 
+		if (minDate.getTimeInMillis() > currentDate.getTimeInMillis()) {
+			minDate.setTimeInMillis(currentDate.getTimeInMillis() - 1);
+		}
+
 		DatePickerDialog picker = null;
 		picker = setupDatePicker();
 
@@ -76,7 +81,7 @@ public class DatePickerDialogFragment extends BaseDialogFragment implements Date
 
 		DatePickerDialog pickerDialog = null;
 
-		if(Build.VERSION.SDK_INT >= 11) {
+		if (Build.VERSION.SDK_INT >= 11) {
 			pickerDialog = new DatePickerDialog(getActivity(), this,
 					year, month, day);
 
@@ -93,14 +98,14 @@ public class DatePickerDialogFragment extends BaseDialogFragment implements Date
 	}
 
 	private DatePicker getDatePicker(DatePickerDialog picker) {
-		if(Build.VERSION.SDK_INT >= 11){
+		if (Build.VERSION.SDK_INT >= 11) {
 			return picker.getDatePicker();
 		} else {
 			Field mDatePickerField = null;
 			try {
 				mDatePickerField = picker.getClass().getDeclaredField("mDatePicker");
 				mDatePickerField.setAccessible(true);
-				return  (DatePicker) mDatePickerField.get(picker);
+				return (DatePicker) mDatePickerField.get(picker);
 			} catch (NoSuchFieldException e) {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
@@ -114,7 +119,7 @@ public class DatePickerDialogFragment extends BaseDialogFragment implements Date
 	public void onStart() {
 		super.onStart();
 		// добавляем кастомный текст для кнопки
-		Button nButton =  ((AlertDialog) getDialog())
+		Button nButton = ((AlertDialog) getDialog())
 				.getButton(DialogInterface.BUTTON_POSITIVE);
 		nButton.setText(getResources().getString(R.string.ok));
 
@@ -123,13 +128,13 @@ public class DatePickerDialogFragment extends BaseDialogFragment implements Date
 	@Override
 	public void onDateSet(DatePicker datePicker, int year,
 	                      int month, int day) {
-		if(onDateChangedListener!=null) {
+		if (onDateChangedListener != null) {
 			Calendar calendar = Calendar.getInstance();
-			calendar.set(year,month,day);
-			if(calendar.compareTo(minDate) < 0){
+			calendar.set(year, month, day);
+			if (calendar.compareTo(minDate) < 0) {
 				calendar = minDate;
 			}
-			if(calendar.compareTo(maxDate) > 0){
+			if (calendar.compareTo(maxDate) > 0) {
 				calendar = maxDate;
 			}
 			onDateChangedListener.onDateChanged(calendar);
@@ -143,7 +148,7 @@ public class DatePickerDialogFragment extends BaseDialogFragment implements Date
 
 	@Override
 	public void onCancel(DialogInterface dialog) {
-		if(onDateChangedListener != null) {
+		if (onDateChangedListener != null) {
 			onDateChangedListener.onCancel();
 		}
 		super.onCancel(dialog);

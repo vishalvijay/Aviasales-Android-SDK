@@ -15,21 +15,23 @@ import ru.aviasales.expandedlistview.view.BaseCheckedText;
 import ru.aviasales.expandedlistview.view.BaseFiltersListViewItem;
 import ru.aviasales.expandedlistview.view.SelectAllView;
 import ru.aviasales.template.R;
-import ru.aviasales.template.filters.CheckedAgency;
+import ru.aviasales.template.filters.FilterCheckedAgency;
 
 public class AgencyAdapter extends BaseExpandedListViewAdapter {
 
-	private Context context;
-	private List<CheckedAgency> items;
+	private final Context context;
+	private final List<FilterCheckedAgency> items;
 	private AdapterCallback listener;
-	private BaseCheckedText selectAll;
+	private final BaseCheckedText selectAll;
+	private final boolean hideTitle;
 
-	public AgencyAdapter(Context context, List<CheckedAgency> items) {
+	public AgencyAdapter(Context context, List<FilterCheckedAgency> items, boolean hideTitle) {
 		this.context = context;
 		this.items = items;
+		this.hideTitle = hideTitle;
 		this.selectAll = new BaseCheckedText();
 		this.selectAll.setChecked(areAllItemsChecked());
-		this.selectAll.setName(context.getString(R.string.select_all));
+		this.selectAll.setName(context.getString(R.string.select_all) + " (" + Integer.toString(items.size()) + ")");
 	}
 
 	@Override
@@ -110,6 +112,11 @@ public class AgencyAdapter extends BaseExpandedListViewAdapter {
 	@Override
 	public Boolean hasSeparators() {
 		return false;
+	}
+
+	@Override
+	public boolean hideTitle() {
+		return hideTitle;
 	}
 }
 

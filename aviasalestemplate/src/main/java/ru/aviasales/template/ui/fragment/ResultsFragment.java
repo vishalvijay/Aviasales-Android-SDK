@@ -3,7 +3,6 @@ package ru.aviasales.template.ui.fragment;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.style.UnderlineSpan;
@@ -19,31 +18,28 @@ import android.widget.Toast;
 import java.util.List;
 
 import ru.aviasales.core.AviasalesSDK;
+import ru.aviasales.core.search.object.Proposal;
 import ru.aviasales.core.search.object.SearchData;
-import ru.aviasales.core.search.object.TicketData;
 import ru.aviasales.core.search.params.SearchParams;
 import ru.aviasales.template.R;
 import ru.aviasales.template.currencies.Currency;
 import ru.aviasales.template.filters.manager.FiltersManager;
-import ru.aviasales.template.ticket.TicketManager;
+import ru.aviasales.template.proposal.ProposalManager;
 import ru.aviasales.template.ui.adapter.ResultsRecycleViewAdapter;
 import ru.aviasales.template.ui.dialog.CurrencyFragmentDialog;
 import ru.aviasales.template.ui.dialog.ResultsSortingDialog;
-import ru.aviasales.template.ui.view.ActionBarTitleFlightView;
-import ru.aviasales.template.ui.view.EmptyView;
 import ru.aviasales.template.utils.CurrencyUtils;
+import ru.aviasales.template.utils.SortUtils;
 import ru.aviasales.template.utils.StringUtils;
 
 public class ResultsFragment extends BaseFragment {
 
-	public static int sortingType = ResultsSortingDialog.SORTING_BY_PRICE;
 	private static int resultsCount = -1;
 
 	private ResultsRecycleViewAdapter resultsAdapter;
 
 	private View rootView;
 	private RecyclerView resultsListView;
-	private EmptyView emptyView;
 	private TextView currencyTextView;
 
 	public static ResultsFragment newInstance() {
@@ -82,26 +78,11 @@ public class ResultsFragment extends BaseFragment {
 	}
 
 	private void setupActionBarCustomView() {
-		ActionBarTitleFlightView titleView = new ActionBarTitleFlightView(getActivity());
-		if (getSearchParams() != null) {
-			titleView.setData(getSearchParams().getOriginIata(), getSearchParams().getDestinationIata());
-		}
-		getActionBar().show();
-		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-		getActionBar().setCustomView(titleView);
+		showActionBar(true);
+		setTextToActionBar(StringUtils.getFirstAndLastIatasString(getSearchParams()));
 	}
 
 	private void setUpViews() {
-
-		emptyView = (EmptyView) rootView.findViewById(R.id.empty_view);
-		emptyView.setType(EmptyView.TYPE_RESULTS);
-		emptyView.setOnButtonClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				clearFilters();
-			}
-		});
-		emptyView.setVisibility(View.GONE);
 
 		resultsListView = (RecyclerView) rootView.findViewById(R.id.lv_results);
 		setUpListView(resultsListView);
@@ -109,20 +90,6 @@ public class ResultsFragment extends BaseFragment {
 
 		resultsListView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-		setupEmptyViewVisibility();
-	}
-
-	private void setupEmptyViewVisibility() {
-		if (resultsAdapter == null ||
-				resultsListView == null) return;
-
-		if (resultsAdapter.getItemCount() == 0) {
-			resultsListView.setVisibility(View.GONE);
-			emptyView.setVisibility(View.VISIBLE);
-		} else {
-			resultsListView.setVisibility(View.VISIBLE);
-			emptyView.setVisibility(View.GONE);
-		}
 	}
 
 	private void setUpListView(RecyclerView listView) {
@@ -133,22 +100,24 @@ public class ResultsFragment extends BaseFragment {
 
 		adapter.setListener(new ResultsRecycleViewAdapter.OnClickListener() {
 			@Override
-			public void onClick(final TicketData ticketData, int position) {
+			public void onClick(final Proposal proposal, int position) {
 				if (getActivity() == null) return;
 
-				showDetails(ticketData);
+				showDetails(proposal);
 			}
 		});
-		adapter.notifyDataSet();
+		adapter.sortProposals(SortUtils.getSavedSortingType());
 	}
 
 	private ResultsRecycleViewAdapter createOrRefreshAdapter() {
 		ResultsRecycleViewAdapter adapter;
 
+		List<Proposal> filteredProposals = FiltersManager.getInstance().getFilteredProposals();
 		if (resultsAdapter == null) {
-			resultsAdapter = new ResultsRecycleViewAdapter(getActivity());
+			boolean isComplexSearch = AviasalesSDK.getInstance().getSearchData().isComplexSearch();
+			resultsAdapter = new ResultsRecycleViewAdapter(getActivity(), filteredProposals, isComplexSearch);
 		} else {
-			resultsAdapter.reloadFilteredTickets(FiltersManager.getInstance().getFilteredTickets());
+			resultsAdapter.reloadFilteredTickets(filteredProposals, SortUtils.getSavedSortingType());
 		}
 		adapter = resultsAdapter;
 
@@ -159,8 +128,9 @@ public class ResultsFragment extends BaseFragment {
 		return AviasalesSDK.getInstance().getSearchData();
 	}
 
-	private void showDetails(TicketData ticketData) {
-		TicketManager.getInstance().init(ticketData, AviasalesSDK.getInstance().getSearchData().getGatesInfo(), AviasalesSDK.getInstance().getSearchParamsOfLastSearch());
+	private void showDetails(Proposal ticketData) {
+		ProposalManager.getInstance().init(ticketData, AviasalesSDK.getInstance().getSearchData().getGatesInfo(),
+				AviasalesSDK.getInstance().getSearchParamsOfLastSearch());
 		startFragment(TicketDetailsFragment.newInstance(), true);
 	}
 
@@ -247,20 +217,20 @@ public class ResultsFragment extends BaseFragment {
 	}
 
 	private void createSortingDialog() {
-		createDialog(ResultsSortingDialog.newInstance(sortingType, new ResultsSortingDialog.OnSortingChangedListener() {
-			@Override
-			public void onSortingChanged(int sortingType) {
-				ResultsFragment.sortingType = sortingType;
-				resultsListView.setAdapter(resultsAdapter);
-				resultsAdapter.notifyDataSet();
-				dismissDialog();
-			}
+		createDialog(ResultsSortingDialog.newInstance(SortUtils.getSavedSortingType(),
+				AviasalesSDK.getInstance().getSearchParamsOfLastSearch().isComplexSearch(), new ResultsSortingDialog.OnSortingChangedListener() {
+					@Override
+					public void onSortingChanged(int sortingType) {
+						resultsListView.setAdapter(resultsAdapter);
+						resultsAdapter.sortProposals(sortingType);
+						dismissDialog();
+					}
 
-			@Override
-			public void onCancel() {
-				dismissDialog();
-			}
-		}));
+					@Override
+					public void onCancel() {
+						dismissDialog();
+					}
+				}));
 	}
 
 	@Override
@@ -279,14 +249,6 @@ public class ResultsFragment extends BaseFragment {
 		return AviasalesSDK.getInstance().getSearchParamsOfLastSearch();
 	}
 
-	public void updateResults() {
-		if (resultsAdapter != null) {
-			resultsAdapter.reloadFilteredTickets(FiltersManager.getInstance().getFilteredTickets());
-		}
-
-		setupEmptyViewVisibility();
-	}
-
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
@@ -299,16 +261,6 @@ public class ResultsFragment extends BaseFragment {
 		if (resultsAdapter != null) {
 			resultsCount = resultsAdapter.getItemCount();
 		}
-	}
-
-	private void clearFilters() {
-		FiltersManager.getInstance().getFilters().clearFilters();
-		FiltersManager.getInstance().filterSearchData(AviasalesSDK.getInstance().getSearchData(), new FiltersManager.OnFilterResultListener() {
-			@Override
-			public void onFilteringFinished(List<TicketData> filteredTicketsData) {
-				updateResults();
-			}
-		});
 	}
 
 }

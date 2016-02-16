@@ -1,18 +1,16 @@
 package ru.aviasales.template.filters;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.aviasales.core.search.object.FlightData;
+import ru.aviasales.core.search.object.Flight;
 
-public class OvernightFilter implements Parcelable {
+public class OvernightFilter implements Serializable {
 
 	private boolean isAirportOvernightAvailable = true;
 
-	private boolean isAirportOvernightViewEnabled = true;
+	private boolean isAirportOvernightViewEnabled = false;
 
 	private List<OvernightTerms> overnightTermsList;
 
@@ -21,9 +19,15 @@ public class OvernightFilter implements Parcelable {
 		isAirportOvernightViewEnabled = overnightFilter.isAirportOvernightViewEnabled();
 
 		if (overnightFilter.getOvernightTermsList() == null) return;
-		overnightTermsList = new ArrayList<OvernightTerms>();
+		overnightTermsList = new ArrayList<>();
 		for (int i = 0; i < overnightFilter.getOvernightTermsList().size(); i++) {
 			overnightTermsList.add(new OvernightTerms(overnightFilter.getOvernightTermsList().get(i)));
+		}
+	}
+
+	public void mergeFilter(OvernightFilter overnightFilter) {
+		if (overnightFilter.isActive()) {
+			isAirportOvernightAvailable = overnightFilter.isAirportOvernightAvailable;
 		}
 	}
 
@@ -32,7 +36,7 @@ public class OvernightFilter implements Parcelable {
 	}
 
 	private void initOvernightList() {
-		overnightTermsList = new ArrayList<OvernightTerms>();
+		overnightTermsList = new ArrayList<>();
 		overnightTermsList.add(new OvernightTerms(4, 5, 23, 4));
 		overnightTermsList.add(new OvernightTerms(5, 6, 22, 4));
 		overnightTermsList.add(new OvernightTerms(6, 7, 21, 5));
@@ -60,7 +64,7 @@ public class OvernightFilter implements Parcelable {
 		return !(isAirportOvernightAvailable || !isAirportOvernightViewEnabled);
 	}
 
-	public boolean isActual(List<FlightData> flights) {
+	public boolean isActual(List<Flight> flights) {
 		for (int i = 0; i < flights.size(); i++) {
 			for (OvernightTerms overnightTerms : overnightTermsList) {
 				if ((!isAirportOvernightAvailable && i != 0 && overnightTerms.isOvernight(flights.get(i).getDepartureInMinutes() -
@@ -70,6 +74,18 @@ public class OvernightFilter implements Parcelable {
 			}
 		}
 		return true;
+	}
+
+	public boolean hasOvernight(List<Flight> flights) {
+		for (int i = 0; i < flights.size(); i++) {
+			for (OvernightTerms overnightTerms : overnightTermsList) {
+				if ((i != 0 && overnightTerms.isOvernight(flights.get(i).getDepartureInMinutes() -
+						flights.get(i - 1).getArrivalInMinutes(), flights.get(i - 1).getArrivalInHoursFromDayBeginning()))) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public boolean isAirportOvernightAvailable() {
@@ -96,31 +112,7 @@ public class OvernightFilter implements Parcelable {
 		isAirportOvernightViewEnabled = airportOvernightEnabled;
 	}
 
-
-	public OvernightFilter(Parcel in) {
-		isAirportOvernightAvailable = in.readByte() == 1;
-
-		isAirportOvernightViewEnabled = in.readByte() == 1;
-		initOvernightList();
+	public boolean isValid() {
+		return isAirportOvernightViewEnabled;
 	}
-
-	public int describeContents() {
-		return 0;
-	}
-
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeByte((byte) (isAirportOvernightAvailable ? 1 : 0));
-
-		dest.writeByte((byte) (isAirportOvernightViewEnabled ? 1 : 0));
-	}
-
-	public static final Creator<OvernightFilter> CREATOR = new Creator<OvernightFilter>() {
-		public OvernightFilter createFromParcel(Parcel in) {
-			return new OvernightFilter(in);
-		}
-
-		public OvernightFilter[] newArray(int size) {
-			return new OvernightFilter[size];
-		}
-	};
 }

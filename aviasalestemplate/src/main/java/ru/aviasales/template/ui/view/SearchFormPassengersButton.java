@@ -6,8 +6,8 @@ import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import ru.aviasales.core.search.params.Passengers;
 import ru.aviasales.template.R;
-import ru.aviasales.template.ui.model.Passengers;
 
 
 public class SearchFormPassengersButton extends RelativeLayout {

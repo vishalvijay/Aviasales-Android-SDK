@@ -4,7 +4,7 @@
 		xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:background="@drawable/results_item"
+		android:background="@drawable/select_airports_button"
 		android:paddingLeft="55dp"
 		android:paddingRight="16dp">
 

@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<dimen name="search_form_dates_divider_top_margin">12.34dp</dimen>
-	<dimen name="search_form_dates_divider_bottom_margin">10dp</dimen>
+	<dimen name="search_form_dates_divider_top_margin">7.34dp</dimen>
+	<dimen name="search_form_dates_divider_bottom_margin">16dp</dimen>
 	<dimen name="search_form_destinations_divider_top_margin">10.34dp</dimen>
-	<dimen name="search_form_destinations_divider_bottom_margin">22.33dp</dimen>
+	<dimen name="search_form_destinations_divider_bottom_margin">18.33dp</dimen>
+	<dimen name="search_form_titles_margin_top">35dp</dimen>
+	<dimen name="search_form_titles_margin_bottom">18dp</dimen>
+	<dimen name="search_form_part_height">512dp</dimen>
 
-	<dimen name="search_form_search_button_top_margin">25dp</dimen>
+	<dimen name="search_form_search_button_top_margin">20dp</dimen>
 	<dimen name="search_form_search_button_bottom_margin">20dp</dimen>
+	<dimen name="search_form_trip_class_margin_bottom">12dp</dimen>
 
 	<dimen name="search_form_passengers_margin_right">48dp</dimen>
 
 	<dimen name="results_duration_margin_right">96dp</dimen>
 	<dimen name="results_transfers_margin_right">112dp</dimen>
+	<dimen name="results_item_complex_time_margin">44dp</dimen>
+	<dimen name="results_item_complex_transfers_min_size">40dp</dimen>
+	<dimen name="results_item_transfers_min_size">98dp</dimen>
+
 </resources>

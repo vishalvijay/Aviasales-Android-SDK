@@ -20,11 +20,11 @@ public class TripClassDialogFragment extends BaseDialogFragment {
 	private RobotoCheckedTextView economy;
 	private RobotoCheckedTextView business;
 
-	private int tripClass = 0;
+	private String tripClass = SearchParams.TRIP_CLASS_ECONOMY;
 
 	private OnTripClassChangedListener onTripClassChangedListener;
 
-	public static TripClassDialogFragment newInstance(int tripClass, OnTripClassChangedListener onTripClassChangedListener) {
+	public static TripClassDialogFragment newInstance(String tripClass, OnTripClassChangedListener onTripClassChangedListener) {
 		TripClassDialogFragment tripClassDialogFragment = new TripClassDialogFragment();
 		tripClassDialogFragment.setTripClass(tripClass);
 		tripClassDialogFragment.setOnTripClassChangedListener(onTripClassChangedListener);
@@ -91,7 +91,7 @@ public class TripClassDialogFragment extends BaseDialogFragment {
 		return view;
 	}
 
-	public void setTripClass(int tripClass) {
+	public void setTripClass(String tripClass) {
 		this.tripClass = tripClass;
 	}
 
@@ -100,7 +100,7 @@ public class TripClassDialogFragment extends BaseDialogFragment {
 	}
 
 	public interface OnTripClassChangedListener {
-		void onTripClassChanged(int tripClass);
+		void onTripClassChanged(String tripClass);
 		void onCancel();
 	}
 

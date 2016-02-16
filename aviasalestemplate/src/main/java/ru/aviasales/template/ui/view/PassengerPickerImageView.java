@@ -10,7 +10,7 @@ public class PassengerPickerImageView extends ImageView {
 
 	private static final int[] STATE_SELECTOR_ENABLED = {R.attr.state_selector_enabled};
 
-	private boolean mIsSelectorEnabled = true;
+	private boolean isSelectorEnabled = true;
 
 	public PassengerPickerImageView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -19,7 +19,7 @@ public class PassengerPickerImageView extends ImageView {
 	@Override
 	public int[] onCreateDrawableState(int extraSpace) {
 		final int[] drawableState = super.onCreateDrawableState(extraSpace + 1);
-		if (mIsSelectorEnabled) {
+		if (isSelectorEnabled) {
 			mergeDrawableStates(drawableState, STATE_SELECTOR_ENABLED);
 		}
 		return drawableState;
@@ -28,7 +28,7 @@ public class PassengerPickerImageView extends ImageView {
 
 	public void setSelectorEnabled(boolean isSelectorEnabled)
 	{
-		mIsSelectorEnabled = isSelectorEnabled;
+		this.isSelectorEnabled = isSelectorEnabled;
 		refreshDrawableState();
 	}
 

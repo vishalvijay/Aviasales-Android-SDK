@@ -1,38 +1,41 @@
 package ru.aviasales.template.filters;
 
 import android.content.Context;
-import android.os.Parcel;
-import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import ru.aviasales.core.search.object.AirlineData;
-import ru.aviasales.template.R;
+import ru.aviasales.core.search.object.Flight;
 import ru.aviasales.expandedlistview.view.BaseCheckedText;
+import ru.aviasales.template.R;
 
-public class AllianceFilter implements Parcelable {
+public class AllianceFilter extends BaseListFilter implements Serializable {
 
-	private Context context;
+	private transient Context context;
 	private List<BaseCheckedText> allianceList;
 
 	public AllianceFilter(Context context) {
 		this.context = context;
-		allianceList = new ArrayList<BaseCheckedText>();
+		allianceList = new ArrayList<>();
 	}
 
 	public AllianceFilter(Context context, AllianceFilter allianceFilter) {
 		if (allianceFilter.getAllianceList() == null) return;
 		this.context = context;
 
-		allianceList = new ArrayList<BaseCheckedText>();
+		allianceList = new ArrayList<>();
 		for (int i = 0; i < allianceFilter.getAllianceList().size(); i++) {
 			allianceList.add(new BaseCheckedText(allianceFilter.getAllianceList().get(i)));
 		}
 	}
 
+	public void setContext(Context context) {
+		this.context = context;
+	}
 	public void addAlliance(String alliance) {
 		allianceList.add(new BaseCheckedText(alliance));
 	}
@@ -59,7 +62,7 @@ public class AllianceFilter implements Parcelable {
 		return true;
 	}
 
-	public void setAlliancesFromGsonClass(Map<String, AirlineData> airlineMap) {
+	public void addAlliancesData(Map<String, AirlineData> airlineMap) {
 		for (String airline : airlineMap.keySet()) {
 			if (airlineMap.get(airline) != null && airlineMap.get(airline).getAllianceName() != null) {
 				BaseCheckedText cAlliance = new BaseCheckedText(airlineMap.get(airline).getAllianceName());
@@ -69,50 +72,40 @@ public class AllianceFilter implements Parcelable {
 				}
 			}
 		}
-		Collections.sort(allianceList, BaseCheckedText.sortByName);
 		BaseCheckedText anotherAlliances = new BaseCheckedText();
 		anotherAlliances.setChecked(true);
 		anotherAlliances.setName(context.getString(R.string.filters_another_alliances));
 		allianceList.add(anotherAlliances);
 	}
 
-	public boolean isActive() {
-		for (BaseCheckedText alliance : allianceList) {
-			if (!alliance.isChecked()) {
-				return true;
+	public void addAlliancesData(Map<String, AirlineData> airlineMap, List<Flight> flights) {
+		for (String airline : airlineMap.keySet()) {
+			if (airlineMap.get(airline) != null && airlineMap.get(airline).getAllianceName() != null) {
+				BaseCheckedText checkedAlliance = new BaseCheckedText(airlineMap.get(airline).getAllianceName());
+
+				for (Flight flight : flights) {
+					if (!allianceList.contains(checkedAlliance) && checkedAlliance.getName() != null &&
+							flight.getOperatingCarrier().equalsIgnoreCase(airline)) {
+						allianceList.add(checkedAlliance);
+					}
+				}
 			}
 		}
-		return false;
-	}
-
-	public void clearFilter() {
-		for (BaseCheckedText alliance : allianceList) {
-			alliance.setChecked(true);
+		BaseCheckedText anotherAlliances = new BaseCheckedText();
+		anotherAlliances.setChecked(true);
+		anotherAlliances.setName(context.getString(R.string.filters_another_alliances));
+		if (!allianceList.contains(anotherAlliances)) {
+			allianceList.add(anotherAlliances);
 		}
 	}
 
-	public AllianceFilter(Parcel in) {
-		if (allianceList == null) {
-			allianceList = new ArrayList<BaseCheckedText>();
-		}
-		in.readTypedList(allianceList, BaseCheckedText.CREATOR);
+	public void sortByName() {
+		Collections.sort(allianceList, BaseCheckedText.nameComparator);
 	}
 
-	public int describeContents() {
-		return 0;
+
+	@Override
+	public List<BaseCheckedText> getCheckedTextList() {
+		return allianceList;
 	}
-
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeTypedList(allianceList);
-	}
-
-	public static final Creator<AllianceFilter> CREATOR = new Creator<AllianceFilter>() {
-		public AllianceFilter createFromParcel(Parcel in) {
-			return new AllianceFilter(in);
-		}
-
-		public AllianceFilter[] newArray(int size) {
-			return new AllianceFilter[size];
-		}
-	};
 }

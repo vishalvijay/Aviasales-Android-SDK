@@ -58,10 +58,9 @@
 	<string name="base_filter_stop_over">Пересадки</string>
 	<string name="stop_over">Пересадки</string>
 	<string name="results_flight_time">Перелёт</string>
-	<string name="base_filter_takeoff">Вылет туда</string>
 	<string name="range_flight_from">Вылет туда</string>
 	<string name="range_flight_return">Вылет обратно</string>
-	<string name="filters_price">до </string>
+	<string name="filters_price">до %s</string>
 	<string name="filters_hours_and_minutes">до %1$02d ч %2$02d мин</string>
 	<string name="range_from">от</string>
 	<string name="range_with">с</string>
@@ -73,7 +72,6 @@
 
 	<string name="menu_filters">Фильтры</string>
 	<string name="menu_sort">Сортировка</string>
-	<string name="menu_currency">Валюта</string>
 
 	<string name="toast_no_search_results">"Информация о билетах устарела</string>
 
@@ -169,6 +167,29 @@
 	<string name="filters_day">День</string>
 	<string name="filters_evening">Вечер</string>
 
+	<string name="ticket_flight_text">Рейс</string>
+
+	<string name="search_form_complex_search_add">Добавить</string>
+	<string name="search_form_complex_search_remove">Удалить</string>
+
+	<string name="search_form_tab_simple">простой</string>
+	<string name="search_form_tab_complex">сложный</string>
+
+	<string name="results_flight_date">Дата</string>
+	<string name="ticket_title_agency">на %1$s</string>
+
+	<string name="filter_payment_method_exp">Курьеру</string>
+	<string name="filter_payment_method_euroset">Евросеть</string>
+	<string name="filter_payment_method_cash">Наличными</string>
+	<string name="filter_payment_method_card">По карте</string>
+	<string name="filter_payment_method_yandex_money">Яндекс.Деньги</string>
+	<string name="filter_payment_method_webmoney">WebMoney</string>
+	<string name="filter_payment_method_terminal">Через терминал</string>
+	<string name="filter_payment_method_svyaznoy">Связной</string>
+	<string name="filter_payment_method_elexnet">Элекснет</string>
+	<string name="filter_payment_method_bank">Банковским переводом</string>
+	<string name="filter_payment_method_contact">Contact</string>
+
 	<plurals name="found_tickets">
 		<item quantity="one">из %d билета</item>
 		<item quantity="few">из %d билетов</item>
@@ -178,6 +199,15 @@
 
 	<string name="currency_dialog_title">Валюта</string>
 
-	<string name="ticket_flight_text">Рейс</string>
+	<string name="clear_filters_ticket_count">Билетов:</string>
+
+	<string name="clear_filters">Сбросить</string>
+	<string name="apply_filters">Применить фильтры</string>
+	<string name="pay_type">Способы оплаты</string>
+	<string name="base_filter_stop_over_count">Пересадки</string>
+	<string name="base_filter_landing">Прибытие</string>
+	<string name="base_filter_landing_back">Прибытие обратно</string>
+
+	<!--<string name="ticket_flight_text">Рейс</string>-->
 
 </resources>

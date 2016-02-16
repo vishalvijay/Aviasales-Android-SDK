@@ -3,7 +3,8 @@
 <RelativeLayout
 		xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent">
+		android:layout_height="match_parent"
+		android:background="@color/aviasales_results_background">
 
 	<android.support.v7.widget.RecyclerView
 			android:id="@+id/lv_results"
@@ -12,10 +13,5 @@
 			android:layout_height="match_parent"
 			android:listSelector="@android:color/transparent"
 			android:scrollbars="vertical"/>
-
-	<ru.aviasales.template.ui.view.EmptyView
-			android:id="@+id/empty_view"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"/>
 
 </RelativeLayout>

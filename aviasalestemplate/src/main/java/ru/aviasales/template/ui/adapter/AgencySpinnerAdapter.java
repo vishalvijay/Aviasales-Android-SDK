@@ -8,25 +8,29 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Map;
 
+import ru.aviasales.core.search.object.GateData;
 import ru.aviasales.template.R;
-import ru.aviasales.template.ticket.TicketManager;
+import ru.aviasales.template.proposal.ProposalManager;
 import ru.aviasales.template.ui.view.AgencyItemView;
 
 public class AgencySpinnerAdapter implements SpinnerAdapter {
 
-	private List<String> agencies;
+	private final List<String> agencies;
+	private final Map<String, GateData> gates;
 	private OnAgencyClickListener onAgencyClickListener;
 
-	public AgencySpinnerAdapter() {
-		agencies = TicketManager.getInstance().getAgenciesCodes();
+	public AgencySpinnerAdapter(List<String> agenciesCodes, Map<String, GateData> gates) {
+		agencies = agenciesCodes;
+		this.gates = gates;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
 			convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.ticket_drop_down_view, parent, false);
-			((TextView) convertView).setText(TicketManager.getInstance().getAgencyName(agencies.get(position)));
+			((TextView) convertView).setText(ProposalManager.getInstance().getAgencyName(agencies.get(position)));
 		}
 
 		return convertView;
@@ -38,7 +42,7 @@ public class AgencySpinnerAdapter implements SpinnerAdapter {
 			convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.agency_item_layout, parent, false);
 		}
 		((AgencyItemView) convertView).setData(agencies.get(position),
-				TicketManager.getInstance().isAgencyHasMobileVersion(agencies.get(position)));
+				gates.get(agencies.get(position)).hasMobileVersion());
 		convertView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

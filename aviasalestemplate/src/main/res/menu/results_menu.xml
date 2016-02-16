@@ -16,7 +16,6 @@
 			app:showAsAction="always"/>
 	<item
 			android:id="@+id/currency"
-			android:title="@string/menu_currency"
 			app:actionLayout="@layout/currency_layout"
 			app:showAsAction="always"/>
 </menu>

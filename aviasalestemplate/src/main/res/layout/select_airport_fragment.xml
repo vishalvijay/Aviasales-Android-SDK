@@ -12,7 +12,7 @@
 			android:id="@+id/rl_select_airport_fragment_bg"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:background="@color/white"
+			android:background="@color/aviasales_select_airport_background"
 			android:minHeight="56dp"
 			android:orientation="vertical">
 
@@ -66,7 +66,7 @@
 				android:layout_alignParentRight="true"
 				android:layout_marginRight="4dp"
 				android:layout_marginTop="4dp"
-				android:background="@drawable/results_item">
+				android:background="@drawable/select_airports_button">
 
 			<ImageView
 					android:id="@+id/iv_select_airport_cancel"
