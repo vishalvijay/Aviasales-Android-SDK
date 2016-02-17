@@ -35,8 +35,6 @@ dependencies {
 }
 ```
 
-
-
 If you want to use complete Aviasales SDK Template, you can add it like this  :
 
 ```gradle
@@ -56,8 +54,7 @@ Before any interaction with Aviasales SDK or Aviasales Template you should initi
   		AviasalesSDK.getInstance().init(this, new IdentificationData(TRAVEL_PAYOUTS_MARKER, TRAVEL_PAYOUTS_TOKEN)); 
 ```
 
-Change TRAVEL_PAYOUTS_MARKER and TRAVEL_PAYOUTS_TOKEN to your marker and token params. You can get them at [Travelpayouts.com](https://www.travelpayouts.com/developers/api):
-
+Change `TRAVEL_PAYOUTS_MARKER` and `TRAVEL_PAYOUTS_TOKEN` to your marker and token params. You can get them at [Travelpayouts.com](https://www.travelpayouts.com/developers/api).
 
 
 ## Example of adding Aviasales Template to your project 
@@ -181,10 +178,10 @@ Also you can change background and price tag colors
 	<color name="aviasales_price_color">@color/yellow_FDCC50</color>
 ```
 
-For more information see the [demo project](https://github.com/KosyanMedia/Aviasales-Android-SDK/tree/master/demo)
+For more information see the [demo project](https://github.com/KosyanMedia/Aviasales-Android-SDK/tree/master/simple_demo)
 
 ### [Aviasales Android API](https://github.com/KosyanMedia/Aviasales-Android-SDK/wiki/Aviasales-Android-SDK-API-documentation)
-###[Template project screens](https://github.com/KosyanMedia/Aviasales-Android-SDK/wiki/Template-project-screens)
+### [Template project screens](https://github.com/KosyanMedia/Aviasales-Android-SDK/wiki/Template-project-screens)
 
 
 [1]: /screenshots/screen.gif "Screenshot1"
