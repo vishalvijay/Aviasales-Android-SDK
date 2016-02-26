@@ -1,6 +1,7 @@
 package ru.aviasales.template.ui.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,15 +14,18 @@ import android.view.ViewGroup;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
+import ru.aviasales.core.search.params.SearchParams;
 import ru.aviasales.core.search_airports.object.PlaceData;
 import ru.aviasales.template.R;
 import ru.aviasales.template.ui.listener.AviasalesImpl;
 import ru.aviasales.template.ui.model.SearchFormData;
+import ru.aviasales.template.utils.Utils;
 
 public class AviasalesFragment extends Fragment implements AviasalesImpl {
 
 	public final static String TAG = "aviasales_fragment";
 	private final static String TAG_CHILD = "aviasales_child_fragment";
+	private static final String SEARCH_PARAMS_IS_UPDATED = "searh_params_is_updated";
 
 	private final static int CACHE_SIZE = 20 * 1024 * 1024;
 	private final static int CACHE_FILE_COUNT = 100;
@@ -40,6 +44,9 @@ public class AviasalesFragment extends Fragment implements AviasalesImpl {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		migrateSearchFormTripClassParam();
+
 		searchFormData = new SearchFormData(getActivity().getApplicationContext());
 		initImageLoader(getActivity().getApplicationContext());
 	}
@@ -50,6 +57,24 @@ public class AviasalesFragment extends Fragment implements AviasalesImpl {
 		rootView = inflater.inflate(R.layout.aviasales_fragment_layout, null);
 
 		return rootView;
+	}
+
+	private void migrateSearchFormTripClassParam() {
+		SharedPreferences prefs = Utils.getPreferences(getActivity());
+
+		if (!prefs.getBoolean(SEARCH_PARAMS_IS_UPDATED, false)) {
+			prefs.edit().putBoolean(SEARCH_PARAMS_IS_UPDATED, true).commit();
+			try {
+				int tripClass = prefs.getInt(SearchParams.SEARCH_PARAM_TRIP_CLASS, -10);
+				if (tripClass != -10) {
+					prefs.edit().remove(SearchParams.SEARCH_PARAM_TRIP_CLASS).
+							putString(SearchParams.SEARCH_PARAM_TRIP_CLASS, SearchParams.convertToNewTripClass(tripClass))
+							.commit();
+				}
+			} catch (ClassCastException e) {
+				//ignore class cast exception
+			}
+		}
 	}
 
 	public FragmentManager getAviasalesFragmentManager() {
