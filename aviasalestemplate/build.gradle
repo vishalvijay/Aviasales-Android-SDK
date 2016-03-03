@@ -70,5 +70,5 @@ task copyLanguageFolders() {
 }
 
 def computeVersionName() {
-	return "2.0.9-sdk"
+	return "2.0.10-sdk"
 }
