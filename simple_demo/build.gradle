@@ -37,6 +37,6 @@ dependencies {
 	compile project(':aviasalestemplate')
 
 	//for compiling from maven repository
-	//compile 'ru.aviasales.template:aviasalesSdkTemplate:2.0.8-sdk'
+	//compile 'ru.aviasales.template:aviasalesSdkTemplate:2.1.1-sdk'
 	compile 'com.android.support:appcompat-v7:23.1.1'
 }
