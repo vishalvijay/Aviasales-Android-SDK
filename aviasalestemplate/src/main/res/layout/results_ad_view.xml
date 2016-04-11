@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ru.aviasales.template.ui.view.ResultsItemView
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:card_view="http://schemas.android.com/apk/res-auto"
+		android:id="@+id/cv_results_item"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="@dimen/results_item_margin_bottom"
+		android:layout_marginLeft="@dimen/results_item_margin_left"
+		android:layout_marginRight="@dimen/results_item_margin_right"
+		android:layout_marginTop="@dimen/results_item_margin_top"
+		android:orientation="vertical"
+		card_view:cardCornerRadius="3dp"
+		card_view:cardUseCompatPadding="true">
+
+	<com.appodeal.ads.native_ad.views.NativeAdViewNewsFeed
+			android:id="@+id/native_ad_view_news_feed"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+	</com.appodeal.ads.native_ad.views.NativeAdViewNewsFeed>
+
+</ru.aviasales.template.ui.view.ResultsItemView>

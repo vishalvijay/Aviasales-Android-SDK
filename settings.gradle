@@ -1,1 +1,1 @@
-include ':simple_demo', ':expandedlistview', ':aviasalestemplate', ':navdrawer_demo'
+include ':simple_demo', ':expandedlistview', ':aviasalestemplate', ':navdrawer_demo', ':pubnative-1.4.8'

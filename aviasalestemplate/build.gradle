@@ -9,6 +9,7 @@ android {
 		targetSdkVersion 23
 		versionCode 6
 		versionName computeVersionName()
+		multiDexEnabled true
 	}
 	buildTypes {
 		release {
@@ -26,18 +27,22 @@ android {
 
 dependencies {
 	compile fileTree(dir: 'libs', include: ['*.jar'])
-	compile 'com.android.support:appcompat-v7:23.1.1'
+
+	compile project(':pubnative-1.4.8')
+	compile 'com.android.support:appcompat-v7:23.2.1'
+	compile 'com.android.support:cardview-v7:23.2.1'
+	compile 'com.android.support:recyclerview-v7:23.2.1'
 
 	compile 'ru.aviasales:aviasalesSdk:2.1.1-sdk'
 	compile 'ru.aviasales.expandedlistview:aviasalesExpandedlistview:1.1'
 	compile 'joda-time:joda-time:2.3'
 
 //	compile project(':expandedlistview')
-	compile 'com.android.support:cardview-v7:23.1.1'
-	compile 'com.android.support:recyclerview-v7:23.1.1'
 	compile 'com.github.johnkil.android-robototextview:robototextview:2.2.0'
 	compile 'com.nineoldandroids:library:2.4.0'
 	compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.3'
+	compile 'com.android.support:multidex:1.0.1'
+	compile 'com.google.android.gms:play-services-ads:8.4.0'
 }
 
 apply plugin: 'maven'

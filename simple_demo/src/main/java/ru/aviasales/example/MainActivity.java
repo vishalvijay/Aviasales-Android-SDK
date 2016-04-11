@@ -4,18 +4,23 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-
 import ru.aviasales.core.AviasalesSDK;
 import ru.aviasales.core.identification.IdentificationData;
+import ru.aviasales.template.ads.AppodealManager;
 import ru.aviasales.template.ui.fragment.AviasalesFragment;
 
 public class MainActivity extends AppCompatActivity {
 
 	private AviasalesFragment aviasalesFragment;
 
-	// replace to your travel payout credentiials
+	// replace to your travel payout credentials
 	private final static String TRAVEL_PAYOUTS_MARKER = "your_travel_payouts_marker";
 	private final static String TRAVEL_PAYOUTS_TOKEN = "your_travel_payouts_token";
+	private final static String APPODEAL_APP_KEY = "your_appodeal_app_key";
+
+	private final static boolean SHOW_ADS_ON_START = true;
+	private final static boolean SHOW_ADS_ON_WAITING_SCREEN = true;
+	private final static boolean SHOW_ADS_ON_SEARCH_RESULTS = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +29,11 @@ public class MainActivity extends AppCompatActivity {
 		AviasalesSDK.getInstance().init(this, new IdentificationData(TRAVEL_PAYOUTS_MARKER, TRAVEL_PAYOUTS_TOKEN));
 		setContentView(R.layout.activity_main);
 
-		init(savedInstanceState);
+		init();
 	}
 
-	private void init(Bundle savedInstanceState) {
+	private void init() {
+		AppodealManager.getInstance().init(this, APPODEAL_APP_KEY, SHOW_ADS_ON_START, SHOW_ADS_ON_WAITING_SCREEN, SHOW_ADS_ON_SEARCH_RESULTS);
 		initFragment();
 	}
 

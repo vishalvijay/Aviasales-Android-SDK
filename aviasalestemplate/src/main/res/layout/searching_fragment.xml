@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+<RelativeLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
+
+	<LinearLayout
+			android:id="@+id/mrec_container"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:layout_above="@+id/pb_searching"
+			android:gravity="center"
+			android:layout_alignParentTop="true"
+			android:layout_marginTop="5dp"
+			android:layout_marginBottom="5dp"
+			android:orientation="horizontal"/>
 
 	<ProgressBar
 			android:id="@+id/pb_searching"
@@ -12,16 +25,5 @@
 			android:layout_alignParentBottom="true"
 			android:layout_centerHorizontal="true"
 			android:layout_margin="20dp"
-	        android:progressDrawable="@drawable/progressbar_horizontal"
-			/>
-
-	<TextView
-			android:id="@+id/tv_searching_information"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_above="@+id/pb_searching"
-			android:layout_centerHorizontal="true"
-			android:text="@string/searching_information"
-			android:textColor="@color/dark_blue_text"
-			android:textSize="16dp"/>
+			android:progressDrawable="@drawable/progressbar_horizontal"/>
 </RelativeLayout>
