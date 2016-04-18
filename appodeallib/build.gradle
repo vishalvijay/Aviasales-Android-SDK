@@ -1,0 +1,52 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        minSdkVersion 10
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.1"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url 'http://android.aviasales.ru/repositories/' }
+    }
+}
+
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uploadUrl) {
+                authentication(userName: mavenUser, password: mavenPassword)
+            }
+            pom.version = "1.1"
+            pom.artifactId = "appodeallib"
+            pom.groupId = "ru.aviasales"
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'ru.aviasales:adsinterface:1.0'
+    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.google.android.gms:play-services-ads:8.4.0'
+    compile 'net.pubnative:library:1.4.8'
+}

@@ -11,16 +11,18 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import com.appodeal.ads.MrecView;
+
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorListenerAdapter;
 import com.nineoldandroids.animation.ValueAnimator;
+
+import ru.aviasales.adsinterface.AdsInterface;
 import ru.aviasales.core.AviasalesSDK;
 import ru.aviasales.core.http.exception.ApiExceptions;
 import ru.aviasales.core.search.object.SearchData;
 import ru.aviasales.core.search.searching.SearchListener;
 import ru.aviasales.template.R;
-import ru.aviasales.template.ads.AppodealManager;
+import ru.aviasales.template.ads.AdsImplKeeper;
 import ru.aviasales.template.filters.manager.FiltersManager;
 import ru.aviasales.template.utils.SortUtils;
 
@@ -56,9 +58,12 @@ public class SearchingFragment extends BaseFragment {
 	}
 
 	private void setUpMrecAd() {
-		MrecView mrecView = AppodealManager.getInstance().getMrecView(getActivity());
-		mrecContainer.addView(mrecView);
-		AppodealManager.getInstance().showWaitingScreenAdsIfAvailable(getActivity());
+		AdsInterface adsInterface = AdsImplKeeper.getInstance().getAdsInterface();
+		View mrecView = adsInterface.getMrecView(getActivity());
+		if (mrecView != null) {
+			mrecContainer.addView(mrecView);
+			adsInterface.showWaitingScreenAdsIfAvailable(getActivity());
+		}
 	}
 
 	private void setupViews(View rootView) {

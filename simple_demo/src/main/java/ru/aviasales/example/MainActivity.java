@@ -4,9 +4,11 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+
+import ru.aviasales.appodeallib.AppodealAds;
 import ru.aviasales.core.AviasalesSDK;
 import ru.aviasales.core.identification.IdentificationData;
-import ru.aviasales.template.ads.AppodealManager;
+import ru.aviasales.template.ads.AdsImplKeeper;
 import ru.aviasales.template.ui.fragment.AviasalesFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -14,9 +16,9 @@ public class MainActivity extends AppCompatActivity {
 	private AviasalesFragment aviasalesFragment;
 
 	// replace to your travel payout credentials
-	private final static String TRAVEL_PAYOUTS_MARKER = "your_travel_payouts_marker";
-	private final static String TRAVEL_PAYOUTS_TOKEN = "your_travel_payouts_token";
-	private final static String APPODEAL_APP_KEY = "your_appodeal_app_key";
+	private final static String TRAVEL_PAYOUTS_MARKER = "48729";
+	private final static String TRAVEL_PAYOUTS_TOKEN = "978f851b049dfb0f8a1a24e436be1f82";
+	private final static String APPODEAL_APP_KEY = "c162c57e218d2a96d0929b93a123687598ca09e40e2f82d8";
 
 	private final static boolean SHOW_ADS_ON_START = true;
 	private final static boolean SHOW_ADS_ON_WAITING_SCREEN = true;
@@ -33,13 +35,21 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private void init() {
-		AppodealManager.getInstance().init(this, APPODEAL_APP_KEY, SHOW_ADS_ON_START, SHOW_ADS_ON_WAITING_SCREEN, SHOW_ADS_ON_SEARCH_RESULTS);
+		initAppodeal();
 		initFragment();
+	}
+
+	private void initAppodeal() {
+		AppodealAds ads = new AppodealAds();
+		ads.setStartAdsEnabled(SHOW_ADS_ON_START);
+		ads.setWaitingScreenAdsEnabled(SHOW_ADS_ON_WAITING_SCREEN);
+		ads.setResultsAdsEnabled(SHOW_ADS_ON_SEARCH_RESULTS);
+		ads.init(this, APPODEAL_APP_KEY);
+		AdsImplKeeper.getInstance().setCustomAdsInterfaceImpl(ads);
 	}
 
 	private void initFragment() {
 		FragmentManager fm = getSupportFragmentManager();
-
 		aviasalesFragment = (AviasalesFragment) fm.findFragmentByTag(AviasalesFragment.TAG);
 
 		if (aviasalesFragment == null) {

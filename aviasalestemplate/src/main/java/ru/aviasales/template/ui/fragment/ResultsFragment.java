@@ -17,14 +17,17 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import ru.aviasales.adsinterface.AdsInterface;
 import ru.aviasales.core.AviasalesSDK;
 import ru.aviasales.core.search.object.Proposal;
 import ru.aviasales.core.search.object.SearchData;
 import ru.aviasales.core.search.params.SearchParams;
 import ru.aviasales.template.R;
+import ru.aviasales.template.ads.AdsImplKeeper;
 import ru.aviasales.template.currencies.Currency;
 import ru.aviasales.template.filters.manager.FiltersManager;
 import ru.aviasales.template.proposal.ProposalManager;
+import ru.aviasales.template.ui.adapter.AdAdapter;
 import ru.aviasales.template.ui.adapter.ResultsRecycleViewAdapter;
 import ru.aviasales.template.ui.dialog.CurrencyFragmentDialog;
 import ru.aviasales.template.ui.dialog.ResultsSortingDialog;
@@ -37,6 +40,7 @@ public class ResultsFragment extends BaseFragment {
 	private static int resultsCount = -1;
 
 	private ResultsRecycleViewAdapter resultsAdapter;
+	private AdAdapter adAdapter;
 
 	private View rootView;
 	private RecyclerView resultsListView;
@@ -74,6 +78,7 @@ public class ResultsFragment extends BaseFragment {
 	@Override
 	public void onDestroyView() {
 		resultsAdapter = null;
+		adAdapter = null;
 		super.onDestroyView();
 	}
 
@@ -95,8 +100,11 @@ public class ResultsFragment extends BaseFragment {
 	private void setUpListView(RecyclerView listView) {
 
 		final ResultsRecycleViewAdapter adapter = createOrRefreshAdapter();
+		adAdapter = new AdAdapter(adapter);
+		AdsInterface adsInterface = AdsImplKeeper.getInstance().getAdsInterface();
+		adAdapter.setShouldShowAdBanner(adsInterface.isResultsAdsEnabled() && adsInterface.areResultsReadyToShow());
 
-		listView.setAdapter(adapter);
+		listView.setAdapter(adAdapter);
 
 		adapter.setListener(new ResultsRecycleViewAdapter.OnClickListener() {
 			@Override

@@ -30,7 +30,7 @@ apply plugin: 'maven-publish'
 uploadArchives {
 	repositories {
 		mavenDeployer {
-			repository(url: "http://android.aviasales.ru/repositories"){
+			repository(url: "http://android.aviasales.ru/repositories") {
 				authentication(userName: mavenUser, password: mavenPassword)
 			}
 			pom.version = "1.1"

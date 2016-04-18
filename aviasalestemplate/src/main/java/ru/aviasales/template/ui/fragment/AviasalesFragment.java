@@ -10,12 +10,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
 import ru.aviasales.core.search.params.SearchParams;
 import ru.aviasales.core.search_airports.object.PlaceData;
 import ru.aviasales.template.R;
-import ru.aviasales.template.ads.AppodealManager;
+import ru.aviasales.template.ads.AdsImplKeeper;
 import ru.aviasales.template.ui.listener.AviasalesImpl;
 import ru.aviasales.template.ui.model.SearchFormData;
 import ru.aviasales.template.utils.Utils;
@@ -31,12 +33,14 @@ public class AviasalesFragment extends Fragment implements AviasalesImpl {
 	private final static int CACHE_SIZE = 20 * 1024 * 1024;
 	private final static int CACHE_FILE_COUNT = 100;
 	private final static int MEMORY_CACHE_SIZE = 5 * 1024 * 1024;
+	private static final String AD_SHOWED_ONCE = "AD_SHOWED_ONCE";
 
 	private FragmentManager fragmentManager;
 
 	private SearchFormData searchFormData;
 
 	private View rootView;
+	private boolean adShowedOnce = false;
 
 	public static Fragment newInstance() {
 		return new AviasalesFragment();
@@ -45,6 +49,9 @@ public class AviasalesFragment extends Fragment implements AviasalesImpl {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if (savedInstanceState != null && savedInstanceState.containsKey(AD_SHOWED_ONCE)) {
+			adShowedOnce = savedInstanceState.getBoolean(AD_SHOWED_ONCE);
+		}
 
 		migrateSearchFormTripClassParam();
 
@@ -55,14 +62,17 @@ public class AviasalesFragment extends Fragment implements AviasalesImpl {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.aviasales_fragment_layout, container, false);
-		rootView.postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				if (getActivity() != null) {
-					AppodealManager.getInstance().showStartAdsIfAvailable(getActivity());
+		if (!adShowedOnce) {
+			adShowedOnce = true;
+			rootView.postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					if (getActivity() != null) {
+						AdsImplKeeper.getInstance().getAdsInterface().showStartAdsIfAvailable(getActivity());
+					}
 				}
-			}
-		}, TimeUnit.SECONDS.toMillis(2));
+			}, TimeUnit.SECONDS.toMillis(2));
+		}
 		return rootView;
 	}
 
@@ -182,5 +192,11 @@ public class AviasalesFragment extends Fragment implements AviasalesImpl {
 	@Override
 	public void saveState() {
 		searchFormData.saveState();
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		outState.putBoolean(AD_SHOWED_ONCE, adShowedOnce);
+		super.onSaveInstanceState(outState);
 	}
 }

@@ -1,4 +1,4 @@
-package ru.aviasales.template.ads;
+package ru.aviasales.appodeallib;
 
 import com.appodeal.ads.NativeAd;
 import com.appodeal.ads.NativeCallbacks;

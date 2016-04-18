@@ -1,79 +1,74 @@
 apply plugin: 'com.android.library'
 
 android {
-	compileSdkVersion 23
-	buildToolsVersion '23.0.2'
+    compileSdkVersion 23
+    buildToolsVersion '23.0.2'
 
-	defaultConfig {
-		minSdkVersion 9
-		targetSdkVersion 23
-		versionCode 6
-		versionName computeVersionName()
-		multiDexEnabled true
-	}
-	buildTypes {
-		release {
-			minifyEnabled false
-			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-		}
-	}
+    defaultConfig {
+        minSdkVersion 9
+        targetSdkVersion 23
+        versionCode 6
+        versionName computeVersionName()
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
 
-	repositories {
-		jcenter()
-		mavenCentral()
-		maven { url 'http://android.aviasales.ru/repositories/' }
-	}
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url 'http://android.aviasales.ru/repositories/' }
+    }
 }
 
 dependencies {
-	compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(dir: 'libs', include: ['*.jar'])
 
-	compile project(':pubnative-1.4.8')
-	compile 'com.android.support:appcompat-v7:23.2.1'
-	compile 'com.android.support:cardview-v7:23.2.1'
-	compile 'com.android.support:recyclerview-v7:23.2.1'
+    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:cardview-v7:23.2.1'
+    compile 'com.android.support:recyclerview-v7:23.2.1'
 
-	compile 'ru.aviasales:aviasalesSdk:2.1.1-sdk'
-	compile 'ru.aviasales.expandedlistview:aviasalesExpandedlistview:1.1'
-	compile 'joda-time:joda-time:2.3'
+    compile 'ru.aviasales:aviasalesSdk:2.1.1-sdk'
+    compile 'ru.aviasales.expandedlistview:aviasalesExpandedlistview:1.1'
+    compile "ru.aviasales:adsinterface:1.0"
+    compile 'joda-time:joda-time:2.3'
 
-//	compile project(':expandedlistview')
-	compile 'com.github.johnkil.android-robototextview:robototextview:2.2.0'
-	compile 'com.nineoldandroids:library:2.4.0'
-	compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.3'
-	compile 'com.android.support:multidex:1.0.1'
-	compile 'com.google.android.gms:play-services-ads:8.4.0'
+    compile 'com.github.johnkil.android-robototextview:robototextview:2.2.0'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.3'
+    compile 'com.google.android.gms:play-services-ads:8.4.0'
 }
 
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 uploadArchives {
-	repositories {
-		mavenDeployer {
-			repository(url: uploadUrl) {
-				authentication(userName: mavenUser, password: mavenPassword)
-			}
-			pom.version = computeVersionName()
-			pom.artifactId = "aviasalesSdkTemplate"
-			pom.groupId = "ru.aviasales.template"
-		}
-	}
+    repositories {
+        mavenDeployer {
+            repository(url: uploadUrl) {
+                authentication(userName: mavenUser, password: mavenPassword)
+            }
+            pom.version = computeVersionName()
+            pom.artifactId = "aviasalesSdkTemplate"
+            pom.groupId = "ru.aviasales.template"
+        }
+    }
 }
-
-
 
 task copyLanguageFolders() {
 
-	['values-az/', 'values-hy/', 'values-be/', 'values-kk/', 'values-ky/', 'values-ro/', 'values-uz/', 'values-uk/', 'values-ka/'].each { dest ->
-		copy {
-			from 'src/main/res/values-ru/'
-			into 'src/main/res/' + dest
-			include('strings.xml')
-		}
-	}
+    ['values-az/', 'values-hy/', 'values-be/', 'values-kk/', 'values-ky/', 'values-ro/', 'values-uz/', 'values-uk/', 'values-ka/'].each { dest ->
+        copy {
+            from 'src/main/res/values-ru/'
+            into 'src/main/res/' + dest
+            include('strings.xml')
+        }
+    }
 }
 
 def computeVersionName() {
-	return "2.1.1-sdk"
+    return "2.1.1-sdk"
 }
