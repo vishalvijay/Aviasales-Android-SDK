@@ -16,9 +16,9 @@ public class MainActivity extends AppCompatActivity {
 	private AviasalesFragment aviasalesFragment;
 
 	// replace to your travel payout credentials
-	private final static String TRAVEL_PAYOUTS_MARKER = "48729";
-	private final static String TRAVEL_PAYOUTS_TOKEN = "978f851b049dfb0f8a1a24e436be1f82";
-	private final static String APPODEAL_APP_KEY = "c162c57e218d2a96d0929b93a123687598ca09e40e2f82d8";
+	private final static String TRAVEL_PAYOUTS_MARKER = "travel_payouts_token";
+	private final static String TRAVEL_PAYOUTS_TOKEN = "travel_payouts_token";
+	private final static String APPODEAL_APP_KEY = "appodeal_app_key";
 
 	private final static boolean SHOW_ADS_ON_START = true;
 	private final static boolean SHOW_ADS_ON_WAITING_SCREEN = true;
